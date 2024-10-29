@@ -1,10 +1,9 @@
 import Layout from "../../components/layout/Layout";
 
-
 const HomePage = () => {
-    reutrn (
+    return(
         <Layout>
-            Home Page
+            Homeeeeeeeeeeeeee
         </Layout>
     );
 }

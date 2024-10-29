@@ -3,7 +3,7 @@ import SearchBar from "../searchBar/SearchBar";
 
 
 const Navbar = () => {
-    // navList Data
+    // // navList Data
     const navList = (
         <ul className="flex space-x-3 text-white font-medium text-md px-5 ">
             {/* Home */}
@@ -23,7 +23,7 @@ const Navbar = () => {
 
             {/* User */}
             <li>
-                <Link to={'/'}>Kamal</Link>
+                <Link to={'/login'}>Log In</Link>
             </li>
 
             {/* Admin */}
@@ -37,11 +37,11 @@ const Navbar = () => {
             </li> */}
 
             {/* Cart */}
-            <li>
+            {/* <li>
                 <Link to={'/cart'}>
                     Cart(0)
                 </Link>
-            </li>
+            </li> */}
         </ul>
     )
     return (
@@ -51,7 +51,7 @@ const Navbar = () => {
                 {/* left  */}
                 <div className="left py-3 lg:py-0">
                     <Link to={'/'}>
-                    <h2 className=" font-bold text-white text-2xl text-center">E-Bharat</h2>
+                    <h2 className=" font-bold text-white text-2xl text-center">KUDOKUDO</h2>
                     </Link>
                 </div>
 
