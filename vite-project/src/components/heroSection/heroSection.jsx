@@ -2,13 +2,13 @@ import { Link } from "react-router-dom";
 
 const HeroSection = () => {
     return (
-        <div className=" playfair relative">
+        <div className="relative">
             {/* Hero Image */}
             <img className="h-60 w-full lg:h-auto lg:max-h-128 object-cover" src="./heroimg.png" alt="image" />
 
             {/* Text Overlay */}
-            <div className="playfair absolute inset-0 flex flex-col justify-center items-start p-8 text-white bg-black bg-opacity-30 ">
-                <div className="playfair w-2/3">
+            <div className="absolute inset-0 flex flex-col justify-center items-start p-8 text-white bg-black bg-opacity-30 ">
+                <div className="w-2/3">
                 <h1 className="text-4xl md:text-6xl font-bold mb-4">
                     Welcome to Kathmandu University
                 </h1>
