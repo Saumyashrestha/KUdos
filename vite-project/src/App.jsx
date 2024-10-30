@@ -6,10 +6,11 @@ import{
 import HomePage from "./pages/home/HomePage";
 import NoPage from "./pages/noPage/NoPage";
 import LogIn from "./pages/registration/logIn";
+import './App.css';
 
 const App = () => {
   return(
-    <div>
+    <div className="playfair" >
       <Router>
         <Routes>
           <Route path="/" element={<HomePage/>}/>
