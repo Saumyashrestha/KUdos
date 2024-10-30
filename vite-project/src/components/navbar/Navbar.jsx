@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-// import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
 
@@ -32,11 +32,9 @@ const Navbar = () => {
                 <Link to={'/'} className="hover:text-[#387478]">MESSAGE</Link>
                 
             </li> 
-            <li>
-                <i className="fas fa-user-circle ml-2 fa-lg hover:text-[#387478]" />
-            </li>
+          
         </ul>
-    )
+    );
 
     return (
         <nav className="bg-[#f2f0ef] shadow-md sticky z-50 top-0">
@@ -50,6 +48,9 @@ const Navbar = () => {
                     <div className="ml-6"> {/* Add margin to separate KUdos from the navList */}
                         {navList}
                     </div>
+                </div>
+                <div className="ml-auto">
+                    <i className="fas fa-user-circle fa-lg hover:text-[#387478]" />
                 </div>
             </div>
         </nav>
