@@ -19,12 +19,12 @@ const Navbar = () => {
 
             {/* Signup */}
             <li>
-                <Link to={'/signup'} className="hover:text-[#387478]">LOGIN</Link>
+                <Link to={'/login'} className="hover:text-[#387478]">LOGIN</Link>
             </li>
 
             {/* User */}
             <li>
-                <Link to={'/login'} className="hover:text-[#387478]">SIGNUP</Link>
+                <Link to={'/signup'} className="hover:text-[#387478]">SIGNUP</Link>
             </li>
 
             {/* Admin */}

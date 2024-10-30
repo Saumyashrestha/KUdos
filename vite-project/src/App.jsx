@@ -5,7 +5,9 @@ import{
 } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
 import NoPage from "./pages/noPage/NoPage";
-import LogIn from "./pages/registration/logIn";
+import Signup from "./pages/registration/signUp";
+import Login from "./pages/registration/logIn";
+
 import './App.css';
 
 const App = () => {
@@ -15,7 +17,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage/>}/>
           <Route path="/*" element={<NoPage/>}/>
-          <Route path="/login" element={<LogIn/>}/>
+          <Route path="/signup" element={<Signup/>}/>
+          <Route path="/login" element={<Login/>}/>
         </Routes>
       </Router>
     </div>
