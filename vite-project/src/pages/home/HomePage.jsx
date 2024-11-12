@@ -1,5 +1,6 @@
 import Category from "../../components/category/category";
 import HeroSection from "../../components/heroSection/heroSection";
+import HomePageCard from "../../components/homePageCard/HomePageCard";
 import Layout from "../../components/layout/Layout";
 
 const HomePage = () => {
@@ -7,6 +8,7 @@ const HomePage = () => {
         <Layout>
             <HeroSection/>
             <Category/>
+            <HomePageCard/>
         </Layout>
     );
 }
