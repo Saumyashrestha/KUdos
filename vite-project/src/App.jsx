@@ -4,7 +4,7 @@ import{
   Routes,
 } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
-import NoPage from "./pages/noPage/NoPage";
+import Equipments from "./pages/equipments/Equipments";
 import Signup from "./pages/registration/signUp";
 import Login from "./pages/registration/logIn";
 
@@ -16,7 +16,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<HomePage/>}/>
-          <Route path="/*" element={<NoPage/>}/>
+          <Route path="/*" element={<Equipments/>}/>
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/login" element={<Login/>}/>
         </Routes>

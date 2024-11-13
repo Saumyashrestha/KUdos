@@ -14,7 +14,7 @@ const Navbar = () => {
 
             {/* All Product */}
             <li>
-                <Link to={'/allproduct'} className="hover:text-[#387478]">HISTORY</Link>
+                <Link to={'/allproduct'} className="hover:text-[#387478]">EQUIPMENTS</Link>
             </li>
 
             {/* Signup */}
