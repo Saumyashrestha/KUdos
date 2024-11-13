@@ -29,7 +29,7 @@ const Navbar = () => {
 
             {/* Admin */}
             <li>
-                <Link to={'/'} className="hover:text-[#387478]">MESSAGE</Link>
+                <Link to={'/'} className="hover:text-[#387478]">NOTICE</Link>
                 
             </li> 
           
