@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {slides} from "./carouselData";
-// import {BsArrowLeftCircleFill, BsArrowRightCircleFill} from "react-icons/bs"
 
 export const Carousel = () => {
     const carouselstyle={
@@ -23,11 +22,9 @@ export const Carousel = () => {
     
     return(
         <div style={carouselstyle}>
-            {/* <BsArrowLeftCircleFill/> */}
             {data.map((item, idx)=>{
                 return <img src={item.src} alt={item.alt} key={idx} style={slidestyle}/>
             })}
-            {/* <BsArrowRightCircleFill/> */}
             <span>
             {data.map((_, idx)=>{
                 return <button key={idx} onClick={()=>setSlide(idx)}></button>
