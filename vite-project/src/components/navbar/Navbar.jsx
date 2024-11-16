@@ -7,10 +7,7 @@ const Navbar = () => {
     // navList Data
     const navList = (
         <ul className="flex space-x-24 text-black font-medium text-md ">
-            {/* Home */}
-            <li>
-                <Link to={'/'} className="hover:text-[#387478]">HOME</Link>
-            </li>
+           
 
             {/* All Product */}
             <li>
