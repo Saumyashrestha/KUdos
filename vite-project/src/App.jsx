@@ -21,6 +21,7 @@ const App = () => {
           <Route path="/*" element={<NoPage/>}/>
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/login" element={<Login/>}/>
+          <Route path="/equipments" element={<Equipments/>}/>
         </Routes>
       </Router>
     </div>
