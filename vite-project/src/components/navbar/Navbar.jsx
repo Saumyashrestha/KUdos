@@ -14,14 +14,19 @@ const Navbar = () => {
                 <Link to={'/allproduct'} className="hover:text-[#387478]">HISTORY</Link>
             </li>
 
-            {/* Signup */}
+            {/* Login */}
             <li>
                 <Link to={'/login'} className="hover:text-[#387478]">LOGIN</Link>
             </li>
 
-            {/* User */}
+            {/* Signup */}
             <li>
                 <Link to={'/signup'} className="hover:text-[#387478]">SIGNUP</Link>
+            </li>
+
+             {/* SWD */}
+             <li>
+                <Link to={'/signup'} className="hover:text-[#387478]">EQUIPMENTS</Link>
             </li>
 
             {/* Admin */}
@@ -38,16 +43,18 @@ const Navbar = () => {
             {/* main  */}
             <div className="lg:flex lg:justify-between items-center py-3 lg:px-3 ">
                 {/* left  */}
-                <div className="playfair flex items-center py-3 lg:py-0">
+                <div className="playfair flex items-center py-3 lg:py-0 lg:px-3">
                     <Link to={'/homepage'}>
                         <h2 className="font-bold text-[#387478] text-2xl">KUdos</h2>
                     </Link>
-                    <div className="ml-6"> {/* Add margin to separate KUdos from the navList */}
+                    <div className="ml-12"> {/* Add margin to separate KUdos from the navList */}
                         {navList}
                     </div>
                 </div>
-                <div className="ml-auto">
+                <div className="flex items-center space-x-6 mr-8">
+                <i className="fas fa-bell fa-lg hover:text-[#387478]" />
                     <i className="fas fa-user-circle fa-lg hover:text-[#387478]" />
+                    
                 </div>
             </div>
         </nav>
