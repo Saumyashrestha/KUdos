@@ -4,6 +4,7 @@ import{
   Routes,
 } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
+import NoPage from "./pages/noPage/NoPage";
 import Equipments from "./pages/equipments/Equipments";
 import Signup from "./pages/registration/signUp";
 import Login from "./pages/registration/logIn";
@@ -18,7 +19,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LandingPage/>}/>
           <Route path="/homepage" element={<HomePage/>}/>
-          <Route path="/*" element={<NoPage/>}/>
+          <Route path="/*" element={<NoPage/>}/> 
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/equipments" element={<Equipments/>}/>
