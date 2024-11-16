@@ -9,11 +9,6 @@ const Navbar = () => {
         <ul className="flex space-x-24 text-black font-medium text-md ">
            
 
-            {/* All Product */}
-            <li>
-                <Link to={'/allproduct'} className="hover:text-[#387478]">HISTORY</Link>
-            </li>
-
             {/* Login */}
             <li>
                 <Link to={'/login'} className="hover:text-[#387478]">LOGIN</Link>
@@ -24,7 +19,12 @@ const Navbar = () => {
                 <Link to={'/signup'} className="hover:text-[#387478]">SIGNUP</Link>
             </li>
 
-             {/* SWD */}
+            {/* History */}
+            <li>
+                <Link to={'/history'} className="hover:text-[#387478]">HISTORY</Link>
+            </li>
+
+            {/* SWD */}
              <li>
                 <Link to={'/signup'} className="hover:text-[#387478]">EQUIPMENTS</Link>
             </li>
