@@ -39,7 +39,7 @@ const Navbar = () => {
             <div className="lg:flex lg:justify-between items-center py-3 lg:px-3 ">
                 {/* left  */}
                 <div className="playfair flex items-center py-3 lg:py-0">
-                    <Link to={'/'}>
+                    <Link to={'/homepage'}>
                         <h2 className="font-bold text-[#387478] text-2xl">KUdos</h2>
                     </Link>
                     <div className="ml-6"> {/* Add margin to separate KUdos from the navList */}
