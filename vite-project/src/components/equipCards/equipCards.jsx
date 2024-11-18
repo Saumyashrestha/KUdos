@@ -55,11 +55,11 @@ const EquipCards = () => {
                 <section className="body-font">
                     <div className="container mx-auto">
                         {/* Grid Layout for the Cards */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cursor-pointer">
                             {equips.map((data, index) => {
                                 const { src, alt, des } = data;
                                 return (
-                                    <div key={index} className="max-w-xs rounded-lg shadow-lg overflow-hidden bg-white">
+                                    <div key={index} className="max-w-xs rounded-lg shadow-lg overflow-hidden bg-white border border-[#52a7ad] transition-transform transform hover:scale-105 hover:shadow-xl">
                                         {/* Equipment Image */}
                                         <div className="relative w-full h-60">
                                             <img
@@ -71,7 +71,7 @@ const EquipCards = () => {
                                         {/* Equipment Description */}
                                         <div className="p-4">
                                             <h1 className="title-font text-lg font-medium text-[#387478]">{des}</h1>
-                                            <p className="text-gray-700 text-sm">{des}</p>
+                                            
                                         </div>
                                         {/* Button Section */}
                                         <div className="flex justify-center p-4">
