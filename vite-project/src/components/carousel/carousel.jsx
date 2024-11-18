@@ -1,35 +1,61 @@
-import React, {useState} from "react";
-import {slides} from "./carouselData";
+import { useEffect, useState } from "react";
 
-export const Carousel = () => {
-    const carouselstyle={
-        display: "flex",
-        justifycontent: "center",
-        alignitems: "center",
-        width: "600px",
-        height: "400px"
-    }
-    const slidestyle={
-        borderradius: "0.5rem",
-        boxshadow: "0px 0px 7px #666",
-        width: "100%",
-        height: "100%"
-    }
-    var data=slides;
-    const [slide, setSlide] = useState(0);
-    const nextslide=()=>{setSlide(slide === data.length ? 0:slide+1)};
-    const prevslide=()=>{setSlide(slide === 0 ? data.length-1:slide-1)};
-    
+const slides = [
+        {
+            src: "https://picsum.photos/seed/img1/1200/450",
+            alt: "Image 1"
+        },
+        {
+            src: "https://picsum.photos/seed/img2/1200/450",
+            alt: "Image 2"
+        },
+        {
+            src: "https://picsum.photos/seed/img3/1200/450",
+            alt: "Image 3"
+        }
+    ]
+
+const Carousel = () => {
+
+    let[slide,setSlide]=useState(0);
+    let[autoplay,setAutoplay]=useState(true);
+    let timeOut = null;
+
+    let prevSlide =() =>{
+        if(slide===0) setSlide(slides.length-1);
+        else setSlide(slide-1);
+    };
+
+    let nextslide =() =>{
+        if(slide===slides.length-1) setSlide(0);
+        else setSlide(slide+1);
+    };
+
+    useEffect(()=>{
+        timeOut = autoplay && setTimeout(() => {
+            nextslide();
+        }, 2500);
+    })
+
     return(
-        <div style={carouselstyle}>
-            {data.map((item, idx)=>{
-                return <img src={item.src} alt={item.alt} key={idx} style={slidestyle}/>
-            })}
-            <span>
-            {data.map((_, idx)=>{
-                return <button key={idx} onClick={()=>setSlide(idx)}></button>
-            })} 
-            </span>
+        <div className="overflow-hidden relative w-[80%] m-auto" onMouseEnter={()=>{setAutoplay(false); clearTimeout(timeOut);}} onMouseLeave={()=>{setAutoplay(true);}}>
+            <div className="flex transition ease-out duration-40" style={{transform: `translateX(-${slide*100}%)`}}>
+                {slides.map((items)=>{
+                    return(<img src={items.src} alt={items.alt}/>)
+                })}
+            </div>
+            <div className="absolute top-0 h-full w-full justify-between items-center flex px-3">
+               <div onClick={prevSlide} className="rounded-full w-10 h-10 bg-white text-center cursor-pointer">P</div>
+               <div onClick={nextslide} className="rounded-full w-10 h-10 bg-white text-center cursor-pointer">N</div>
+            </div>
+            <div className="absolute bottom-0 py-3 flex justify-center gap-3 w-full">
+               {slides.map((items, idx)=>{
+                return <div onClick={()=>{setSlide(idx)}} key={"circle"+idx} className={`rounded-full w-3 h-3 cursor-pointer ${idx==slide? "bg-white":"bg-gray-300"}`}>
+                </div> 
+               })}
+            </div>
         </div>
     );
 }
+
+export default Carousel;
