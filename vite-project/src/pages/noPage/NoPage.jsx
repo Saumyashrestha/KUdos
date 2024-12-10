@@ -1,7 +1,7 @@
 const NoPage = () => {
     return (
         <div>
-            No Page Found
+            No Page, No KUdos
         </div>
     )
 }
