@@ -1,17 +1,16 @@
 import { useNavigate } from "react-router-dom";
 
 const category = [
-    { name: 'KUCC' },
-    { name: 'KUCEC' },
-    { name: 'KUCMC' },
-    { name: 'GES' },
-    { name: 'AMES' },
-    { name: 'SEEE' },
-    { name: 'KUARC' },
+    { name: 'Football' },
+    { name: 'Futsal' },
+    { name: 'Cricket' },
+    { name: 'Basketball' },
+    { name: 'Volleyball' },
+    { name: 'Badminton' },
 
 ];
 
-const Category = () => {
+const SportsCategory = () => {
     const navigate = useNavigate();
 
     return (
@@ -29,7 +28,7 @@ const Category = () => {
 
                             {/* Category Box */}
                             <div
-                                onClick={() => navigate(`/clubhome`)}
+                                onClick={() => navigate(`/category/${item.name}`)}
                                 className="flex justify-center items-center cursor-pointer mx-4 flex-grow"
                             >
                                 <h1 className="text-lg lg:text-2xl font-medium text-white text-center transition-all hover:text-gray-400">
@@ -60,4 +59,4 @@ const Category = () => {
     );
 };
 
-export default Category;
+export default SportsCategory;

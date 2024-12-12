@@ -48,7 +48,7 @@ const EquipCards = () => {
             <div className="flex-1 px-5 py-5 overflow-y-auto mr-80">
                 {/* Heading */}
                 <div className="text-center mb-5">
-                    <h1 className="text-2xl text-[#387478] font-semibold">AVAILABLE EQUIPMENTS</h1>
+                    <h1 className="text-2xl text-[#387478] font-semibold text-decoration : underline">AVAILABLE EQUIPMENTS</h1>
                 </div>
 
                 {/* Main Section */}
