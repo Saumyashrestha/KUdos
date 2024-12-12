@@ -14,16 +14,6 @@ const Navbar = () => {
         </Link>
       </li>
       <li>
-        <Link to={"/signup"} className="hover:text-[#387478]">
-          SIGNUP
-        </Link>
-      </li>
-      <li>
-        <Link to={"/history"} className="hover:text-[#387478]">
-          HISTORY
-        </Link>
-      </li>
-      <li>
         <Link to={"/equipments"} className="hover:text-[#387478]">
           EQUIPMENTS
         </Link>
@@ -38,7 +28,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-[#f2f0ef] shadow-md sticky z-50 top-0">
-      <div className="flex justify-between items-center py-3 px-4 lg:px-8">
+      <div className="flex justify-between items-center py-3 px-8 lg:px-14">
         {/* Logo */}
         <div className="flex items-center">
           <Link to={"/homepage"}>
@@ -55,10 +45,10 @@ const Navbar = () => {
         </button>
 
         {/* Desktop Nav */}
-        <div className="hidden lg:flex items-center space-x-6">
+        <div className="hidden lg:flex items-center space-x-12 mr-4">
           {navList}
-          <i className="fas fa-bell fa-lg hover:text-[#387478]" />
-          <i className="fas fa-user-circle fa-lg hover:text-[#387478]" />
+          <i className="fas fa-bell fa-lg hover:text-[#387478] ml-6" />
+          <i className="fas fa-user-circle fa-lg hover:text-[#387478] ml-6" />
         </div>
       </div>
 
