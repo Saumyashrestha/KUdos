@@ -57,7 +57,7 @@ const Navbar = () => {
             {navList}
           </div>
         </div>
-        <div className="flex items-center space-x-6 mr-8">
+        <div className="flex items-center space-x-6 mr-8 cursor-pointer">
           <i className="fas fa-bell fa-lg hover:text-[#387478]" />
           <i className="fas fa-user-circle fa-lg hover:text-[#387478]" />
         </div>

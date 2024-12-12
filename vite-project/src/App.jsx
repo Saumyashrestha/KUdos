@@ -11,6 +11,7 @@ import Login from "./pages/registration/logIn";
 
 import './App.css';
 import LandingPage from "./pages/landing/LandingPage";
+import ClubHome from "./pages/clubhome/ClubHome";
 
 const App = () => {
   return(
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/equipments" element={<Equipments/>}/>
+          <Route path="/clubhome" element={<ClubHome/>}/>
         </Routes>
       </Router>
     </div>
