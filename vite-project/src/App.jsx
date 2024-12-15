@@ -12,6 +12,7 @@ import Login from "./pages/registration/logIn";
 import './App.css';
 import LandingPage from "./pages/landing/LandingPage";
 import ClubHome from "./pages/clubhome/ClubHome";
+import Football from "./pages/football/Football";
 
 const App = () => {
   return(
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/login" element={<Login/>}/>
           <Route path="/equipments" element={<Equipments/>}/>
           <Route path="/clubhome" element={<ClubHome/>}/>
+          <Route path="/football" element={<Football/>}/>
         </Routes>
       </Router>
     </div>
