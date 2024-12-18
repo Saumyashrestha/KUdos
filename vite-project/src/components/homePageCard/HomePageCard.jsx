@@ -35,7 +35,7 @@ const HomePageCard = () => {
         <div className=" playfair mt-10">
             {/* Heading */}
             <div className="">
-                <h1 className="text-center mb-5 text-2xl text-[#387478] font-semibold">ONGOING EVENTS</h1>
+                <h1 className="text-center mb-5 text-2xl text-[#387478] font-semibold text-decoration : underline">LIVE MATCHES</h1>
             </div>
 
             {/* Main Section */}
@@ -79,6 +79,14 @@ const HomePageCard = () => {
                     })}
                 </div>
             </section>
+
+            <div className="">
+                <h1 className="text-center mb-5 text-2xl text-[#387478] font-semibold text-decoration : underline">ONGOING TOURNAMENTS</h1>
+            </div>
+
+            <div className="">
+                <h1 className="text-center mb-5 text-2xl text-[#387478] font-semibold text-decoration : underline">RECENT MATCHES</h1>
+            </div>
         </div>
     );
 };
