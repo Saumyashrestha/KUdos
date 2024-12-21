@@ -37,14 +37,14 @@ const ongoingEventData = [
         image: '/public/tournament .png',
         title: 'KUCC Cup',
         clubLogo: '/public/kucc-logo.webp',
-        link: '/events/cricket-league',
+        link: 'ongoingTournament',
     },
     {
         id: 2,
         image: '/public/tournament .png',
         title: 'Sankalpa Cup',
         clubLogo: '/public/kucc-logo.webp',
-        link: '/events/cricket-league',
+        link: 'ongoingTournament',
     },
 ];
 
