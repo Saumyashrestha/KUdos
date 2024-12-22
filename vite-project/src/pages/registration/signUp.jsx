@@ -1,8 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Loader from "../../components/loader/Loader";
 import Layout from "../../components/layout/Layout";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../firebase/FirebaseConfig";
+import { setDoc, doc } from "firebase/firestore";
+
+const navigate = useNavigate();
 
 const Signup = () => {
     // State to manage loading and signup fields
@@ -11,14 +16,14 @@ const Signup = () => {
         name: "",
         email: "",
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
     });
 
     /**========================================================================
      *                          User Signup Function 
     *========================================================================**/
 
-    const userSignupFunction = () => {
+    const userSignupFunction = async () => {
         // Validation check
         if (
             userSignup.name === "" ||
@@ -34,19 +39,47 @@ const Signup = () => {
             toast.error("Passwords do not match");
             return;
         }
-
-        setLoading(true);
-        // Simulate signup delay
-        setTimeout(() => {
-            setLoading(false);
-            toast.success("Signed Up Successfully");
-            setUserSignup({
-                name: "",
-                email: "",
-                password: "",
-                confirmPassword: ""
-            });
-        }, 1000);
+        
+        try{
+            await createUserWithEmailAndPassword(auth, userSignup.email, userSignup.password)
+            const user = auth.currentUser;
+            console.log(user);
+            if(user){
+                await setDoc(doc(db, "Users", userSignup.email),{
+                    Name: userSignup.name,
+                    Email: userSignup.email,
+                    Role: "Student"
+                })
+            }
+            setLoading(true);
+            // Simulate signup delay
+            setTimeout(() => {
+                setLoading(false);
+                toast.success("Signed Up Successfully");
+                setUserSignup({
+                    name: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: ""
+                });
+            }, 1000);
+            navigate("/login");
+        }
+        catch(error){
+            console.log(error.message);
+            setLoading(true);
+            // Simulate signup delay
+            setTimeout(() => {
+                setLoading(false);
+                toast.success("Signed Up Failed");
+                setUserSignup({
+                    name: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: ""
+                });
+            }, 1000);
+        }
     };
 
     return (

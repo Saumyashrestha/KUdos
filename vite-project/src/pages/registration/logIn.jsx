@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Loader from "../../components/loader/Loader";
 import Layout from "../../components/layout/Layout";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -17,17 +18,23 @@ const Login = () => {
     password: "",
   });
 
-  const userLoginFunction = () => {
+  const userLoginFunction = async () => {
     if (userLogin.email === "" || userLogin.password === "") {
       toast.error("All fields are required");
     } else {
-      setLoading(true);
-      // Mock login process
-      setTimeout(() => {
-        setLoading(false);
-        toast.success("Logged In Successfully");
-        navigate("/");
-      }, 1000);
+      try{
+        await signInWithEmailAndPassword(auth, userLogin.email, userLogin.password)
+        setLoading(true);
+        // Mock login process
+        setTimeout(() => {
+          setLoading(false);
+          toast.success("Logged In Successfully");
+          navigate("/homepage");
+        }, 1000);
+      }
+      catch(error){
+        console.log(error.message);
+      }
     }
   };
 
