@@ -3,30 +3,30 @@ import { useNavigate } from "react-router-dom";
 const eventData = [
     {
         id: 1,
-        image: '/public/football-banner.png', // replace with actual event banner URL
+        image: '/football-banner.png', // replace with actual event banner URL
         title: 'Football Tournament',
-        clubLogo: '/public/kucc-logo.webp', // replace with actual club logo URL
+        clubLogo: '/kucc-logo.webp', // replace with actual club logo URL
         link: '/football', // replace with actual link to event page
     },
     {
         id: 2,
-        image: '/public/basketball-banner.png',
+        image: '/basketball-banner.png',
         title: 'Basketball Tournament',
-        clubLogo: '/public/kucc-logo.webp',
+        clubLogo: '/kucc-logo.webp',
         link: '/events/basketball-championship',
     },
     {
         id: 3,
-        image: '/public/badminton-banner.jpeg',
+        image: '/badminton-banner.jpeg',
         title: 'Badminton Tournament',
-        clubLogo: '/public/kucc-logo.webp',
+        clubLogo: '/kucc-logo.webp',
         link: '/events/badminton-open',
     },
     {
         id: 4,
-        image: '/public/cricket-banner.jpeg',
+        image: '/cricket-banner.jpeg',
         title: 'Cricket Tournament',
-        clubLogo: '/public/kucc-logo.webp',
+        clubLogo: '/kucc-logo.webp',
         link: '/events/cricket-league',
     },
 ];
