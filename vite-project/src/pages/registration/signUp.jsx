@@ -7,9 +7,10 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase/FirebaseConfig";
 import { setDoc, doc } from "firebase/firestore";
 
-const navigate = useNavigate();
+
 
 const Signup = () => {
+    const navigate = useNavigate();
     // State to manage loading and signup fields
     const [loading, setLoading] = useState(false);
     const [userSignup, setUserSignup] = useState({
