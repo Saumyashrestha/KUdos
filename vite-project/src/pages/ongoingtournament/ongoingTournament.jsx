@@ -28,32 +28,27 @@ const OngoingTournament = () => {
                 </div>
                 <div className="flex-grow"></div>
                 <div className="flex space-x-10 mt-auto pb-1">
-                    <a
-                        href="/ongoing-tournament/table"
-                        className="text-[#387478] hover:text-[#387478] text-lg font-semibold border-b-2 border-transparent hover:border-[#387478]"
-                    >
-                        Table
-                    </a>
-                    <a
-                        href="/ongoing-tournament/matches"
+                <a
+                        href="#matches"
                         className="text-[#387478] hover:text-[#387478] text-lg font-semibold border-b-2 border-transparent hover:border-[#387478]"
                     >
                         Matches
                     </a>
+                    <a
+                        href="#table"
+                        className="text-[#387478] hover:text-[#387478] text-lg font-semibold border-b-2 border-transparent hover:border-[#387478]"
+                    >
+                        Table
+                    </a>
+                   
                 </div>
             </div>
 
             {/* Matches Section */}
-            <div className="container bg-gray-100 border border-[#387478] shadow-md rounded-lg mt-8 mx-auto px-5 py-5">
+            <div id="matches" className="container bg-gray-100 border border-[#387478] shadow-md rounded-lg mt-8 mx-auto px-5 py-5">
                 <h2 className="text-2xl font-semibold text-[#387478] mb-4">Matches</h2>
                 <div className="relative">
-                    <button
-                        onClick={scrollLeft}
-                        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-400 rounded-full p-3 shadow z-10"
-                        style={{ marginLeft: "-40px" }}
-                    >
-                        &lt;
-                    </button>
+                   
 
                     {/* Matches Container */}
                     <div
@@ -164,16 +159,50 @@ const OngoingTournament = () => {
                             </a>
                         ))}
                     </div>
-
-                    <button
-                        onClick={scrollRight}
-                        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-400 rounded-full p-3 shadow z-10"
-                        style={{ marginRight: "-40px" }}
-                    >
-                        &gt;
-                    </button>
+                </div>
+                </div>
+                 {/* Table Section */}
+            <div id="table" className="container bg-gray-100 border border-[#387478] shadow-md rounded-lg mt-8 mx-auto px-5 py-5 mb-8">
+                <h2 className="text-2xl font-semibold text-[#387478] mb-4">Table</h2>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse border border-[#387478]">
+                        <thead>
+                            <tr className="bg-gray-200 text-[#387478]">
+                                <th className="px-2 py-2 border-b border-[#387478] text-left font-semibold">Rank</th>
+                                <th className="px-8 py-2 border-b border-[#387478] text-left font-semibold">Team</th>
+                                <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Played</th>
+                                <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Win</th>
+                                <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Draw</th>
+                                <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Loss</th>
+                                <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Goal Difference</th>
+                                <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {[
+                                { rank: 1, team: "Team A", played: 5, win: 4, draw: 1, loss: 0, gd: 10, points: 13 },
+                                { rank: 2, team: "Team B", played: 5, win: 3, draw: 1, loss: 1, gd: 8, points: 10 },
+                                { rank: 3, team: "Team C", played: 5, win: 2, draw: 1, loss: 2, gd: 2, points: 7 },
+                                { rank: 4, team: "Team D", played: 5, win: 3, draw: 1, loss: 1, gd: -3, points: 5 },
+                                { rank: 5, team: "Team E", played: 5, win: 0, draw: 1, loss: 4, gd: -8, points: 1 },
+                            ].map((row, index) => (
+                                <tr key={index} className="hover:bg-gray-200">
+                                    <td className="px-4 py-2 border-b border-[#387478] text-left">{row.rank}</td>
+                                    <td className="px-8 py-2 border-b border-[#387478] text-left">{row.team}</td>
+                                    <td className="px-1 py-2 border-b border-[#387478] text-center">{row.played}</td>
+                                    <td className="px-1 py-2 border-b border-[#387478] text-center">{row.win}</td>
+                                    <td className="px-1 py-2 border-b border-[#387478] text-center">{row.draw}</td>
+                                    <td className="px-1 py-2 border-b border-[#387478] text-center">{row.loss}</td>
+                                    <td className="px-1 py-2 border-b border-[#387478] text-center">{row.gd}</td>
+                                    <td className="px-1 py-2 border-b border-[#387478] text-center">
+                                        {(row.win * 3) + (row.draw * 1) + (row.loss * 0)}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        
         </Layout>
     );
 };
