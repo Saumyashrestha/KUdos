@@ -44,7 +44,7 @@ const Signup = () => {
         try{
             await createUserWithEmailAndPassword(auth, userSignup.email, userSignup.password)
             const user = auth.currentUser;
-            console.log(user);
+            //console.log(user);
             if(user){
                 await setDoc(doc(db, "Users", userSignup.email),{
                     Name: userSignup.name,
@@ -64,7 +64,7 @@ const Signup = () => {
                     confirmPassword: ""
                 });
             }, 1000);
-            navigate("/login");
+            window.location.href = "/login";
         }
         catch(error){
             console.log(error.message);
