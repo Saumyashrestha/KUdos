@@ -16,6 +16,7 @@ import Football from "./pages/football/Football";
 import OngoingTournament from "./pages/ongoingtournament/ongoingTournament";
 import AdminDashboard from "./pages/admin/admin"
 import CoordinatorHome from "./pages/coordinator/coordinator_home";
+import TournamentManagement from "./pages/coordinator/tournament_management";
 
 const App = () => {
   return(
@@ -32,7 +33,6 @@ const App = () => {
           <Route path="/football" element={<Football/>}/>
           <Route path="/ongoingtournament" element={<OngoingTournament/>}/>
           <Route path="/admin" element={<AdminDashboard/>}/>
-          <Route path="/coordinatorhome" element={<CoordinatorHome/>}/>
         </Routes>
       </Router>
     </div>
