@@ -4,9 +4,8 @@ const EquipmentDetail = () => {
     return (
         <div>
             <div className="py-5 flex justify-between items-center">
-                {/* text  */}
                 <h1 className=" text-xl text-[#387478] font-bold">All Equipments</h1>
-                {/* Add Product Button  */}
+                {/* Add Equipment Button  */}
                 <Link to="/addequipment">
                 <button className="px-5 py-2 bg-[#a8d4d7] border border-[#387478] rounded-lg">Add Equipment</button>
                 </Link>
