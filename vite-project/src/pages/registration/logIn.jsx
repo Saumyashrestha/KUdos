@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Loader from "../../components/loader/Loader";
 import Layout from "../../components/layout/Layout";
+import { auth } from "../../firebase/FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
@@ -29,7 +30,7 @@ const Login = () => {
         setTimeout(() => {
           setLoading(false);
           toast.success("Logged In Successfully");
-          navigate("/homepage");
+          window.location.href = "/homepage";
         }, 1000);
       }
       catch(error){
