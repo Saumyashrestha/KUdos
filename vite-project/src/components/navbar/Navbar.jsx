@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import Profile from "../profile/Profile"
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showProfile, setProfile] = useState(false);
 
   // navList Data
   const navList = (
@@ -48,7 +50,8 @@ const Navbar = () => {
         <div className="hidden lg:flex items-center space-x-12 mr-4">
           {navList}
           <i className="fas fa-bell fa-lg hover:text-[#387478] ml-6" />
-          <i className="fas fa-user-circle fa-lg hover:text-[#387478] ml-6" />
+          <i onClick={()=> setProfile(true)} className="fas fa-user-circle fa-lg hover:text-[#387478] ml-6" />
+          {showProfile && <Profile onClose={()=>setProfile(false)}/>}
         </div>
       </div>
 
@@ -58,7 +61,8 @@ const Navbar = () => {
           {navList}
           <div className="flex justify-center space-x-6 mt-4">
             <i className="fas fa-bell fa-lg hover:text-[#387478]" />
-            <i className="fas fa-user-circle fa-lg hover:text-[#387478]" />
+            <i onClick={()=> setProfile(true)} className="fas fa-user-circle fa-lg hover:text-[#387478]" />
+            {showProfile && <Profile onClose={()=>setProfile(false)}/>}
           </div>
         </div>
       )}
