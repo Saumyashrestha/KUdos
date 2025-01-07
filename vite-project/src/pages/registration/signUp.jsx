@@ -46,7 +46,7 @@ const Signup = () => {
             const user = auth.currentUser;
             //console.log(user);
             if(user){
-                await setDoc(doc(db, "Users", userSignup.email),{
+                await setDoc(doc(db, "Users", user.uid),{
                     Name: userSignup.name,
                     Email: userSignup.email,
                     Role: "Student"

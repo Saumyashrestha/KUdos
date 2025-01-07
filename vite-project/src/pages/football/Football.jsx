@@ -3,9 +3,9 @@ import Layout from "../../components/layout/Layout";
 const Football = () => {
   return (
     <Layout>
-      <div className="flex justify-center items-center py-10">
+      <div className="flex flex-col justify-center items-center py-10">
         {/* Scorecard Container */}
-        <div className=" shadow-md rounded-lg border border-[#387478] p-8 w-[90%] max-w-4xl">
+        <div className="shadow-md rounded-lg border border-[#387478] p-8 w-[90%] max-w-4xl mb-10">
           <div className="flex justify-between items-center px-10">
             {/* Left Team */}
             <div className="text-center space-y-4">
@@ -19,7 +19,6 @@ const Football = () => {
                 <p>P. Foden 22'</p>
                 <p>K. DeBruyne 66'</p>
               </div>
-    
             </div>
 
             {/* Match Time and Scores */}
@@ -44,16 +43,67 @@ const Football = () => {
               </div>
             </div>
           </div>
-          <div className="flex justify-center gap-20 mt-4 mb-0">
-            <button className="text-[#387478] hover:text-[#387478] text-lg font-semibold border-b-2 border-transparent hover:border-[#387478]">
-              Lineup
-            </button>
-            <button className="text-[#387478] hover:text-[#387478] text-lg font-semibold border-b-2 border-transparent hover:border-[#387478]">
-              Result
-            </button>
-            <button className="text-[#387478] hover:text-[#387478] text-lg font-semibold border-b-2 border-transparent hover:border-[#387478]">
-              Table
-            </button>
+        </div>
+
+        {/* Lineup Container */}
+        <div className="shadow-md rounded-lg border border-[#387478] p-8 w-[90%] max-w-4xl">
+          <h2 className="text-2xl font-bold text-[#387478] mb-8">
+            Lineup
+          </h2>
+          <div className="grid grid-cols-2 gap-8">
+            {/* Team A */}
+            <div className="space-y-2">
+              <h3 className="font-semibold text-xl text-[#387478] mb-6">
+                Team A
+              </h3>
+              <ul className="text-[#387478]">
+                {[
+                  "Ederson",
+                  "Kyle Walker",
+                  "Rúben Dias",
+                  "João Cancelo",
+                  "Aymeric Laporte",
+                  "Rodri",
+                  "Kevin De Bruyne",
+                  "Phil Foden",
+                  "Riyad Mahrez",
+                  "Jack Grealish",
+                  "Erling Haaland",
+                ].map((player, index) => (
+                  <li key={index} className="flex flex-col">
+                    {player}
+                    <hr className="border-t border-gray-400 my-4" />
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Team B */}
+            <div className="space-y-2">
+              <h3 className="font-semibold text-xl text-[#387478] mb-6">
+                Team B
+              </h3>
+              <ul className="text-[#387478]">
+                {[
+                  "Alisson",
+                  "Trent Alexander-Arnold",
+                  "Virgil van Dijk",
+                  "Andy Robertson",
+                  "Joel Matip",
+                  "Fabinho",
+                  "Jordan Henderson",
+                  "Thiago Alcântara",
+                  "Mohamed Salah",
+                  "Darwin Núñez",
+                  "Diogo Jota",
+                ].map((player, index) => (
+                  <li key={index} className="flex flex-col">
+                    {player}
+                    <hr className="border-t border-gray-400 my-4" />
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
