@@ -49,10 +49,11 @@ const ongoingEventData = [
 ];
 
 
+
 const HomePageCard = () => {
     const navigate = useNavigate();
     return (
-        <div className=" playfair mt-10">
+        <div className=" playfair mt-10">  
             {/* Heading */}
             <div className="">
                 <h1 
