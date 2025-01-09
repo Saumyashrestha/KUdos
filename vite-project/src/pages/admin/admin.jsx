@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'; // Import the Link component
 import { 
   Card, 
   CardHeader,
   CardTitle, 
-  CardContent,
-  CardDescription 
-} from '../../components/card/card'; ; 
+  CardContent
+} from '../../components/card/card'; 
 import { 
   Users,
   UserPlus,
@@ -43,65 +43,74 @@ const AdminDashboard = () => {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <Card className="bg-white hover:shadow-lg transition-shadow">
-          <CardContent className="pt-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Users</p>
-                <h3 className="text-2xl font-bold text-gray-800">1,234</h3>
+        {/* Wrapping each card with Link to make it pressable */}
+        
+          <Card className="bg-white hover:shadow-lg transition-shadow cursor-pointer">
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Total Users</p>
+                  <h3 className="text-2xl font-bold text-gray-800">1,234</h3>
+                </div>
+                <Users className="h-8 w-8 text-blue-500" />
               </div>
-              <Users className="h-8 w-8 text-blue-500" />
-            </div>
-            <div className="mt-4 text-xs text-green-600">
-              +12% from last month
-            </div>
-          </CardContent>
-        </Card>
+              <div className="mt-4 text-xs text-green-600">
+                +12% from last month
+              </div>
+            </CardContent>
+          </Card>
+     
 
-        <Card className="bg-white hover:shadow-lg transition-shadow">
-          <CardContent className="pt-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Active Coordinators</p>
-                <h3 className="text-2xl font-bold text-gray-800">8</h3>
+        <Link to="/coordinator">
+          <Card className="bg-white hover:shadow-lg transition-shadow cursor-pointer">
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Active Coordinators</p>
+                  <h3 className="text-2xl font-bold text-gray-800">8</h3>
+                </div>
+                <UserPlus className="h-8 w-8 text-purple-500" />
               </div>
-              <UserPlus className="h-8 w-8 text-purple-500" />
-            </div>
-            <div className="mt-4 text-xs text-blue-600">
-              2 pending approvals
-            </div>
-          </CardContent>
-        </Card>
+              <div className="mt-4 text-xs text-blue-600">
+                2 pending approvals
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card className="bg-white hover:shadow-lg transition-shadow">
-          <CardContent className="pt-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Equipment Items</p>
-                <h3 className="text-2xl font-bold text-gray-800">156</h3>
+        <Link to="/addequipment">
+          <Card className="bg-white hover:shadow-lg transition-shadow cursor-pointer">
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Equipment Items</p>
+                  <h3 className="text-2xl font-bold text-gray-800">156</h3>
+                </div>
+                <Dumbbell className="h-8 w-8 text-green-500" />
               </div>
-              <Dumbbell className="h-8 w-8 text-green-500" />
-            </div>
-            <div className="mt-4 text-xs text-orange-600">
-              12 items checked out
-            </div>
-          </CardContent>
-        </Card>
+              <div className="mt-4 text-xs text-orange-600">
+                12 items checked out
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card className="bg-white hover:shadow-lg transition-shadow">
-          <CardContent className="pt-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Active Tournaments</p>
-                <h3 className="text-2xl font-bold text-gray-800">3</h3>
+        <Link to="/ongoingtournament">
+          <Card className="bg-white hover:shadow-lg transition-shadow cursor-pointer">
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Active Tournaments</p>
+                  <h3 className="text-2xl font-bold text-gray-800">3</h3>
+                </div>
+                <Trophy className="h-8 w-8 text-yellow-500" />
               </div>
-              <Trophy className="h-8 w-8 text-yellow-500" />
-            </div>
-            <div className="mt-4 text-xs text-purple-600">
-              2 upcoming this week
-            </div>
-          </CardContent>
-        </Card>
+              <div className="mt-4 text-xs text-purple-600">
+                2 upcoming this week
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
 
       {/* Main Content Area */}
@@ -149,8 +158,8 @@ const AdminDashboard = () => {
               <div className="space-y-4">
                 {[
                   { title: "Inter-College Football Tournament", date: "Dec 25", status: "Pending" },
-                  { title: "Cricket Equipment Inspection", date: "Dec 27", status: "Confirmed" },
-                  { title: "New Coordinator Training", date: "Dec 30", status: "Scheduled" }
+                  { title: "Cricket Tournament", date: "Dec 27", status: "Confirmed" },
+                  { title: "Futsal Inter-department", date: "Dec 30", status: "Scheduled" }
                 ].map((event, index) => (
                   <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
                     <div>
@@ -183,43 +192,21 @@ const AdminDashboard = () => {
             <CardContent>
               <div className="space-y-3">
                 {[
-                  { icon: UserPlus, text: "Add New Coordinator", color: "text-blue-500" },
-                  { icon: Dumbbell, text: "Equipment Check-out", color: "text-green-500" },
-                //   { icon: Trophy, text: "Create Tournament", color: "text-yellow-500" },
-                  { icon: Activity, text: "Generate Reports", color: "text-purple-500" }
+                  { icon: UserPlus, text: "Add New Coordinator", color: "text-blue-500", link: "/coordinator" },
+                  { icon: Dumbbell, text: "Equipment Check-out", color: "text-green-500", link: "/addequipment" },
+                { icon: Trophy, text: "Create Tournament", color: "text-yellow-500", link: "/createtournament" },
+                  // { icon: Activity, text: "Generate Reports", color: "text-purple-500", link: "/generatereports" }
                 ].map((action, index) => (
-                  <div key={index} 
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                    <action.icon className={`h-5 w-5 ${action.color}`} />
-                    <span className="text-sm font-medium text-gray-700">{action.text}</span>
-                  </div>
+                  <Link key={index} to={action.link}>
+                    <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                      <action.icon className={`h-5 w-5 ${action.color}`} />
+                      <span className="text-sm font-medium text-gray-700">{action.text}</span>
+                    </div>
+                  </Link>
                 ))}
               </div>
             </CardContent>
           </Card>
-
-          {/* <Card className="bg-gradient-to-br from-blue-500 to-purple-600 text-white">
-            <CardHeader>
-              <CardTitle className="text-lg font-bold">System Status</CardTitle>
-              <CardDescription className="text-blue-100">All systems operational</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Server Status</span>
-                  <span className="text-xs bg-green-400 px-2 py-1 rounded-full">Online</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Last Backup</span>
-                  <span className="text-xs">2 hours ago</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Storage</span>
-                  <span className="text-xs">75% used</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card> */}
         </div>
       </div>
     </div>

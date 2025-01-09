@@ -17,9 +17,12 @@ import OngoingTournament from "./pages/ongoingtournament/ongoingTournament";
 import Admin from "./pages/admin/admin"
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AddEquipmentPage from "./pages/admin/AddEquipmentPage";
-import UpdateEquipmentPage from "./components/admin/UpdateEquipmentPage";
+
 import EditScorePage from "./pages/coordinator/EditScorePage";
 import MyState from "./context/myState";
+import CoordinatorManagement from "./components/admin/coordinates";
+import UserDetail from "./components/admin/UserDetail";
+import EquipmentApprovalPage from "./components/admin/EquipmentApprovalPage";
 
 const App = () => {
   return(
@@ -38,8 +41,10 @@ const App = () => {
           <Route path="/admin" element={<Admin/>}/>
           <Route path="/admin-dashboard" element={<AdminDashboard/>}/>
           <Route path="/addequipment" element={<AddEquipmentPage/>} />
-          <Route path="/updateequipment" element={<UpdateEquipmentPage/>} />
           <Route path="/editscore" element={<EditScorePage/>}/>
+          <Route path="/coordinator" element={<CoordinatorManagement/>}/>
+          <Route path="/userdetail" element={<UserDetail/>}/>
+          <Route path="/admin-dashboard2" element={<EquipmentApprovalPage/>}/>
         </Routes>
       </Router>
     </MyState>
