@@ -27,7 +27,8 @@ import EditTournamentPage from "./pages/coordinator/EditTournamentPage";
 
 const App = () => {
   return(
-    <MyState className="playfair" >
+    <MyState  >
+      <div className="playfair">
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage/>}/>
@@ -49,6 +50,7 @@ const App = () => {
           <Route path="/edittournament" element={<EditTournamentPage/>}/>
         </Routes>
       </Router>
+      </div>  
     </MyState>
   );
 }
