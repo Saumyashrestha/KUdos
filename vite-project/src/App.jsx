@@ -26,7 +26,8 @@ import EquipmentApprovalPage from "./components/admin/EquipmentApprovalPage";
 
 const App = () => {
   return(
-    <MyState className="playfair" >
+    <MyState  >
+      <div className="playfair">
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage/>}/>
@@ -47,6 +48,7 @@ const App = () => {
           <Route path="/admin-dashboard2" element={<EquipmentApprovalPage/>}/>
         </Routes>
       </Router>
+      </div>  
     </MyState>
   );
 }
