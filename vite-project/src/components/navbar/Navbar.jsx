@@ -29,7 +29,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="bg-[#f2f0ef] shadow-md sticky z-50 top-0">
+    <nav className="playfair bg-[#f2f0ef] shadow-md sticky z-50 top-0">
       <div className="flex justify-between items-center py-3 px-8 lg:px-14">
         {/* Logo */}
         <div className="flex items-center">

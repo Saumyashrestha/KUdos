@@ -19,10 +19,11 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AddEquipmentPage from "./pages/admin/AddEquipmentPage";
 import UpdateEquipmentPage from "./components/admin/UpdateEquipmentPage";
 import EditScorePage from "./pages/coordinator/EditScorePage";
+import MyState from "./context/myState";
 
 const App = () => {
   return(
-    <div className="playfair" >
+    <MyState className="playfair" >
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage/>}/>
@@ -41,7 +42,7 @@ const App = () => {
           <Route path="/editscore" element={<EditScorePage/>}/>
         </Routes>
       </Router>
-    </div>
+    </MyState>
   );
 }
 
