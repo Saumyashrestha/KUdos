@@ -19,6 +19,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AddEquipmentPage from "./pages/admin/AddEquipmentPage";
 import UpdateEquipmentPage from "./components/admin/UpdateEquipmentPage";
 import EditScorePage from "./pages/coordinator/EditScorePage";
+import EditTournamentPage from "./pages/coordinator/EditTournamentPage";
 
 const App = () => {
   return(
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/addequipment" element={<AddEquipmentPage/>} />
           <Route path="/updateequipment" element={<UpdateEquipmentPage/>} />
           <Route path="/editscore" element={<EditScorePage/>}/>
+          <Route path="/edittournament" element={<EditTournamentPage/>}/>
         </Routes>
       </Router>
     </div>

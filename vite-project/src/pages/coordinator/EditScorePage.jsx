@@ -100,7 +100,7 @@ const EditScorePage = () => {
               className={`px-4 py-2 rounded ${
                 isTimerRunning
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-[#448d92] text-white hover:bg-[#4fa3a9]"
+                  : "bg-[#387478] text-white hover:bg-[#4fa3a9]"
               }`}
             >
               Start Timer
@@ -152,7 +152,7 @@ const EditScorePage = () => {
 
           {/* Goal Scorer */}
           <div className="mb-4 mt-12">
-            <label className="block text-[#387478] font-semibold mb-2">
+            <label className="text-lg text-[#387478] font-semibold mb-4">
               Goal Scorer:
             </label>
             <input
@@ -164,7 +164,6 @@ const EditScorePage = () => {
             />
           </div>
 
-          {/* Extra Time */}
           <div className="mb-4">
             <h3 className="text-lg font-semibold text-[#387478]">Extra Time:</h3>
             <div className="flex items-center">
@@ -172,7 +171,8 @@ const EditScorePage = () => {
                 type="text"
                 value={extraTime}
                 onChange={handleExtraTimeInput}
-                className="w-24 px-4 py-2 mr-4 border border-[#387478] rounded-lg shadow-md focus:outline-none"
+                className="w-32 px-4 py-2 mr-4 border border-[#387478] rounded-lg shadow-md focus:outline-none"
+                placeholder="Extra Time"
               />
               <button
                 onClick={addExtraTime}

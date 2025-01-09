@@ -11,7 +11,6 @@ const EquipmentDetail = () => {
                 </Link>
             </div>
 
-            {/* table  */}
             <div className="w-full overflow-x-auto">
                 <table className="w-full text-left border border-collapse sm:border-separate border-gray-500 text-[#4c9da3]" >
                     <tbody>
