@@ -56,7 +56,8 @@ const HomePageCard = () => {
             {/* Heading */}
             <div className="">
                 <h1 
-                className="text-center mb-5 text-2xl text-[#387478] font-semibold text-decoration : underline">LIVE MATCHES</h1>
+                className="text-center mb-5 text-2xl text-[
+                 font-semibold text-decoration : underline">LIVE MATCHES</h1>
             </div>
 
             {/* Main Section */}
