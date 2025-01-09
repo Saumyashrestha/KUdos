@@ -15,14 +15,17 @@ import ClubHome from "./pages/clubhome/ClubHome";
 import Football from "./pages/football/Football";
 import OngoingTournament from "./pages/ongoingtournament/ongoingTournament";
 import Admin from "./pages/admin/admin"
-import AdminDashboard from "./pages/admin/AdminDashboard";
+import EventDetailsCard from "./pages/admin/AdminDashboard"
 import AddEquipmentPage from "./pages/admin/AddEquipmentPage";
+import ActiveTournamentsPage from "./components/admin/activetournament";
 
 import EditScorePage from "./pages/coordinator/EditScorePage";
 import MyState from "./context/myState";
 import CoordinatorManagement from "./components/admin/coordinates";
 import UserDetail from "./components/admin/UserDetail";
 import EquipmentApprovalPage from "./components/admin/EquipmentApprovalPage";
+import EventRequestForm from "./pages/eventRequest/eventRequest";
+
 
 const App = () => {
   return(
@@ -40,12 +43,15 @@ const App = () => {
           <Route path="/football" element={<Football/>}/>
           <Route path="/ongoingtournament" element={<OngoingTournament/>}/>
           <Route path="/admin" element={<Admin/>}/>
-          <Route path="/admin-dashboard" element={<AdminDashboard/>}/>
+          <Route path="/admin-dashboard" element={<EventDetailsCard/>}/>
           <Route path="/addequipment" element={<AddEquipmentPage/>} />
           <Route path="/editscore" element={<EditScorePage/>}/>
           <Route path="/coordinator" element={<CoordinatorManagement/>}/>
           <Route path="/userdetail" element={<UserDetail/>}/>
-          <Route path="/admin-dashboard2" element={<EquipmentApprovalPage/>}/>
+          <Route path="/equipmentArroval" element={<EquipmentApprovalPage/>}/>
+          <Route path="/ActiveTournamentsPage" element={<ActiveTournamentsPage/>}/>
+          <Route path="/eventRequest" element={<EventRequestForm/>}/>
+       
         </Routes>
       </Router>
       </div>  
