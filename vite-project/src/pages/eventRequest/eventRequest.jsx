@@ -328,11 +328,15 @@ const EventRequestForm = () => {
                       name="phoneNumber"
                       value={formData.phoneNumber}
                       onChange={handleChange}
+                      maxLength={10}
                       required
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:border-transparent"
                       style={{ '--tw-ring-color': '#387478' }}
                       placeholder="Enter phone number"
                     />
+                     {formData.phoneNumber && formData.phoneNumber.length!== 10 && (
+    <p className="text-red-500 text-xs">Phone number must be 10 digits.</p>
+  )}
                   </div>
                 </div>
 

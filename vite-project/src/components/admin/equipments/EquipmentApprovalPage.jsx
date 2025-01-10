@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Card } from '../card/card';
-import { db, doc, collection, getDocs,getDoc, updateDoc ,query , where} from '../../firebase/FirebaseConfig';
+import { Card } from '../../card/card';
+import { db, doc, collection, getDocs,getDoc, updateDoc ,query , where} from '../../../firebase/FirebaseConfig';
 import { CheckCircle, XCircle, Package2, Calendar, User2, Shield } from 'lucide-react';
 import { format } from 'date-fns';
-import Layout from '../layout/Layout';
+import Layout from '../../layout/Layout';
 
 
 const EquipmentApprovalPage = () => {

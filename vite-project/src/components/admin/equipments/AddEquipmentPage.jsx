@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, X, Trash } from 'lucide-react';
-import { db, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from '../../firebase/FirebaseConfig';
-import Layout from "../../components/layout/Layout";
+import { db, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from '../../../firebase/FirebaseConfig';
+import Layout from "../../layout/Layout";
 
 const EquipmentManagement = () => {
   const [equipment, setEquipment] = useState([]);
