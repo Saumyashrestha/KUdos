@@ -29,12 +29,12 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="bg-[#f2f0ef] shadow-md sticky z-50 top-0">
+    <nav className="bg-[#387478] shadow-md sticky z-50 top-0">
       <div className="flex justify-between items-center py-3 px-8 lg:px-14">
         {/* Logo */}
         <div className="flex items-center">
           <Link to={"/homepage"}>
-            <h2 className="font-bold text-[#387478] text-2xl">KUdos</h2>
+            <h2 className="font-bold text-[#f2f0ef] text-2xl">KUdos</h2>
           </Link>
         </div>
 
