@@ -75,7 +75,7 @@ const HomePageCard = () => {
                 <td>{team1Name}</td>
                 <td>{team2Name}</td>
                 <td>{venue}</td>
-                <td>{dateTime?.toDate().toLocaleString()}</td>
+                <td>{new Date(dateTime).toLocaleString()}</td>
               </tr>
             );
           })}
