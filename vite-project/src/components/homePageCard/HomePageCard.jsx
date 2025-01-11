@@ -43,12 +43,12 @@ const HomePageCard = () => {
                 key={matchId}
                 className="block w-full border border-gray-300 p-0 rounded-xl overflow-hidden shadow-md cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:shadow-lg"
               >
-                <div className="relative w-full flex justify-between items-center px-28 py-6">
+                <div className="relative bg-[#f2f0ef] w-full flex justify-between items-center px-28 py-6">
                   {/* Left Team */}
                   <div className="text-center space-y-4">
                     <img
                       className="h-30 w-32 object-cover mx-auto"
-                      src="/mancity.png" 
+                      src="/TeamA.png" 
                       alt={`${team1Name} jersey`}
                     />
                     <h3 className="font-semibold text-xl text-[#387478]">{team1Name}</h3>
@@ -66,7 +66,7 @@ const HomePageCard = () => {
                   <div className="text-center space-y-4">
                     <img
                       className="h-30 w-32 object-cover mx-auto"
-                      src="/mancity2.png" 
+                      src="/TeamB.png" 
                       alt={`${team2Name} jersey`}
                     />
                     <h3 className="font-semibold text-xl text-[#387478]">{team2Name}</h3>
