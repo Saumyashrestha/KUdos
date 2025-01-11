@@ -188,26 +188,18 @@ const EventDetails = () => {
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto p-4">
+    <div className="max-w min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-6">
+      <div className="max-w-4xl mx-auto p-6">
         <h1 className="text-2xl font-bold mb-6" style={{ color: '#387478' }}>
           Event Requests
         </h1>
         {loading ? (
-          <p
-            style={{
-              fontSize: '1.2rem',
-              color: '#387478',
-              fontWeight: 'bold',
-              textAlign: 'center',
-              marginTop: '20px',
-              animation: 'fadeIn 1.5s ease-in-out',
-            }}
-          >
+          <p className="text-center text-lg font-bold" style={{ color: '#387478' }}>
             Loading events...
           </p>
         ) : error ? (
-          <p>{error}</p> // Display error message
-        ) :eventData.length === 0 ? (
+          <p>{error}</p>
+        ) : eventData.length === 0 ? (
           <p>No event requests available.</p>
         ) : (
           eventData.map((event, index) => (
@@ -215,7 +207,7 @@ const EventDetails = () => {
               <CardHeader className="border-b border-gray-200">
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-2xl font-bold" style={{ color: '#387478' }}>
-                    Event Request Details
+                    {event.eventName}
                   </CardTitle>
                   <div className="flex gap-3">
                     <button
@@ -236,7 +228,6 @@ const EventDetails = () => {
               </CardHeader>
 
               <CardContent className="p-6">
-                {/* Banner Image */}
                 <div className="mb-6">
                   <img
                     src={event.bannerImage}
@@ -245,7 +236,6 @@ const EventDetails = () => {
                   />
                 </div>
 
-                {/* Event Details Grid */}
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Left Column */}
                   <div className="space-y-4">
@@ -256,19 +246,22 @@ const EventDetails = () => {
                       </h3>
                       <div className="space-y-2">
                         <p>
-                          <span className="font-medium">Type:</span> {event.eventType}
+                          <span className="font-medium">Event Type:</span>{' '}
+                          {event.eventType === 'other' ? event.otherEventType : event.eventType}
                         </p>
                         <p>
-                          <span className="font-medium">Date:</span> {event.eventDate}
+                          <span className="font-medium">Start Date:</span>{' '}
+                          {new Date(event.startDate).toLocaleDateString()}
                         </p>
                         <p>
-                          <span className="font-medium">Time:</span> {event.startTime} - {event.endTime}
+                          <span className="font-medium">End Date:</span>{' '}
+                          {new Date(event.endDate).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
 
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <h3 className="font-semibold mb-3 flex items-center gap-2 " style={{ color: '#387478' }}>
+                      <h3 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#387478' }}>
                         <MapPin className="h-5 w-5" />
                         Venue And Attendance
                       </h3>
@@ -277,7 +270,8 @@ const EventDetails = () => {
                           <span className="font-medium">Location:</span> {event.location}
                         </p>
                         <p>
-                          <span className="font-medium ">Expected Participants:</span> {event.expectedAttendees}
+                          <span className="font-medium">Expected Participants:</span>{' '}
+                          {event.expectedAttendees}
                         </p>
                       </div>
                     </div>
@@ -310,9 +304,9 @@ const EventDetails = () => {
                       </h3>
                       <div className="space-y-2">
                         <p>
-                          <span className="font-medium">Description:</span> {event.description || 'Not provided'}
+                          <span className="font-medium">Description:</span>{' '}
+                          {event.description || 'Not provided'}
                         </p>
-
                         {event.proposalFile && (
                           <div className="mt-2">
                             <p className="font-medium mb-1">Proposal Document:</p>
@@ -332,7 +326,8 @@ const EventDetails = () => {
           ))
         )}
       </div>
-    </Layout>
+    </div>
+  </Layout>
   );
 };
 
