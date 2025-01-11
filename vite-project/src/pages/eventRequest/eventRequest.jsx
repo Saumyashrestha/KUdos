@@ -14,11 +14,11 @@ const EventRequestForm = () => {
   const [formData, setFormData] = useState({
     eventName: '',
     eventDate: '',
-    startTime: '',
-    endTime: '',
+    endDate: '',
+    startDate: '',
     expectedAttendees: '',
     description: '',
-    eventType: 'football',
+    eventType: 'Choice your eventType',
     otherEventType: '',
     phoneNumber: '',
     bannerImage: '/api/placeholder/400/320',
@@ -26,6 +26,7 @@ const EventRequestForm = () => {
     location: '',
     userName:'',
     userEmail:''
+
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -34,22 +35,27 @@ const EventRequestForm = () => {
   const [bannerPreview, setBannerPreview] = useState('');
 
   const sportTypes = [
+    
     'Football',
     'Basketball',
-    'Table Tennis',
     'Futsal',
     'Volleyball',
     'Badminton',
     'Cricket',
-    'Tennis',
+   'Badminton' ,
   ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    if (new Date(formData.endDate) < new Date(formData.startDate)) {
+      alert('End date must be after the start date.');
+      return;
+    }
+    else{ setFormData(prev => ({
       ...prev,
       [name]: value
-    }));
+    }));}
+    
   };
 
  
@@ -96,7 +102,7 @@ const EventRequestForm = () => {
           endTime: '',
           expectedAttendees: '',
           description: '',
-          eventType: 'football',
+          eventType: '',
           otherEventType: '',
           requirements: '',
           phoneNumber: '',
@@ -181,11 +187,12 @@ const EventRequestForm = () => {
                     />
                   </div>
 
-                  {/* <div className="space-y-2 group">
+                  <div className="space-y-2 group">
                     <label className="text-sm font-medium text-gray-700">Sport Type</label>
                     <select
                       name="eventType"
                       value={formData.eventType}
+                     
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:border-transparent transition-all hover:border-gray-300"
                       style={{ '--tw-ring-color': '#387478' }}
@@ -195,9 +202,9 @@ const EventRequestForm = () => {
                           {sport}
                         </option>
                       ))}
-                      <option value="other">Other</option>
+                     
                     </select>
-                  </div> */}
+                  </div>
                 </div>
                 {/* <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
@@ -239,46 +246,38 @@ const EventRequestForm = () => {
                     <Calendar className="h-5 w-5" style={{ color: '#387478' }} />
                     Date And Time
                   </h3>
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-700">Date</label>
-                      <input
-                        type="date"
-                        name="eventDate"
-                        value={formData.eventDate}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:border-transparent"
-                        style={{ '--tw-ring-color': '#387478' }}
-                      />
-                    </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+    {/* Start Date */}
+    <div className="space-y-2">
+      <label className="text-sm font-medium text-gray-700">Start Date</label>
+      <input
+        type="date"
+        name="startDate"
+        value={formData.startDate}
+        onChange={handleChange}
+        required
+        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:border-transparent"
+        style={{ '--tw-ring-color': '#387478' }}
+      />
+    </div>
 
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-700">Start Time</label>
-                      <input
-                        type="time"
-                        name="startTime"
-                        value={formData.startTime}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:border-transparent"
-                        style={{ '--tw-ring-color': '#387478' }}
-                      />
-                    </div>
+    {/* End Date */}
+    <div className="space-y-2">
+      <label className="text-sm font-medium text-gray-700">End Date</label>
+      <input
+        type="date"
+        name="endDate"
+        value={formData.endDate}
+        onChange={handleChange}
+        required
+        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:border-transparent"
+        style={{ '--tw-ring-color': '#387478' }}
+      />
+    </div>
 
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-700">End Time</label>
-                      <input
-                        type="time"
-                        name="endTime"
-                        value={formData.endTime}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:border-transparent"
-                        style={{ '--tw-ring-color': '#387478' }}
-                      />
-                    </div>
-                  </div>
+ 
+    
+  </div>
                 </div>
 
                 {/* Location, Attendees, and Phone Number */}
@@ -328,11 +327,15 @@ const EventRequestForm = () => {
                       name="phoneNumber"
                       value={formData.phoneNumber}
                       onChange={handleChange}
+                      maxLength={10}
                       required
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:border-transparent"
                       style={{ '--tw-ring-color': '#387478' }}
                       placeholder="Enter phone number"
                     />
+                     {formData.phoneNumber && formData.phoneNumber.length!== 10 && (
+    <p className="text-red-500 text-xs">Phone number must be 10 digits.</p>
+  )}
                   </div>
                 </div>
 

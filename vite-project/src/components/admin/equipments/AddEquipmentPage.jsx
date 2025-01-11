@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, X, Trash } from 'lucide-react';
-import { db, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from '../../firebase/FirebaseConfig';
-import Layout from "../../components/layout/Layout";
+import { db, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from '../../../firebase/FirebaseConfig';
+import Layout from "../../layout/Layout";
 
 const EquipmentManagement = () => {
   const [equipment, setEquipment] = useState([]);
@@ -155,7 +155,7 @@ const EquipmentManagement = () => {
                     alt={equip.name}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200" />
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-5  transition-all duration-200" />
                   <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200">
                     <button
                       onClick={() => {
