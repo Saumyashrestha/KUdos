@@ -6,7 +6,7 @@ import {
   CardTitle, 
   CardContent, 
   CardDescription 
-} from '../card/card';
+} from '../../card/card';
 import { 
   UserPlus, 
   Users, 
@@ -18,9 +18,9 @@ import {
   XCircle, 
   ChevronDown 
 } from 'lucide-react';
-import Layout from '../layout/Layout';
+import Layout from '../../layout/Layout';
 
-import { db, collection, getDocs, addDoc, updateDoc, doc } from '../../firebase/FirebaseConfig';
+import { db, collection, getDocs, addDoc, updateDoc, doc } from '../../../firebase/FirebaseConfig';
 
 const CoordinatorManagement = () => {
   const [activeTab, setActiveTab] = useState('list');
@@ -356,3 +356,7 @@ const getStatusStyle = (status) => {
 };
 
 export default CoordinatorManagement;
+
+
+
+

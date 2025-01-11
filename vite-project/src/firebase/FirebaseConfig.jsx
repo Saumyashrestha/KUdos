@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";  // Importing getFirestore
-import { collection, getDocs, getDoc,addDoc, updateDoc, doc,query, where,deleteDoc ,serverTimestamp} from "firebase/firestore";
+import { collection, getDocs, getDoc,addDoc, updateDoc, setDoc,doc,query, where,deleteDoc ,serverTimestamp} from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -21,4 +21,4 @@ const db = getFirestore(app);  // Initialize Firestore
 const storage = getStorage(app);
 
 // Exporting all the necessary functions and variables
-export { auth, db, app, storage,serverTimestamp,collection,query,where, getDocs, getDoc,addDoc, updateDoc, doc, deleteDoc };
+export { auth, db, app, storage,setDoc,serverTimestamp,collection,query,where, getDocs, getDoc,addDoc, updateDoc, doc, deleteDoc };
