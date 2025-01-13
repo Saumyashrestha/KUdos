@@ -31,6 +31,7 @@ import EventDetails from "./components/admin/event/eventCard";
 
 import EditTournamentPage from "./pages/coordinator/EditTournamentPage";
 
+
 const App = () => {
   return(
     <MyState  >
@@ -65,6 +66,8 @@ const App = () => {
           
        
           <Route path="/edittournament" element={<EditTournamentPage/>}/>
+     
+          
         </Routes>
       </Router>
       </div>  

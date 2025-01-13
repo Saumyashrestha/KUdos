@@ -6,11 +6,12 @@ import { getAuth } from 'firebase/auth';
 
 
 
-import { db, doc, collection, getDoc,getDocs,addDoc } from '../../firebase/FirebaseConfig';
+import { db, doc, collection, getDoc,addDoc , getDocs,query ,where } from '../../firebase/FirebaseConfig';
 
 
 const EventRequestForm = () => {
-    const [userDetails, setUserDetailsLocal] = useState(null);
+  const cloudName = 'dt4rt3krq';
+    // const [userDetails, setUserDetailsLocal] = useState(null);
   const [formData, setFormData] = useState({
     eventName: '',
     eventDate: '',
@@ -21,11 +22,12 @@ const EventRequestForm = () => {
     eventType: 'Choice your eventType',
     otherEventType: '',
     phoneNumber: '',
-    bannerImage: '/api/placeholder/400/320',
-    proposalFile: '/api/placeholder/400/320',
+    bannerImage: '',
+    proposalFile: '',
     location: '',
     userName:'',
     userEmail:''
+    
 
   });
 
@@ -58,41 +60,95 @@ const EventRequestForm = () => {
     
   };
 
- 
+  const handleFileUpload = async (e, type) => {
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'ml_default'); // Cloudinary preset
+  
+    try {
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+  
+      const data = await response.json();
+      if (data.secure_url) {
+        if (type === 'banner') {
+          setFormData((prev) => ({ ...prev, bannerImage: data.secure_url }));
+          setBannerPreview(data.secure_url);
+        } else if (type === 'proposal') {
+          setFormData((prev) => ({ ...prev, proposalFile: data.secure_url }));
+        }
+      } else {
+        console.log('Failed to upload file:', data);
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
+  
+  
+
+  
+  
+  
+
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    const auth = getAuth();
-    // Wait for user to be authenticated and details to load
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const docRef = doc(db, "Users", user?.uid); // Ensure user is authenticated
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserDetailsLocal(docSnap.data()); // Set user details in local state
-        } else {
-          console.log("User not logged in");
-        }
-      }
-    });
-  
-    if (!userDetails) {
-      console.log("User details not available yet");
-      return; // Ensure data is available before submitting
+    // Ensure all required fields are filled, including the bannerImage
+    if (!formData.bannerImage) {
+      alert("Please upload a banner image.");
+      return;
     }
   
+    const auth = getAuth();
+  
     try {
+      const user = auth.currentUser; // Get the current user directly
+      if (!user) {
+        alert("User not logged in.");
+        return;
+      }
+
+
+      // Check if the user has already created an event
+    const eventRef = collection(db, 'eventRequests');
+    const q = query(eventRef, where("userEmail", "==", user.email));  // Use userEmail to check for an existing event
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      alert("You have already created an event request.");
+      return;
+    }
+  
+      // Fetch user details from Firestore
+      const docRef = doc(db, "Users", user.uid);
+      const docSnap = await getDoc(docRef);
+  
+      if (!docSnap.exists()) {
+        alert("User details not found in database.");
+        return;
+      }
+  
+      const userDetails = docSnap.data();
+  
+      // Submit form data with user details
       await addDoc(collection(db, 'eventRequests'), {
-        ...formData, // Spread existing form data
-        userName: userDetails?.Name, // Ensure userName is populated
+        ...formData,
+        userName: userDetails?.Name,
         userEmail: userDetails?.Email,
       });
   
-      console.log('Form submitted successfully!');
+      console.log("Form submitted successfully!");
       setIsSubmitted(true);
   
-      // Reset form after 3 seconds
+      // Reset form
       setTimeout(() => {
         setIsSubmitted(false);
         setFormData({
@@ -107,14 +163,17 @@ const EventRequestForm = () => {
           requirements: '',
           phoneNumber: '',
           userName: '',
-          userEmail: ''
+          userEmail: '',
+          status:'pending',
         });
         setFileName('');
       }, 3000);
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error("Error submitting form:", error);
     }
   };
+  
+
   
 
 
@@ -239,6 +298,32 @@ const EventRequestForm = () => {
                   </div>
                 </div>
               </div> */}
+<input
+  type="file"
+  accept="image/*"
+  onChange={(e) => handleFileUpload(e, 'banner')}
+  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:border-transparent"
+/>
+
+<div className="space-y-2 group">
+  <label className="text-sm font-medium text-gray-700">Proposal File</label>
+  <input
+    type="file"
+    accept="application/pdf"
+    onChange={(e) => handleFileUpload(e, 'proposal')}
+    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:border-transparent transition-all hover:border-gray-300"
+    style={{ '--tw-ring-color': '#387478' }}
+  />
+  {formData.proposalFile && (
+    <div className="text-sm text-gray-600 mt-2">
+     
+    </div>
+  )}
+</div>
+
+
+
+
 
                 {/* Date and Time Section */}
                 <div className="bg-gray-50 p-6 rounded-2xl space-y-6">
@@ -403,4 +488,3 @@ const EventRequestForm = () => {
 };
 
 export default EventRequestForm;
-
