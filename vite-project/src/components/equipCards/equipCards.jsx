@@ -5,6 +5,7 @@ import { getAuth } from 'firebase/auth';
 import { db, doc, collection, getDoc,getDocs,addDoc } from '../../firebase/FirebaseConfig';
 
 const EquipCards = () => {
+    const cloudName = 'dt4rt3krq';
     const [equips, setEquips] = useState([]);
     const [userDetails, setUserDetailsLocal] = useState(null);
     const [cartItems, setCartItems] = useState([]);
