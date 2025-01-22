@@ -1,10 +1,12 @@
 import Layout from "../../components/layout/Layout";
 import React, { useState } from "react";
+import { db  } from "../../firebase/FirebaseConfig";
+import { collection, addDoc, doc } from "firebase/firestore";
 
 const EditTournamentPage = () => {
   const [teams, setTeams] = useState([{ name: "", players: [] }]);
   const [matches, setMatches] = useState([
-    { teamA: "", teamB: "", date: "", time: "", venue: "" },
+    { teamA: "", teamB: "", date: "", time: "", venue: "", stage: "" },
   ]);
 
   const handleTeamChange = (index, value) => {
@@ -49,12 +51,60 @@ const EditTournamentPage = () => {
   };
 
   const addMatch = () => {
-    setMatches([...matches, { teamA: "", teamB: "", date: "", time: "", venue: "" }]);
+    setMatches([...matches, { teamA: "", teamB: "", date: "", time: "", venue: "", stage: "" }]);
   };
 
   const removeMatch = (index) => {
     const updatedMatches = matches.filter((_, i) => i !== index);
     setMatches(updatedMatches);
+  };
+
+  const saveTeamsToFirestore = async () => {
+    try {
+      const teamRefs = [];
+      for (const team of teams) {
+        const teamDoc = await addDoc(collection(db, "Teams"), {
+          name: team.name,
+          players: team.players,
+        });
+        teamRefs.push(teamDoc.id);
+      }
+      return teamRefs;
+    } catch (error) {
+      console.error("Error adding teams to Firestore: ", error);
+      return [];
+    }
+  };
+
+  const saveMatchesToFirestore = async (teamRefs) => {
+    try {
+      for (const match of matches) {
+        const team1Id = teamRefs[teams.findIndex((team) => team.name === match.teamA)];
+        const team2Id = teamRefs[teams.findIndex((team) => team.name === match.teamB)];
+
+        if (team1Id && team2Id) {
+          await addDoc(collection(db, "Matches"), {
+            team1Id: doc(db, "Teams", team1Id),
+            team2Id: doc(db, "Teams", team2Id),
+            dateTime: `${match.date}T${match.time}`,
+            venue: match.venue,
+            matchStage: match.stage,
+            status: "upcoming",
+            team1score:null,
+            team2score:null,
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error adding matches to Firestore: ", error);
+    }
+  };
+
+  const handleSaveChanges = async () => {
+    const teamRefs = await saveTeamsToFirestore();
+    if (teamRefs.length > 0) {
+      await saveMatchesToFirestore(teamRefs);
+    }
   };
 
   return (
@@ -64,10 +114,12 @@ const EditTournamentPage = () => {
           Edit Tournament
         </h1>
 
+        {/* Teams Section */}
         <div className="mb-8 bg-[#f5f5f5] border border-[#387478] rounded-lg p-6 shadow-md">
           <h2 className="text-2xl font-semibold text-[#387478] mb-4">Teams</h2>
           {teams.map((team, index) => (
             <div key={index} className="mb-8">
+              {/* Team Name Input */}
               <div className="flex items-center gap-4 mb-4">
                 <input
                   type="text"
@@ -85,6 +137,8 @@ const EditTournamentPage = () => {
                   </button>
                 )}
               </div>
+
+              {/* Players Section */}
               <div className="bg-[#f5f5f5] p-4 border border-gray-300 rounded-md shadow-md">
                 <h4 className="text-md font-semibold text-[#387478] mb-4">
                   Players for {team.name || `Team ${index + 1}`}
@@ -128,6 +182,7 @@ const EditTournamentPage = () => {
           </button>
         </div>
 
+        {/* Matches Section */}
         <div className="bg-[#f5f5f5] border border-[#387478] rounded-lg p-6 shadow-md">
           <h2 className="text-2xl font-semibold text-[#387478] mb-4">Matches</h2>
           {matches.map((match, index) => (
@@ -135,6 +190,7 @@ const EditTournamentPage = () => {
               <h3 className="font-semibold text-lg text-[#387478] mb-4">
                 Match {index + 1}
               </h3>
+              {/* Match Inputs */}
               <div className="flex items-center gap-4 mb-4">
                 <select
                   value={match.teamA}
@@ -197,7 +253,7 @@ const EditTournamentPage = () => {
                   onChange={(e) =>
                     handleMatchChange(index, "stage", e.target.value)
                   }
-                  placeholder="Match Stage (Group Stage/Quarter Finals/Semi Finals)"
+                  placeholder="Match Stage"
                   className="border border-[#387478] rounded-md w-96 px-4 py-2"
                 />
               </div>
@@ -217,7 +273,11 @@ const EditTournamentPage = () => {
           </button>
         </div>
 
-        <button className="bg-[#387478] hover:bg-[#4fa3a9] text-white px-4 mt-4 py-2 rounded-md">
+        {/* Save Changes Button */}
+        <button
+          onClick={handleSaveChanges}
+          className="bg-[#387478] hover:bg-[#4fa3a9] text-white px-4 mt-4 py-2 rounded-md"
+        >
           Save Changes
         </button>
       </div>
