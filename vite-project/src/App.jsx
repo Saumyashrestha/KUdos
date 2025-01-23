@@ -15,19 +15,19 @@ import ClubHome from "./pages/clubhome/ClubHome";
 import Football from "./pages/football/Football";
 import OngoingTournament from "./pages/ongoingtournament/ongoingTournament";
 import Admin from "./pages/admin/admin"
-import EventDetailsCard from "./pages/admin/AdminDashboard"
+
 import AddEquipmentPage from "./components/admin/equipments/AddEquipmentPage";
-import ActiveTournamentsPage from "./components/admin/activetournament";
+
 
 
 
 import EditScorePage from "./pages/coordinator/EditScorePage";
 import MyState from "./context/myState";
 import CoordinatorManagement from "./components/admin/coordinators/coordinator";
-import UserDetail from "./components/admin/UserDetail";
+
 import EquipmentApprovalPage from "./components/admin/equipments/EquipmentApprovalPage";
 import EventRequestForm from "./pages/eventRequest/eventRequest";
-import EventDetails from "./components/admin/event/eventCard";
+
 import TableTennis from "./pages/tableTennis/TableTennis";
 
 import EditTournamentPage from "./pages/coordinator/EditTournamentPage";
@@ -59,20 +59,20 @@ const App = () => {
             <Route path="/eventRequestform" element={<EventRequestForm/>}/>
 
             <Route path="/admin" element={<Admin/>}/>
-            <Route path="/admin-dashboard" element={<EventDetailsCard/>}/>
+           
             <Route path="/addequipment" element={<AddEquipmentPage/>} />
             <Route path="/editscore" element={<EditScorePage/>}/>
             <Route path="/coordinator" element={<CoordinatorManagement/>}/>
             <Route path="/equipmentArroval" element={<EquipmentApprovalPage/>}/>
-            <Route path="/eventdetails" element={<EventDetails/>}/>
+            
             <Route path="/tabletennis" element={<TableTennis/>}/>
             <Route path="/edittt" element={<EditTTPage/>}/>
             <Route path="/venuebooking" element={<VenueBooking/>}/>
 
 
-            <Route path="/userdetail" element={<UserDetail/>}/>
+          
             
-            <Route path="/ActiveTournamentsPage" element={<ActiveTournamentsPage/>}/>
+          
           
             <Route path="/edittournament" element={<EditTournamentPage/>}/>
 
