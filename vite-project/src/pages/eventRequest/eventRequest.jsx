@@ -23,11 +23,10 @@ const EventRequestForm = () => {
     otherEventType: '',
     phoneNumber: '',
     bannerImage: '',
-    proposalFile: '',
-    location: '',
-    userName:'',
-    userEmail:''
     
+    location: '',
+    organizerName:'',
+    organizerEmail:''
 
   });
 
@@ -79,9 +78,7 @@ const EventRequestForm = () => {
         if (type === 'banner') {
           setFormData((prev) => ({ ...prev, bannerImage: data.secure_url }));
           setBannerPreview(data.secure_url);
-        } else if (type === 'proposal') {
-          setFormData((prev) => ({ ...prev, proposalFile: data.secure_url }));
-        }
+        } 
       } else {
         console.log('Failed to upload file:', data);
       }
@@ -119,7 +116,7 @@ const EventRequestForm = () => {
 
       // Check if the user has already created an event
     const eventRef = collection(db, 'eventRequests');
-    const q = query(eventRef, where("userEmail", "==", user.email));  // Use userEmail to check for an existing event
+    const q = query(eventRef, where("organizerEmail", "==", user.email), where('status','==','accepted'));  // Use userEmail to check for an existing event
     const querySnapshot = await getDocs(q);
 
     if (!querySnapshot.empty) {
@@ -141,8 +138,8 @@ const EventRequestForm = () => {
       // Submit form data with user details
       await addDoc(collection(db, 'eventRequests'), {
         ...formData,
-        userName: userDetails?.Name,
-        userEmail: userDetails?.Email,
+        organizerName: userDetails?.Name,
+        organizerEmail: userDetails?.Email,
       });
   
       console.log("Form submitted successfully!");
@@ -162,8 +159,8 @@ const EventRequestForm = () => {
           otherEventType: '',
           requirements: '',
           phoneNumber: '',
-          userName: '',
-          userEmail: '',
+          organizerName: '',
+          organizerEmail: '',
           status:'pending',
         });
         setFileName('');
@@ -298,27 +295,17 @@ const EventRequestForm = () => {
                   </div>
                 </div>
               </div> */}
-<input
+
+
+<div className="space-y-2 group">
+  <label className="text-sm font-medium text-gray-700">Event Banner File</label>
+  <input
   type="file"
   accept="image/*"
   onChange={(e) => handleFileUpload(e, 'banner')}
   className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:border-transparent"
 />
-
-<div className="space-y-2 group">
-  <label className="text-sm font-medium text-gray-700">Proposal File</label>
-  <input
-    type="file"
-    accept="application/pdf"
-    onChange={(e) => handleFileUpload(e, 'proposal')}
-    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:border-transparent transition-all hover:border-gray-300"
-    style={{ '--tw-ring-color': '#387478' }}
-  />
-  {formData.proposalFile && (
-    <div className="text-sm text-gray-600 mt-2">
-     
-    </div>
-  )}
+  
 </div>
 
 

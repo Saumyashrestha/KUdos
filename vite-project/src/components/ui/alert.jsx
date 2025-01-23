@@ -1,87 +1,96 @@
 import React from 'react';
 
+// AlertDialog Component
 const AlertDialog = ({ isOpen, onClose, onConfirm, title, description }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 animate-in fade-in zoom-in">
-        <div className="space-y-4">
-          <AlertDialogHeader title={title} />
-          <AlertDialogContent description={description} />
-          <AlertDialogFooter onClose={onClose} onConfirm={onConfirm} />
-        </div>
+    <div className="alert-dialog-overlay">
+      <div className="alert-dialog-container">
+        <AlertDialogHeader title={title} />
+        <AlertDialogContent description={description} />
+        <AlertDialogFooter onClose={onClose} onConfirm={onConfirm} />
       </div>
     </div>
   );
 };
 
+// AlertDialog Subcomponents
 const AlertDialogHeader = ({ title }) => (
-  <div className="text-center">
-    <h2 className="text-xl font-semibold text-gray-900">
-      {title || "Are you sure you want to delete this item?"}
-    </h2>
+  <div className="alert-dialog-header">
+    <h3>{title || "Are you sure you want to delete this item?"}</h3>
   </div>
 );
 
 const AlertDialogContent = ({ description }) => (
-  <div className="text-center">
-    <p className="text-gray-500">
-      {description || "This action is irreversible. Please confirm if you wish to proceed."}
-    </p>
+  <div className="alert-dialog-content">
+    <p>{description || "This action is irreversible. Please confirm if you wish to proceed."}</p>
   </div>
 );
 
 const AlertDialogFooter = ({ onClose, onConfirm }) => (
-  <div className="flex justify-end space-x-3 mt-6">
+  <div className="alert-dialog-footer">
     <AlertDialogCancel onClose={onClose} />
     <AlertDialogAction onConfirm={onConfirm} />
   </div>
 );
 
 const AlertDialogCancel = ({ onClose }) => (
-  <button
-    onClick={onClose}
-    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-  >
+  <button className="alert-dialog-button cancel" onClick={onClose}>
     Cancel
   </button>
 );
 
 const AlertDialogAction = ({ onConfirm }) => (
-  <button
-    onClick={onConfirm}
-    className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-  >
+  <button className="alert-dialog-button confirm" onClick={onConfirm}>
     Confirm
   </button>
 );
 
 const AlertDialogDescription = ({ description }) => (
-  <div className="text-center">
-    <p className="text-gray-500">
-      {description || "This action is irreversible. Please confirm if you wish to proceed."}
-    </p>
-  </div>
+  <p>{description || "This action is irreversible. Please confirm if you wish to proceed."}</p>
 );
 
 const AlertDialogTitle = ({ title }) => (
-  <div className="text-center">
-    <h2 className="text-xl font-semibold text-gray-900">
-      {title || "Are you sure you want to delete this item?"}
-    </h2>
+  <h3>{title || "Are you sure you want to delete this item?"}</h3>
+);
+
+// New Alert Component
+const Alert = ({ children }) => (
+  <div className="alert">
+    <div className="alert-container">
+      {children}
+    </div>
   </div>
 );
 
+// New AlertDescription Component
+const AlertDescription = ({ description }) => (
+  <div className="alert-description">
+    <p>{description}</p>
+  </div>
+);
+
+const AlertDialogTrigger = () => {
+  return (
+    <button>
+      Open Alert Dialog
+    </button>
+  );
+};
 
 
-export { 
-  AlertDialog, 
-  AlertDialogHeader, 
-  AlertDialogContent, 
-  AlertDialogFooter, 
-  AlertDialogCancel, 
-  AlertDialogAction, 
-  AlertDialogDescription, 
-  AlertDialogTitle 
+// Export Components
+export {
+  AlertDialog,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+  AlertDialogDescription,
+  AlertDialogTitle,
+  Alert,
+  AlertDescription,
+  AlertDialogTrigger
 };
