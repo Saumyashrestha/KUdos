@@ -8,6 +8,7 @@ import { db, collection, getDocs ,query,where} from "../../firebase/FirebaseConf
 const OngoingTournament = () => {
     const matchContainerRef = useRef(null);
     const location = useLocation();
+   
     const navigate = useNavigate();
       const [error, setError] = useState(null);
       const [old_teams, setOldTeams] = useState([{ name: "", players: [] }]);
@@ -18,6 +19,8 @@ const OngoingTournament = () => {
     const [coordinator, setCoordinator] = useState([]);
     const [matches, setMatches] = useState([]);
     const [userDetails, setUserDetailsLocal] = useState({});
+ const [match, setMatch] = useState("");
+ 
 
     const scrollLeft = () => {
         matchContainerRef.current.scrollBy({ left: -300, behavior: "smooth" });
@@ -26,6 +29,11 @@ const OngoingTournament = () => {
     const scrollRight = () => {
         matchContainerRef.current.scrollBy({ left: 300, behavior: "smooth" });
     };
+
+
+    const image = match.club;
+ 
+
 
 
     //Fetching a team 
@@ -66,6 +74,20 @@ const OngoingTournament = () => {
           
           setActiveEvents(events);
         };
+
+        const fetchCurrentEvent = async () => {
+          const activeEventsRef = collection(db, "matches");
+          const q = query(activeEventsRef, where("eventId", "==", eventName));
+          const querySnapshot = await getDocs(q);
+    
+          const events = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          
+          setActiveEvents(events);
+        };
+        
     
        
          const fetchMatches = async () => {
@@ -83,7 +105,8 @@ const OngoingTournament = () => {
               const querySnapshot = await getDocs(q);
 
               const matchData = querySnapshot.docs.map(doc => doc.data());
-            
+             
+            setMatch(matchData[0]);
               setMatches(matchData);
             } catch (error) {
               console.error("Error fetching matches: ", error);
@@ -95,7 +118,7 @@ const OngoingTournament = () => {
             const auth = getAuth();
             const user = auth.currentUser;  
             userDetails.email = user.email;
-            console.log("User Details:", userDetails.email); 
+           
           };
 
 
@@ -105,16 +128,16 @@ const OngoingTournament = () => {
           const fetchCoordinator = async () => {
             try {
               const coordinatorRef = collection(db, 'coordinator'); 
-              console.log("hash");
-              console.log(coordinatorRef);
+              
+            
               const q = query(coordinatorRef, where("email", "==", userDetails.email));
-              console.log(q)
-              console.log("hash");
+              
+           
               const querySnapshot = await getDocs(q);
-              console.log(querySnapshot.docs);
+            
               const coordinatorData = querySnapshot.docs.map(doc => doc.data());
               setCoordinator(coordinatorData);
-              console.log("Coordinator Data:", coordinatorData);
+            
 
             } catch (error) {
               console.error("Error fetching matches: ", error);
@@ -122,10 +145,11 @@ const OngoingTournament = () => {
           };
     
           if (eventName) {
-            console.log('hehe');
+          
             fetchMatches();
           }
           fetchCoordinator(); 
+        fetchActiveEvents();
         fetchActiveEvents();
         fetchUserDetail();
         fetchTeams();
@@ -135,16 +159,22 @@ const OngoingTournament = () => {
      
 
     return (
+      
         <Layout>
 <div className="container border border-[#387478] shadow-md rounded-lg mt-20 mx-auto px-5 py-5 flex flex-col h-48">
         <div className="flex items-center mt-2 space-x-5">
-            <img
-                src="/public/kucc-logo.webp"
-                alt="KUCC Logo"
-                className="w-16 h-16 object-cover"
-            />
+        {match && match.club ? (
+  <img
+  src={`/${match?.club}.png`}
+    alt="Club Logo"
+    className="w-16 h-16 object-cover"
+  />
+) : (
+  <p>Image not available</p>
+)}
             <div>
-                <h1 className="text-2xl font-semibold text-[#387478]">KUCC Cup</h1>
+                <h1 className="text-2xl font-semibold text-[#387478]">{match.club}</h1>
+                
                 <h2 className="text-lg text-gray-600">DoCSE</h2>
             </div>
         </div>
@@ -185,16 +215,6 @@ const OngoingTournament = () => {
     // Return null if condition is not met
     return null;
 })}
-
-
-
-
-
-
-
-
-
-
 
         </div>
     </div>
