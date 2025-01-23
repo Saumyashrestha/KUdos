@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 
 import myContext from "../../context/myContext";
-import { getFirestore, collection, getDocs, query, where, doc,  } from "firebase/firestore";
-import { db,updateDoc } from '../../firebase/FirebaseConfig'
+import { getFirestore, collection, getDocs, query, where, doc, } from "firebase/firestore";
+import { db, updateDoc } from '../../firebase/FirebaseConfig'
 import { getAuth } from 'firebase/auth';
 import { X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { set } from "date-fns";
 const HomePageCard = () => {
 
   const context = useContext(myContext);
-  const {AllMatches, getAllMatches } = context;
+  const { AllMatches, getAllMatches } = context;
 
   const [userDetails, setUserDetailsLocal] = useState({});
   const [activeEvents, setActiveEvents] = useState([]);
@@ -22,12 +22,12 @@ const HomePageCard = () => {
   const [event, setEvent] = useState(null);
   const navigate = useNavigate();
 
-  
- 
+
+
   useEffect(() => {
     const fetchActiveEvents = async () => {
-    
-    const db = getFirestore();
+
+      const db = getFirestore();
       const activeEventsRef = collection(db, "activeEvents");
       const q = query(activeEventsRef, where("status", "==", "active"));
       const q1 = query(activeEventsRef, where("status", "==", "upcoming"));
@@ -37,7 +37,7 @@ const HomePageCard = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      
+
 
       const querySnapshot1 = await getDocs(q1);
       const events1 = querySnapshot1.docs.map((doc) => ({
@@ -50,31 +50,31 @@ const HomePageCard = () => {
 
     const fetchUserDetail = async () => {
       const auth = getAuth();
-      const user = auth.currentUser;  
+      const user = auth.currentUser;
       userDetails.email = user.email;
-      console.log("User Details:", user.email); 
+      console.log("User Details:", user.email);
     };
 
     fetchActiveEvents();
     fetchUserDetail();
-  },[]); 
+  }, []);
 
 
 
- 
- 
-  
+
+
+
 
   const getBadgeColor = (eventType) => {
     const colors = {
-  'Football': 'bg-orange-500 text-white',
-  'Table Tennis': 'bg-teal-500 text-white',
-  'Cricket': 'bg-indigo-600 text-white',
-  'Basketball': 'bg-red-500 text-white',
-  'Volleyball': 'bg-yellow-600 text-white',
-  'Badminton': 'bg-pink-500 text-white',
-  'Tennis Table': 'bg-lime-500 text-white',
-  'Tournament': 'bg-gray-800 text-white'
+      'Football': 'bg-orange-500 text-white',
+      'Table Tennis': 'bg-teal-500 text-white',
+      'Cricket': 'bg-indigo-600 text-white',
+      'Basketball': 'bg-red-500 text-white',
+      'Volleyball': 'bg-yellow-600 text-white',
+      'Badminton': 'bg-pink-500 text-white',
+      'Tennis Table': 'bg-lime-500 text-white',
+      'Tournament': 'bg-gray-800 text-white'
     };
     return colors[eventType] || 'bg-pink-500 text-white';
   };
@@ -82,14 +82,14 @@ const HomePageCard = () => {
 
   const handleAddEvent = async (newEvent) => {
     const isDuplicate = event.some((event) => event.eventName.toLowerCase() === newEvent.eventName.toLowerCase());
-    
+
     if (isDuplicate) {
       alert('An equipment with this name already exists!');
       return;
     }
-    
-   
-    
+
+
+
     setActiveEvents([...event, { ...newEvent, image: "/api/placeholder/400/320" }]);
     setIsAddModalOpen(false);
   };
@@ -103,7 +103,7 @@ const HomePageCard = () => {
 
     const updatedEventList = activeEvents.map((event) =>
       event.id === updatedEvent.id ? { ...event, ...updatedEvent } : event
-    ); 
+    );
     setActiveEvents(updatedEventList);
     setIsAddModalOpen(false);
     setEditingEvent(null);
@@ -134,7 +134,7 @@ const HomePageCard = () => {
             e.preventDefault();
             const formData = new FormData(e.target);
             const updatedEvent = {
-            
+
               eventName: formData.get('eventName'),
               eventType: formData.get('eventType'),
             };
@@ -177,9 +177,9 @@ const HomePageCard = () => {
   );
 
   return (
-    
-       <div className="playfair mt-10 bg-white">
-      
+
+    <div className="playfair mt-10 bg-white">
+
       <div className="relative mb-8 text-center">
         <h1 className="text-3xl font-bold text-[#387478] inline-block pb-2">
           LIVE MATCHES
@@ -189,7 +189,7 @@ const HomePageCard = () => {
 
       <section className="body-font">
         <div className="container px-5 py-5 mx-auto space-y-6">
-          
+
           {getAllMatches.map((match) => {
             const { matchId, team1Name, team2Name, venue, dateTime, team1score, team2score, matchTime } = match;
 
@@ -203,7 +203,7 @@ const HomePageCard = () => {
                   <div className="text-center space-y-4">
                     <img
                       className="h-30 w-32 object-cover mx-auto"
-                      src="/TeamA.png" 
+                      src="/TeamA.png"
                       alt={`${team1Name} jersey`}
                     />
                     <h3 className="font-semibold text-xl text-[#2c5a5d]">{team1Name}</h3>
@@ -221,7 +221,7 @@ const HomePageCard = () => {
                   <div className="text-center space-y-4">
                     <img
                       className="h-30 w-32 object-cover mx-auto"
-                      src="/TeamB.png" 
+                      src="/TeamB.png"
                       alt={`${team2Name} jersey`}
                     />
                     <h3 className="font-semibold text-xl text-[#2c5a5d]">{team2Name}</h3>
@@ -251,7 +251,7 @@ const HomePageCard = () => {
 
         <div className="max-w-7xl mx-auto grid gap-8 sm:grid-cols-1 lg:grid-cols-1">
           {activeEvents.map((event) => (
-     
+
             <a
               key={event.id}
               href={event.link}
@@ -263,9 +263,9 @@ const HomePageCard = () => {
                   src={event.bannerImage}
                   alt={`${event.eventName} banner`}
                 />
-                
+
                 <div className="absolute inset-0 bg-gradient-to-t from-[#387478]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                
+
                 <div className="absolute top-4 right-4 z-10">
                   <span className={`px-4 py-1.5 rounded-full text-sm font-medium shadow-md ${getBadgeColor(event.eventType)}`}>
                     {event.eventType}
@@ -281,11 +281,11 @@ const HomePageCard = () => {
                     />
                   </div>
                 </div>
-                
+
                 {/* Conditionally render the "Edit" button */}
                 {userDetails.email === event.organizerEmail && (
                   console.log(event),
-                  <button 
+                  <button
                     className="absolute bottom-4 right-4 bg-[#387478] text-white py-1 px-4 rounded-full"
                     onClick={() => {
                       setEditingEvent(event);
@@ -298,50 +298,50 @@ const HomePageCard = () => {
               </div>
 
               <a href={`http://localhost:5173/ongoingtournament?eventName=${event.id}`}>
-        
-  <div className="p-6 bg-gradient-to-b from-white to-[#f9fbfb]">
-    <h2 className="text-xl font-semibold text-[#387478] group-hover:text-[#2c5a5d] transition-colors duration-300">
-      {event.eventName}
-    </h2>
-    <a href={event.link} className="block">
-      <div className="mt-4 flex items-center justify-between">
-        <span className="text-sm text-[#5c8f92] font-medium cursor-pointer">View Details</span>
-        <svg 
-          className="w-5 h-5 text-[#387478] transform group-hover:translate-x-1 transition-transform duration-300" 
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth={2} 
-            d="M9 5l7 7-7 7"
-          />
-        </svg>
-      </div>
-    </a>
-  </div>
-</a>
 
-              
+                <div className="p-6 bg-gradient-to-b from-white to-[#f9fbfb]">
+                  <h2 className="text-xl font-semibold text-[#387478] group-hover:text-[#2c5a5d] transition-colors duration-300">
+                    {event.eventName}
+                  </h2>
+                  <a href={event.link} className="block">
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="text-sm text-[#5c8f92] font-medium cursor-pointer">View Details</span>
+                      <svg
+                        className="w-5 h-5 text-[#387478] transform group-hover:translate-x-1 transition-transform duration-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </a>
+                </div>
+              </a>
+
+
             </a>
           ))}
         </div>
       </div>
 
-{/* Ongoing Tournaments Section */}
-<div className="py-12 px-4 sm:px-6 lg:px-8">
+      {/* Ongoing Tournaments Section */}
+      <div className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="relative mb-12 text-center">
           <h1 className="text-3xl font-bold text-[#387478] inline-block pb-2">
-          Upcoming Tournaments
+            Upcoming Tournaments
           </h1>
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-[#387478] rounded-full"></div>
         </div>
 
         <div className="max-w-7xl mx-auto grid gap-8 sm:grid-cols-1 lg:grid-cols-1">
           {upcomingEvents.map((event) => (
-     
+
             <a
               key={event.id}
               href={event.link}
@@ -353,9 +353,9 @@ const HomePageCard = () => {
                   src={event.bannerImage}
                   alt={`${event.eventName} banner`}
                 />
-                
+
                 <div className="absolute inset-0 bg-gradient-to-t from-[#387478]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                
+
                 <div className="absolute top-4 right-4 z-10">
                   <span className={`px-4 py-1.5 rounded-full text-sm font-medium shadow-md ${getBadgeColor(event.eventType)}`}>
                     {event.eventType}
@@ -371,11 +371,11 @@ const HomePageCard = () => {
                     />
                   </div>
                 </div>
-                
+
                 {/* Conditionally render the "Edit" button */}
                 {userDetails.email === event.organizerEmail && (
                   console.log(event),
-                  <button 
+                  <button
                     className="absolute bottom-4 right-4 bg-[#387478] text-white py-1 px-4 rounded-full"
                     onClick={() => {
                       setEditingEvent(event);
@@ -388,25 +388,122 @@ const HomePageCard = () => {
               </div>
 
               {
-  userDetails.email === event.organizerEmail ? (
-    <a href={`http://localhost:5173/edittournament?eventName=${event.id}`}>
+                userDetails.email === event.organizerEmail ? (
+                  <a href={`http://localhost:5173/edittournament?eventName=${event.id}`}>
+                    <div className="p-6 bg-gradient-to-b from-white to-[#f9fbfb]">
+                      <h2 className="text-xl font-semibold text-[#387478] group-hover:text-[#2c5a5d] transition-colors duration-300">
+                        {event.eventName}
+                      </h2>
+                      <a href={event.link} className="block">
+                        <div className="mt-4 flex items-center justify-between">
+                          <span className="text-sm text-[#5c8f92] font-medium cursor-pointer">View Details</span>
+                          <svg
+                            className="w-5 h-5 text-[#387478] transform group-hover:translate-x-1 transition-transform duration-300"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </div>
+                      </a>
+                    </div>
+                  </a>
+                ) : (
+                  <div className="p-6 bg-gradient-to-b from-white to-[#f9fbfb]">
+                    <h2 className="text-xl font-semibold text-[#387478] group-hover:text-[#2c5a5d] transition-colors duration-300">
+                      {event.eventName}
+                    </h2>
+                    <a href={event.link} className="block">
+                      <div className="mt-4 flex items-center justify-between">
+                        <span className="text-sm text-[#5c8f92] font-medium cursor-pointer">View Details</span>
+                        <svg
+                          className="w-5 h-5 text-[#387478] transform group-hover:translate-x-1 transition-transform duration-300"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
+                    </a>
+                  </div>
+                )
+              }
+
+
+
+
+
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div className="py-12 px-4 sm:px-6 lg:px-8">
+  <div className="relative mb-12 text-center">
+    <h1 className="text-3xl font-bold text-[#387478] inline-block pb-2">
+      Recent Tournaments
+    </h1>
+    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-[#387478] rounded-full"></div>
+  </div>
+
+  <div className="max-w-7xl mx-auto grid gap-8 sm:grid-cols-1 lg:grid-cols-1">
+    {/* Hardcoded events for demonstration */}
+    <a
+      href="#"
+      className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#e7f3f3] hover:border-[#387478]"
+    >
+      <div className="relative h-64 overflow-hidden">
+        <img
+          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+          src="https://via.placeholder.com/400x200"
+          alt="Event banner"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#387478]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute top-4 right-4 z-10">
+          <span className="px-4 py-1.5 rounded-full text-sm font-medium shadow-md bg-[#387478] text-white">
+            Tournament
+          </span>
+        </div>
+        <div className="absolute top-4 left-4 transform group-hover:scale-110 transition-transform duration-300">
+          <div className="p-1.5 bg-white rounded-full shadow-lg">
+            <img
+              className="h-14 w-14 rounded-full object-cover"
+              src="https://via.placeholder.com/50"
+              alt="Club logo"
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="p-6 bg-gradient-to-b from-white to-[#f9fbfb]">
         <h2 className="text-xl font-semibold text-[#387478] group-hover:text-[#2c5a5d] transition-colors duration-300">
-          {event.eventName}
+          Tournament Name
         </h2>
-        <a href={event.link} className="block">
+        <a href="#" className="block">
           <div className="mt-4 flex items-center justify-between">
             <span className="text-sm text-[#5c8f92] font-medium cursor-pointer">View Details</span>
-            <svg 
-              className="w-5 h-5 text-[#387478] transform group-hover:translate-x-1 transition-transform duration-300" 
-              fill="none" 
-              stroke="currentColor" 
+            <svg
+              className="w-5 h-5 text-[#387478] transform group-hover:translate-x-1 transition-transform duration-300"
+              fill="none"
+              stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
                 d="M9 5l7 7-7 7"
               />
             </svg>
@@ -414,52 +511,71 @@ const HomePageCard = () => {
         </a>
       </div>
     </a>
-  ) : (
-    <div className="p-6 bg-gradient-to-b from-white to-[#f9fbfb]">
-      <h2 className="text-xl font-semibold text-[#387478] group-hover:text-[#2c5a5d] transition-colors duration-300">
-        {event.eventName}
-      </h2>
-      <a href={event.link} className="block">
-        <div className="mt-4 flex items-center justify-between">
-          <span className="text-sm text-[#5c8f92] font-medium cursor-pointer">View Details</span>
-          <svg 
-            className="w-5 h-5 text-[#387478] transform group-hover:translate-x-1 transition-transform duration-300" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
+
+    
+    <a
+      href="#"
+      className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#e7f3f3] hover:border-[#387478]"
+    >
+      <div className="relative h-64 overflow-hidden">
+        <img
+          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+          src="https://via.placeholder.com/400x200"
+          alt="Event banner"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#387478]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute top-4 right-4 z-10">
+          <span className="px-4 py-1.5 rounded-full text-sm font-medium shadow-md bg-[#387478] text-white">
+            Tournament
+          </span>
         </div>
-      </a>
-    </div>
-  )
-}
-
-
-
-
-              
-            </a>
-          ))}
+        <div className="absolute top-4 left-4 transform group-hover:scale-110 transition-transform duration-300">
+          <div className="p-1.5 bg-white rounded-full shadow-lg">
+            <img
+              className="h-14 w-14 rounded-full object-cover"
+              src="https://via.placeholder.com/50"
+              alt="Club logo"
+            />
+          </div>
         </div>
       </div>
-   
-      
+
+      <div className="p-6 bg-gradient-to-b from-white to-[#f9fbfb]">
+        <h2 className="text-xl font-semibold text-[#387478] group-hover:text-[#2c5a5d] transition-colors duration-300">
+          Another Tournament
+        </h2>
+        <a href="#" className="block">
+          <div className="mt-4 flex items-center justify-between">
+            <span className="text-sm text-[#5c8f92] font-medium cursor-pointer">View Details</span>
+            <svg
+              className="w-5 h-5 text-[#387478] transform group-hover:translate-x-1 transition-transform duration-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </div>
+        </a>
+      </div>
+    </a>
+  </div>
+</div>
 
 
-      
+
+
       {isAddModalOpen && <AddEventModal />}
     </div>
-   
-   
 
-   
+
+
+
   );
 };
 
