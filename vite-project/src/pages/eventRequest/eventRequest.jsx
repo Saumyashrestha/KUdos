@@ -105,6 +105,8 @@ const EventRequestForm = () => {
     }
   
     const auth = getAuth();
+
+    if (auth.currentUser == null ){}
   
     try {
       const user = auth.currentUser; // Get the current user directly

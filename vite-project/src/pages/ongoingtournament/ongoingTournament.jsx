@@ -123,7 +123,7 @@ const OngoingTournament = () => {
 
 
           
-      
+      console.log(userDetails.email);
   
           const fetchCoordinator = async () => {
             try {
@@ -148,15 +148,16 @@ const OngoingTournament = () => {
           
             fetchMatches();
           }
-          fetchCoordinator(); 
+          if (coordinator) {fetchCoordinator(); }
+        
         fetchActiveEvents();
         fetchActiveEvents();
         fetchUserDetail();
         fetchTeams();
        
-      },[eventName, userDetails.email]); 
+      },[eventName, userDetails.email,coordinator]); 
     
-     
+     console.log(eventName);
 
     return (
       
