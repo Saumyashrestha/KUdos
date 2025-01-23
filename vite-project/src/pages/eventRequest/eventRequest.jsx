@@ -23,7 +23,6 @@ const EventRequestForm = () => {
     otherEventType: '',
     phoneNumber: '',
     bannerImage: '',
-    
     location: '',
     organizerName:'',
     organizerEmail:''
@@ -140,6 +139,7 @@ const EventRequestForm = () => {
         ...formData,
         organizerName: userDetails?.Name,
         organizerEmail: userDetails?.Email,
+        clubName: userDetails?.Club,
       });
   
       console.log("Form submitted successfully!");
@@ -157,6 +157,7 @@ const EventRequestForm = () => {
           description: '',
           eventType: '',
           otherEventType: '',
+          clubName: '',
           requirements: '',
           phoneNumber: '',
           organizerName: '',

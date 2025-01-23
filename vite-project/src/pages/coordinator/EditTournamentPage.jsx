@@ -23,12 +23,13 @@ const EditTournamentPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search); 
-    const eventName = queryParams.get('eventName');
-  const [teams, setTeams] = useState([{ name: "", players: [] }]);
-  const [old_teams, setOldTeams] = useState([{ name: "", players: [] }]);
-  const [old_matches, setOldMatches] = useState([{ name: "", players: [] }]);
+  const eventName = queryParams.get('eventName');
+    console.log(eventName)
+  const [teams, setTeams] = useState([{ name: "", players: [], eventId: eventName }]);
+  const [old_teams, setOldTeams] = useState([{ name: "", players: [] , eventId :eventName }]);
+  const [old_matches, setOldMatches] = useState([{ name: "", players: [] , club : ""}]);
   const [matches, setMatches] = useState([
-    { teamA: "", teamB: "", date: "", time: "", venue: "", stage: "",eventId:"" },
+    { teamA: "", teamB: "", date: "", time: "", venue: "", stage: "",eventId:"" ,club:""},
   ]);
   const [activeSection, setActiveSection] = useState("teams");
   const [isLoading, setIsLoading] = useState(false);
@@ -54,10 +55,11 @@ const EditTournamentPage = () => {
   }, [activeSection]);
 
 
-  const handleRowClick = (matchId, eventName, teamA, teamB, stage, venue) => {
+  const handleRowClick = (matchId, club ,eventName, teamA, teamB, stage, venue) => {
     navigate(`/editscore`, {
       state: {
         matchId,
+        club,
         eventName,
         teamA,
         teamB,
@@ -96,7 +98,9 @@ const EditTournamentPage = () => {
     try {
       setIsLoading(true);
       const teamsRef = collection(db, "teams");
-      const querySnapshot = await getDocs(teamsRef);
+      const q = query(teamsRef, where("eventId", "==", eventName));
+      const querySnapshot = await getDocs(q);
+
   
       const fetchedTeams = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -118,11 +122,18 @@ const EditTournamentPage = () => {
 const fetchMatch = async () => {
   try {
     setIsLoading(true);
-    const teamsRef = collection(db, "matches");
-    const querySnapshot = await getDocs(teamsRef);
+    
+    // Fetch event name from query params first
     const eventName = queryParams.get('eventName');
-    console.log(eventName)
+    console.log(eventName);
 
+    // Now you can use eventName in the query
+    const teamsRef = collection(db, "matches");
+    const q = query(teamsRef, where("eventId", "==", eventName)); 
+    const querySnapshot = await getDocs(q);
+    console.log(querySnapshot);
+    console.log("heheh");
+   
     const fetchedMatch = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -144,6 +155,7 @@ const resetTeams = () => {
     {
       name: "",
       players: [],
+
     },
   ]);
 };
@@ -188,7 +200,7 @@ const resetTeams = () => {
   };
 
   const addTeamInput = () => {
-    setTeams([...teams, { name: "", players: [] }]);
+    setTeams([...teams, { name: "", players: [], eventId:eventName }]);
     setIsDirty(true);
   };
 
@@ -336,6 +348,7 @@ const resetTeams = () => {
         const teamDoc = doc(teamsRef);
         await setDoc(teamDoc, {
           name: team.name.trim(),
+          eventId: eventName,
           players: team.players.filter(player => player.trim()),
           updatedAt: new Date().toISOString(),
         });
