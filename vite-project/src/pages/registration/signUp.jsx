@@ -39,38 +39,38 @@ const Signup = () => {
         setUserSignup({ ...userSignup, club:club });
       };
 
-      const handleFileUpload = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return; 
+    //   const handleFileUpload = async (e) => {
+    //     const file = e.target.files[0];
+    //     if (!file) return; 
     
-        // Prepare the form data for Cloudinary upfload
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'ml_default');
+    //     // Prepare the form data for Cloudinary upfload
+    //     const formData = new FormData();
+    //     formData.append('file', file);
+    //     formData.append('upload_preset', 'ml_default');
     
-        try {
-            // Upload the file to Cloudinary
-            const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-                method: 'POST',
-                body: formData,
-            });
+    //     try {
+    //         // Upload the file to Cloudinary
+    //         const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+    //             method: 'POST',
+    //             body: formData,
+    //         });
     
-            const data = await response.json();
-            const ClubLogoUrl = data.url;
-            console.log(ClubLogoUrl);
+    //         const data = await response.json();
+    //         const ClubLogoUrl = data.url;
+    //         console.log(ClubLogoUrl);
     
-            if (data.url) {
-                console.log('File uploaded successfully:', data.url);
+    //         if (data.url) {
+    //             console.log('File uploaded successfully:', data.url);
     
                 
-                updateUserField('clubLogo', ClubLogoUrl);
-            } else {
-                console.error('Failed to upload file:', data);
-            }
-        } catch (error) {
-            console.error('Error uploading file:', error);
-        }
-    };
+    //             updateUserField('clubLogo', ClubLogoUrl);
+    //         } else {
+    //             console.error('Failed to upload file:', data);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error uploading file:', error);
+    //     }
+    // };
     
     useEffect(() => {
         console.log('Updated userSignup:', userSignup);
@@ -112,7 +112,6 @@ const Signup = () => {
                 Name: userSignup.name,
                 Email: userSignup.email,
                 Club: userSignup.club,
-                ClubLogo: userSignup.clubLogo, 
                 Role: "Student",
             });
 
@@ -124,7 +123,6 @@ const Signup = () => {
                 password: "",
                 confirmPassword: "",
                 club: "",
-                clubLogo: null,
             });
             navigate("/login");
         } catch (error) {
@@ -215,7 +213,7 @@ const Signup = () => {
                                 />
                             )}
                         </div>
-                        {dropMenu && (
+                        {/* {dropMenu && (
                             <div className="mt-3">
                                 <input
                                     type="file"
@@ -223,7 +221,7 @@ const Signup = () => {
                                     className="text-gray-800"
                                 />
                             </div>
-                        )}
+                        )} */}
                     </div>
 
                     <div className="mb-5 w-full flex justify-center mt-4">
