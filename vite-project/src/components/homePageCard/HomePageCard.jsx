@@ -191,8 +191,8 @@ const HomePageCard = () => {
 
       <section className="body-font">
         <div className="container px-5 py-5 mx-auto space-y-6">
-
-          {getAllMatches.filter(match => !clubName || match.club === clubName).map((match) => {
+          
+  {getAllMatches.filter(match => (!clubName || match.club === clubName) && match.status === "live").map((match) => {
             const { eventId, teamA, teamB, venue, date, scoreA, scoreB } = match;
 
             return (
@@ -251,111 +251,59 @@ const HomePageCard = () => {
         </div>
 
         <div className="max-w-7xl mx-auto grid gap-8 sm:grid-cols-1 lg:grid-cols-1">
+        <section className="body-font">
+        <div className="container px-5 py-5 mx-auto space-y-6">
           
-          <a
-            href="#"
-            className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#e7f3f3] hover:border-[#387478]"
-          >
-            <div className="relative h-64 overflow-hidden">
-              <img
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                src="https://via.placeholder.com/400x200"
-                alt="Event banner"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#387478]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="absolute top-4 right-4 z-10">
-                <span className="px-4 py-1.5 rounded-full text-sm font-medium shadow-md bg-[#387478] text-white">
-                  Tournament
-                </span>
-              </div>
-              <div className="absolute top-4 left-4 transform group-hover:scale-110 transition-transform duration-300">
-                <div className="p-1.5 bg-white rounded-full shadow-lg">
-                  <img
-                    className="h-14 w-14 rounded-full object-cover"
-                    src="https://via.placeholder.com/50"
-                    alt="Club logo"
-                  />
-                </div>
-              </div>
-            </div>
+  {getAllMatches.filter(match => (!clubName || match.club === clubName) && match.status === "completed").map((match) => {
+            const { eventId, teamA, teamB, venue, date, scoreA, scoreB } = match;
 
-            <div className="p-6 bg-gradient-to-b from-white to-[#f9fbfb]">
-              <h2 className="text-xl font-semibold text-[#387478] group-hover:text-[#2c5a5d] transition-colors duration-300">
-                Tournament Name
-              </h2>
-              <a href="#" className="block">
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="text-sm text-[#5c8f92] font-medium cursor-pointer">View Details</span>
-                  <svg
-                    className="w-5 h-5 text-[#387478] transform group-hover:translate-x-1 transition-transform duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
+            return (
+              <a
+                key={teamA + teamB}
+                className="block w-full bg-white border-2 border-[#e7f3f3] p-0 rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-102 hover:shadow-xl hover:border-[#387478]"
+              >
+                <div className="relative bg-[#f8f7f6] w-full flex justify-between items-center px-28 py-6">
+                  {/* Left Team */}
+                  <div className="text-center space-y-4">
+                    <img
+                      className="h-30 w-32 object-cover mx-auto"
+                      src="/TeamA.png"
+                      alt={`${teamA} jersey`}
                     />
-                  </svg>
+                    <h3 className="font-semibold text-xl text-[#2c5a5d]">{teamA}</h3>
+                  </div>
+
+                  <div className="text-center space-y-4">
+                    <h1 className="text-4xl font-bold text-[#387478] bg-[#f0f7f7] py-3 px-6 rounded-xl">
+                      {scoreA} : {scoreB}
+                    </h1>
+                    <div className="bg-gradient-to-r from-[#387478] to-[#2c5a5d] rounded-full py-2 px-8 inline-block shadow-md">
+                      <p className="text-lg text-white font-medium"></p>
+                    </div>
+                  </div>
+
+                  <div className="text-center space-y-4">
+                    <img
+                      className="h-30 w-32 object-cover mx-auto"
+                      src="/TeamB.png"
+                      alt={`${teamB} jersey`}
+                    />
+                    <h3 className="font-semibold text-xl text-[#2c5a5d]">{teamB}</h3>
+                  </div>
+                </div>
+                <div className="border-t-2 border-[#e7f3f3]"></div>
+                <div className="p-5 bg-[#f9fbfb]">
+                  <h1 className="text-lg font-semibold text-[#387478]">
+                    {teamA} VS {teamB}
+                  </h1>
+                  <p className="text-[#5c8f92] text-sm mt-1">Venue: {venue}</p>
                 </div>
               </a>
-            </div>
-          </a>
+            );
+          })}
+        </div>
+      </section>
 
-          {/* Repeat for more events */}
-          <a
-            href="#"
-            className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#e7f3f3] hover:border-[#387478]"
-          >
-            <div className="relative h-64 overflow-hidden">
-              <img
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                src="https://via.placeholder.com/400x200"
-                alt="Event banner"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#387478]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="absolute top-4 right-4 z-10">
-                <span className="px-4 py-1.5 rounded-full text-sm font-medium shadow-md bg-[#387478] text-white">
-                  Tournament
-                </span>
-              </div>
-              <div className="absolute top-4 left-4 transform group-hover:scale-110 transition-transform duration-300">
-                <div className="p-1.5 bg-white rounded-full shadow-lg">
-                  <img
-                    className="h-14 w-14 rounded-full object-cover"
-                    src="https://via.placeholder.com/50"
-                    alt="Club logo"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="p-6 bg-gradient-to-b from-white to-[#f9fbfb]">
-              <h2 className="text-xl font-semibold text-[#387478] group-hover:text-[#2c5a5d] transition-colors duration-300">
-                Another Tournament
-              </h2>
-              <a href="#" className="block">
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="text-sm text-[#5c8f92] font-medium cursor-pointer">View Details</span>
-                  <svg
-                    className="w-5 h-5 text-[#387478] transform group-hover:translate-x-1 transition-transform duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </div>
-              </a>
-            </div>
-          </a>
         </div>
       </div>
 
