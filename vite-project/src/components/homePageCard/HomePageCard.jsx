@@ -347,7 +347,15 @@ const HomePageCard = () => {
         </div>
 
         <div className="max-w-7xl mx-auto grid gap-8 sm:grid-cols-1 lg:grid-cols-1">
-          {activeEvents.map((event) => (
+          {activeEvents
+          .filter((event) => {
+            const clubMatch = !clubName || event.clubName === clubName;
+            const eventTypeMatch =
+              !lowerCaseEventType ||
+              event.eventType === lowerCaseEventType;
+            return clubMatch && eventTypeMatch ;
+          })
+          .map((event) => (
             <a
               key={event.id}
               href={event.link}
@@ -441,7 +449,15 @@ const HomePageCard = () => {
         </div>
 
         <div className="max-w-7xl mx-auto grid gap-8 sm:grid-cols-1 lg:grid-cols-1">
-          {upcomingEvents.map((event) => (
+          {upcomingEvents
+          .filter((event) => {
+            const clubMatch = !clubName || event.clubName === clubName;
+            const eventTypeMatch =
+              !lowerCaseEventType ||
+              event.eventType === lowerCaseEventType;
+            return clubMatch && eventTypeMatch ;
+          })
+          .map((event) => (
             <a
               key={event.id}
               href={event.link}

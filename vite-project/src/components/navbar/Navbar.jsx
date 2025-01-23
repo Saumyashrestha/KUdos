@@ -40,8 +40,8 @@ const Navbar = () => {
         </Link>
       </li>
       <li>
-        <Link to={"/"} className="hover:text-[#387478]">
-          NOTICE
+        <Link to={"/venuebooking"} className="hover:text-[#387478]">
+        VENUE
         </Link>
       </li>
     </ul>
@@ -61,8 +61,8 @@ const Navbar = () => {
         </Link>
       </li>
       <li>
-        <Link to={"/"} className="hover:text-[#387478]">
-          NOTICE
+        <Link to={"/venuebooking"} className="hover:text-[#387478]">
+          VENUE
         </Link>
       </li>
     </ul>

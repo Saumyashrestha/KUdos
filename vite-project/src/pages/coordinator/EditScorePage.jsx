@@ -144,18 +144,25 @@ const EditScorePage = () => {
   
     try {
       // Query for the match document by eventName
-      const matchQuery = query(collection(db, "matches"), where("eventName", "==", eventName));
-      const matchSnapshot = await getDocs(matchQuery);
 
-      const eventRef =collection(db, "activeEvents"); 
-      const q = query(eventRef, where("eventName", "==",  eventName));
-      const querySnapshot = await getDocs(q);
+      
+      const eventSnapshot = await getDocs(eventQuery);
+  
+      if (!eventSnapshot.empty) {
+        const eventDoc = eventSnapshot.docs[0];
+        const eventRef = doc(db, "activeEvents", eventDoc.id);
+        await updateDoc(eventRef, { status: "live" });
+        console.log(`Event '${eventName}' status updated to 'live'.`);
+      } else {
+        console.error("No matching event found in 'activeEvents' collection.");
+      }
+
 
        if (!querySnapshot.empty) {
               // Get the first document that matches
               const eventDoc = querySnapshot.docs[0];
               const eventDocRef = doc(db, "activeEvents", eventDoc.id); // Reference the document by its ID
-          
+            
               // Update the 'status' field to 'active'
               await updateDoc(eventDocRef, { status: "active" });
           
@@ -316,6 +323,10 @@ const EditScorePage = () => {
     } catch (error) {
       console.error("Error adding scorer to the database:", error);
       toast.error("Failed to add scorer to the database.");
+      const eventDoc = eventSnapshot.docs[0];
+      const eventRef = doc(db, "activeEvents", eventDoc.id);
+      await updateDoc(eventRef, { status: "completed" });
+      console.log(`Event '${eventName}' status updated to 'completed'.`);
     }
   
     // Reset selected scorer

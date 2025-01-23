@@ -496,7 +496,7 @@ const resetTeams = () => {
           eventId: eventName,
           eventName: eventname,
           updatedAt: new Date().toISOString(),
-          staus: "upcoming"
+          status: "upcoming"
         });
   
         return matchDoc.id;
