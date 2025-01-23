@@ -23,7 +23,7 @@ const SportsCategory = () => {
                         <div key={index} className="flex items-center flex-grow">
                             {/* Divider before the item */}
                             {index !== 0 && (
-                                <div className="border-l-2 border-white h-10"></div>
+                                <div className="border-l-2 border-white h-10"></div>    
                             )}
 
                             {/* Category Box */}
