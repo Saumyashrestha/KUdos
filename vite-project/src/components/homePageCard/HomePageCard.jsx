@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { act, useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import myContext from "../../context/myContext";
 import {
@@ -56,6 +56,7 @@ const HomePageCard = () => {
       setUpcomingEvents(events1);
     };
 
+  
     const fetchUserDetail = async () => {
       const auth = getAuth();
       const user = auth.currentUser;
@@ -100,20 +101,34 @@ const HomePageCard = () => {
   };
 
   const handleUpdateEvent = async (updatedEvent) => {
-    const eventRef = doc(db, "activeEvents", updatedEvent.id);
-    await updateDoc(eventRef, {
-      eventName: updatedEvent.eventName,
-      eventType: updatedEvent.eventType,
-    });
+   
 
-    const updatedEventList = activeEvents.map((event) =>
-      event.id === updatedEvent.id ? { ...event, ...updatedEvent } : event
-    );
-    setActiveEvents(updatedEventList);
-    setIsAddModalOpen(false);
-    setEditingEvent(null);
+    console.log("sns",activeEvents);
+  
+    // Create a reference to the specific document
+    const eventRef = doc(db, "activeEvents", activeEvents[0].id);
+  
+    try {
+      // Update the document with the new values
+      await updateDoc(eventRef, {
+        eventName: updatedEvent.eventName,
+        eventType: updatedEvent.eventType,
+      });
+  
+      // Update the local state with the updated event data
+      const updatedEventList = activeEvents.map((event) =>
+        event.id === updatedEvent.id ? { ...event, ...updatedEvent } : event
+      );
+      setActiveEvents(updatedEventList);
+  
+      // Close the modal and clear the editing state
+      setIsAddModalOpen(false);
+      setEditingEvent(null);
+    } catch (error) {
+      console.error("Error updating event:", error);
+    }
   };
-
+  
   const AddEventModal = () => (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg p-8 w-full max-w-md shadow-xl">

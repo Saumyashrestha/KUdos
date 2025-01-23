@@ -409,7 +409,6 @@ const resetTeams = () => {
       isLoading: true,
     });
   
-    // Validate all matches
     let allErrors = [];
     matches.forEach((match, index) => {
       const matchErrors = validateMatch(match, index);
@@ -431,15 +430,16 @@ const resetTeams = () => {
     try {
       const matchesRef = collection(db, "matches");
       const matchDoc = doc(matchesRef, generateRandomId());
-      const eventRef = collection(db, "activeEvents"); 
+      const eventRef = collection(db, "activeEvents");
       const q = query(eventRef, where("id", "==", eventName));
       const querySnapshot = await getDocs(q);
       const matchData = querySnapshot.docs.map(doc => doc.data());
   
+      console.log("Event Data:", matchData[0]);
+  
       const eventname = matchData[0].eventName;
       const eventType = matchData[0].eventType;
-      console.log("meiome");
-      console.log(matchData[0]);
+      const club = matchData[0].clubName ; 
   
       if (!querySnapshot.empty) {
         const eventDoc = querySnapshot.docs[0];
@@ -456,38 +456,29 @@ const resetTeams = () => {
           console.error("Event name is undefined. Skipping match.");
           return; // Skip the match if event name is not defined
         }
- 
-
+  
+        let teamA, teamB;
         for (let i = 0; i < old_teams.length; i++) {
           if (old_teams[i].name === match.teamA) {
-           teamA = old_teams[i];
+            teamA = old_teams[i];
           }
           if (old_teams[i].name === match.teamB) {
-          teamB = old_teams[i];
+            teamB = old_teams[i];
           }
-         
-        } 
-
-        console.log("ssss")
-        // Find teams by name
-        console.log(old_teams);
-        console.log(match.teamA);
-        console.log(teamA);
-        console.log(teamA.players);
+        }
   
-        // Ensure teams and players are defined
+        console.log("Teams:", teamA, teamB);
+  
         if (!teamA || !teamB) {
           console.error("Team A or Team B not found, skipping match.");
           return; // Skip the match if a team is not found
         }
   
-        
-  
-        const matchDocs = doc(matchesRef); 
+        const matchDocs = doc(matchesRef);
         await setDoc(matchDoc, {
           matchId: matchDocs.id,
-          playerA: teamA.players, // Ensure playerA.id exists
-          playerB: teamB.players, // Ensure playerB.id exists
+          playerA: teamA.players,
+          playerB: teamB.players,
           teamA: match.teamA,
           eventType: eventType,
           teamB: match.teamB,
@@ -496,9 +487,10 @@ const resetTeams = () => {
           venue: match.venue?.trim() || "",
           stage: match.stage?.trim() || "",
           eventId: eventName,
+          club: club,
           eventName: eventname,
           updatedAt: new Date().toISOString(),
-          staus: "upcoming"
+          status: "upcoming",
         });
   
         return matchDoc.id;
@@ -532,6 +524,7 @@ const resetTeams = () => {
       setIsLoading(false);
     }
   };
+  
   
   
 

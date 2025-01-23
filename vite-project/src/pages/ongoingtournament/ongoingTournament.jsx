@@ -31,7 +31,8 @@ const OngoingTournament = () => {
     };
 
 
-    const image = match.club;
+    console.log('matches');
+   
  
 
 
@@ -87,6 +88,7 @@ const OngoingTournament = () => {
                 
 
               const matchRef = collection(db, 'matches');
+
              
             
               const q = query(matchRef, where("eventId", "==",  eventName));
@@ -96,11 +98,15 @@ const OngoingTournament = () => {
               const matchData = querySnapshot.docs.map(doc => doc.data());
              
             setMatch(matchData[0]);
+            console.log('match');
+            console.log(matchData[0]);
               setMatches(matchData);
             } catch (error) {
               console.error("Error fetching matches: ", error);
             }
           };
+          console.log('matches');
+       
 
         
           const fetchUserDetail = async () => {
