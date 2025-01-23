@@ -320,7 +320,7 @@ const EventDetails = () => {
                             {event.description || 'Not provided'}
                           </p>
                           <p>
-                            <span className="font-medium">Description:</span>{' '}
+                            <span className="font-medium">Club:</span>{' '}
                             {event.clubName || 'Not provided'}
                           </p>
                           

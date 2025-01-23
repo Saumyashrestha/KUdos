@@ -36,6 +36,7 @@ import VenueBooking from "./pages/venueBooking/venueBooking";
 
 import Profile from "./pages/profile/ProfilePage";
 import ProtectedRoute from "./components/protectedRoutes/ProtectedRoutes";
+import EventDetails from "./components/admin/event/eventCard";
 
 const App = () => {
   return(
@@ -59,6 +60,7 @@ const App = () => {
             <Route path="/eventRequestform" element={<EventRequestForm/>}/>
 
             <Route path="/admin" element={<Admin/>}/>
+            <Route path="/eventdetails" element={<EventDetails/>}/>
            
             <Route path="/addequipment" element={<AddEquipmentPage/>} />
             <Route path="/editscore" element={<EditScorePage/>}/>
