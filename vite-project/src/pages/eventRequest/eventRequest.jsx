@@ -39,10 +39,11 @@ const EventRequestForm = () => {
     'Football',
     'Basketball',
     'Futsal',
+    'TableTennis',
     'Volleyball',
     'Badminton',
     'Cricket',
-   'Badminton' ,
+    'Badminton' ,
   ];
 
   const handleChange = (e) => {
