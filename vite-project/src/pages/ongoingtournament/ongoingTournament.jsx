@@ -3,7 +3,7 @@ import { useRef , useState  ,useEffect} from "react";
 import { getAuth } from 'firebase/auth';
 import { useLocation ,useNavigate} from 'react-router-dom';
 
- import { db, collection, getDocs ,query,where} from "../../firebase/FirebaseConfig";
+import { db, collection, getDocs ,query,where} from "../../firebase/FirebaseConfig";
 
 const OngoingTournament = () => {
     const matchContainerRef = useRef(null);
@@ -41,9 +41,10 @@ const OngoingTournament = () => {
             ...doc.data(),
           }));
           setOldTeams(fetchedTeams);
+        
           setError(null);
         } catch (error) {
-          console.error("Error fetching teams:", error);
+        
           setError("Failed to fetch teams. Please try again later.");
         } finally {
           setIsLoading(false);
@@ -75,15 +76,14 @@ const OngoingTournament = () => {
                 
 
               const matchRef = collection(db, 'matches');
-              
-              console.log("Event Name:", eventName);
-              console.log("Match Ref:", matchRef);
-              console.log(matchRef);
+             
             
               const q = query(matchRef, where("eventId", "==",  eventName));
           
               const querySnapshot = await getDocs(q);
+
               const matchData = querySnapshot.docs.map(doc => doc.data());
+            
               setMatches(matchData);
             } catch (error) {
               console.error("Error fetching matches: ", error);
@@ -92,7 +92,6 @@ const OngoingTournament = () => {
 
         
           const fetchUserDetail = async () => {
-
             const auth = getAuth();
             const user = auth.currentUser;  
             userDetails.email = user.email;
@@ -106,14 +105,16 @@ const OngoingTournament = () => {
           const fetchCoordinator = async () => {
             try {
               const coordinatorRef = collection(db, 'coordinator'); 
-              const q = query(coordinatorRef, where("email", "==", "userDetails.email"));
+              console.log("hash");
+              console.log(coordinatorRef);
+              const q = query(coordinatorRef, where("email", "==", userDetails.email));
+              console.log(q)
+              console.log("hash");
               const querySnapshot = await getDocs(q);
+              console.log(querySnapshot.docs);
               const coordinatorData = querySnapshot.docs.map(doc => doc.data());
-            
-              console.log(coordinatorData);
-              
-             
               setCoordinator(coordinatorData);
+              console.log("Coordinator Data:", coordinatorData);
 
             } catch (error) {
               console.error("Error fetching matches: ", error);
@@ -131,7 +132,7 @@ const OngoingTournament = () => {
        
       },[eventName, userDetails.email]); 
     
-    
+     
 
     return (
         <Layout>
@@ -166,11 +167,8 @@ const OngoingTournament = () => {
             
 
 
-            {coordinator.map(coord => {
-    console.log("coord");
-    console.log(eventName);
-    console.log(coord.eventId);
-
+    {coordinator.map(coord => {
+  
     // Check if the email matches and return the button if true
     if (coord.eventId === eventName) {
         return (
@@ -193,20 +191,7 @@ const OngoingTournament = () => {
 
 
 
-{/* 
-            {coordinator.some(coord => {
-              console.log("coord");
-    console.log(coord.eventId); 
-    console.log(eventName)// Logs each coord object
-    return coord.eventId === eventName; // Checks the condition
-}) && (
-    <button
-        className="bg-[#387478] text-white text-lg font-semibold py-2 px-4 rounded-md shadow-md transform transition-all duration-300 hover:scale-105 hover:bg-[#306a61] hover:shadow-lg"
-        onClick={() => navigate(`/edittournament?eventName=${eventName}`)}
-    >
-        Edit
-    </button>
-)} */}
+
 
 
 
@@ -229,9 +214,10 @@ const OngoingTournament = () => {
                         style={{ paddingLeft: "10px", paddingRight: "10px" }}
                     >
                         {matches.map((match, index) => (
+                       
               <a
                 key={index}
-                href={`/match-details/${match.teamA} vs ${match.teamB}`} // Adjust the link as needed
+                href={`http://localhost:5173/football?eventName=${match.matchId}`}
                 className="min-w-[250px] flex flex-col items-center bg-gray-300 border border-[#387478] rounded-lg shadow-md p-4 hover:bg-gray-400 transition"
               >
                 {/* Jerseys and Teams */}
@@ -239,7 +225,7 @@ const OngoingTournament = () => {
                   {/* Team 1 Jersey and Name */}
                   <div className="flex flex-col items-center">
                     <img
-                      src={match.teamAJersey} // Assuming you have team jerseys stored
+                      src="/TeamA.png" // Assuming you have team jerseys stored
                       alt={`${match.teamA} Jersey`}
                       className="w-12 h-12 object-contain"
                     />
@@ -255,7 +241,7 @@ const OngoingTournament = () => {
                   {/* Team 2 Jersey and Name */}
                   <div className="flex flex-col items-center">
                     <img
-                      src={match.teamBJersey} // Assuming you have team jerseys stored
+                      src='/TeamB.png'// Assuming you have team jerseys stored
                       alt={`${match.teamB} Jersey`}
                       className="w-12 h-12 object-contain"
                     />
