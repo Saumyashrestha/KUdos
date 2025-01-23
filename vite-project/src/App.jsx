@@ -34,6 +34,8 @@ import EditTournamentPage from "./pages/coordinator/EditTournamentPage";
 import EditTTPage from "./pages/coordinator/EditTTPage";
 import VenueBooking from "./pages/venueBooking/venueBooking";
 
+import Profile from "./pages/profile/ProfilePage";
+
 const App = () => {
   return(
     <MyState  >
@@ -71,6 +73,8 @@ const App = () => {
           
        
           <Route path="/edittournament" element={<EditTournamentPage/>}/>
+
+          <Route path="/profile" element={<Profile/>}/>
         </Routes>
       </Router>
       </div>  

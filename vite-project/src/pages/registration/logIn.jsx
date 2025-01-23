@@ -6,6 +6,7 @@ import Loader from "../../components/loader/Loader";
 import Layout from "../../components/layout/Layout";
 import { auth } from "../../firebase/FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import ForgotPassword from "../../components/forgotPassword/ForgotPassword";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -45,6 +46,8 @@ const Login = () => {
       userLoginFunction(); 
     }
   };
+
+  const [showPopup, setPopup] = useState(false);
 
   return (
     <Layout>
@@ -105,12 +108,8 @@ const Login = () => {
               className="shadow-md border border-[#387478] px-2 py-2 w-96 rounded-md outline-none placeholder-gray-400"
             />
             <div className="playfair absolute right-45 mt-14">
-              <Link
-                to="/forgot-password"
-                className="text-[#387478] font-semibold text-sm underline underline-offset-2 hover:text-[#52a7ad]"
-              >
-                Forgot Password?
-              </Link>
+              <button onClick={()=>setPopup(true)} className="text-[#387478] font-semibold text-sm underline underline-offset-2 hover:text-[#52a7ad]">Forgot Password?</button>
+              {showPopup && <ForgotPassword onClose={() => setPopup(false)}/>}    
             </div>
           </div>
 

@@ -6,6 +6,7 @@ import Layout from "../../components/layout/Layout";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase/FirebaseConfig";
 import { setDoc, doc } from "firebase/firestore";
+import ClubsDropdown from "../../components/clubsdropdown/ClubsDropDown";
 
 
 
@@ -18,7 +19,9 @@ const Signup = () => {
         email: "",
         password: "",
         confirmPassword: "",
+        club: "",
     });
+    const [dropMenu, showDropMenu] = useState(false);
 
     /**========================================================================
      *                          User Signup Function 
@@ -49,6 +52,7 @@ const Signup = () => {
                 await setDoc(doc(db, "Users", user.uid),{
                     Name: userSignup.name,
                     Email: userSignup.email,
+                    Club: userSignup.club,
                     Role: "Student"
                 })
             }
@@ -151,6 +155,12 @@ const Signup = () => {
                             }
                             className="shadow-md border border-[#387478] px-2 py-2 w-96 rounded-md outline-none placeholder-gray-400"
                         />
+                    </div>
+                    <div class="mb-5 flex flex-row space-x-3">
+                        <p className="text-gray-800 mt-2">Are you part of a Club ?</p>
+                        <button onClick={()=>showDropMenu(true)} className="text-[#387478] hover:text-[#52a7ad] underline">Yes</button>
+                        <button onClick={()=>showDropMenu(false)} className="text-[#387478] hover:text-[#52a7ad] underline">No</button>
+                        {dropMenu && <ClubsDropdown/>}
                     </div>
 
                     {/* Signup Button */}
