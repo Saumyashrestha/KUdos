@@ -30,13 +30,8 @@ const Navbar = () => {
   const adminNavList = (
     <ul className="lg:flex lg:space-x-10 text-black font-medium text-md space-y-4 lg:space-y-0">
       <li>
-        <Link to={"/equipmentArroval"} className="hover:text-[#f2f0ef]">
+        <Link to={"/equipmentArroval"} className="hover:text-[#387478]">
           EQUIPMENTS
-        </Link>
-      </li>
-      <li>
-        <Link to={"/login"} className="hover:text-[#387478]">
-          LOGIN
         </Link>
       </li>
       <li>

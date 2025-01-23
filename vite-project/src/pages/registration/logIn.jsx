@@ -26,17 +26,18 @@ const Login = () => {
     } else {
       try{
         await signInWithEmailAndPassword(auth, userLogin.email, userLogin.password)
+        window.localStorage.setItem("LoggedIn", "true");
         setLoading(true);
         // Mock login process
         setTimeout(() => {
           setLoading(false);
-          toast.success("Logged in successfully");
           if(userLogin.email === "swd.kudos@gmail.com"){
             window.location.href = "/admin";
           }
           else{
           window.location.href = "/homepage";
           }
+          toast.success("Logged in successfully");
         }, 1000);
       }
       catch(error){
