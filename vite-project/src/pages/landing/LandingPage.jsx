@@ -4,7 +4,7 @@ import { ArrowRightCircle } from 'lucide-react';
 
 const LandingPage = () => {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden font-sans bg-black">
+    <div className="relative min-h-screen w-full overflow-hidden font-playfair-display bg-black">
       {/* Hero Section */}
       <div className="absolute inset-0">
         {/* Hero Image */}
@@ -23,7 +23,7 @@ const LandingPage = () => {
           <div className="max-w-3xl">
             {/* Animated Heading */}
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-slide-in">
-              Welcome to Kathmandu University {' '}
+              Welcome to Kathmandu University Domain of Sports {' '}
               <span className="text-transparent bg-clip-text bg-teal-00 ">
               Domain of Sports
               </span>{' '}

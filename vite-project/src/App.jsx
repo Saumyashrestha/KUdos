@@ -28,8 +28,11 @@ import UserDetail from "./components/admin/UserDetail";
 import EquipmentApprovalPage from "./components/admin/equipments/EquipmentApprovalPage";
 import EventRequestForm from "./pages/eventRequest/eventRequest";
 import EventDetails from "./components/admin/event/eventCard";
+import TableTennis from "./pages/tableTennis/TableTennis";
 
 import EditTournamentPage from "./pages/coordinator/EditTournamentPage";
+import EditTTPage from "./pages/coordinator/EditTTPage";
+import VenueBooking from "./pages/venueBooking/venueBooking";
 
 const App = () => {
   return(
@@ -56,6 +59,9 @@ const App = () => {
           <Route path="/coordinator" element={<CoordinatorManagement/>}/>
           <Route path="/equipmentArroval" element={<EquipmentApprovalPage/>}/>
           <Route path="/eventdetails" element={<EventDetails/>}/>
+          <Route path="/tabletennis" element={<TableTennis/>}/>
+          <Route path="/edittt" element={<EditTTPage/>}/>
+          <Route path="/venuebooking" element={<VenueBooking/>}/>
 
 
           <Route path="/userdetail" element={<UserDetail/>}/>

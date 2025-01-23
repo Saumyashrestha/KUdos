@@ -166,8 +166,7 @@ const HomePageCard = () => {
 
   return (
     
-       <div className="playfair mt-10 bg-gradient-to-b from-[#f0f7f7] to-white">
-      {/* Live Matches Section */}
+       <div className="playfair mt-10 bg-white">
       
       <div className="relative mb-8 text-center">
         <h1 className="text-3xl font-bold text-[#387478] inline-block pb-2">
@@ -187,7 +186,7 @@ const HomePageCard = () => {
                 key={matchId}
                 className="block w-full bg-white border-2 border-[#e7f3f3] p-0 rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-102 hover:shadow-xl hover:border-[#387478]"
               >
-                <div className="relative bg-[#f2f0ef] w-full flex justify-between items-center px-28 py-6">
+                <div className="relative bg-[#f8f7f6] w-full flex justify-between items-center px-28 py-6">
                   {/* Left Team */}
                   <div className="text-center space-y-4">
                     <img
@@ -233,7 +232,7 @@ const HomePageCard = () => {
       <div className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="relative mb-12 text-center">
           <h1 className="text-3xl font-bold text-[#387478] inline-block pb-2">
-            Ongoing Tournaments
+            ONGOING TOURNAMENTS
           </h1>
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-[#387478] rounded-full"></div>
         </div>
