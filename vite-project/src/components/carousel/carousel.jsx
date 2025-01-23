@@ -1,61 +1,87 @@
 import { useEffect, useState } from "react";
 
+// Slides array with local images
 const slides = [
-        {
-            src: "https://picsum.photos/seed/img1/1200/450",
-            alt: "Image 1"
-        },
-        {
-            src: "https://picsum.photos/seed/img2/1200/450",
-            alt: "Image 2"
-        },
-        {
-            src: "https://picsum.photos/seed/img3/1200/450",
-            alt: "Image 3"
-        }
-    ]
+    {
+        src: "/carousel1.jpg",
+        alt: "Carousel 1"
+    },
+    {
+        src: "/carousel2.jpg",
+        alt: "Carousel 2"
+    },
+    {
+        src: "/carousel3.jpg",
+        alt: "Carousel 3"
+    }
+];
 
 const Carousel = () => {
-
-    let[slide,setSlide]=useState(0);
-    let[autoplay,setAutoplay]=useState(true);
+    const [slide, setSlide] = useState(0);
+    const [autoplay, setAutoplay] = useState(true);
     let timeOut = null;
 
-    let prevSlide =() =>{
-        if(slide===0) setSlide(slides.length-1);
-        else setSlide(slide-1);
+    const nextSlide = () => {
+        if (slide === slides.length - 1) setSlide(0);
+        else setSlide(slide + 1);
     };
 
-    let nextslide =() =>{
-        if(slide===slides.length-1) setSlide(0);
-        else setSlide(slide+1);
-    };
-
-    useEffect(()=>{
+    useEffect(() => {
         timeOut = autoplay && setTimeout(() => {
-            nextslide();
-        }, 2500);
-    })
+            nextSlide();
+        }, 2000);
+        return () => clearTimeout(timeOut); 
+    });
 
-    return(
-        <div className="overflow-hidden relative w-[80%] m-auto" onMouseEnter={()=>{setAutoplay(false); clearTimeout(timeOut);}} onMouseLeave={()=>{setAutoplay(true);}}>
-            <div className="flex transition ease-out duration-40" style={{transform: `translateX(-${slide*100}%)`}}>
-                {slides.map((items)=>{
-                    return(<img src={items.src} alt={items.alt}/>)
-                })}
+    return (
+        <div
+            className="overflow-hidden relative w-screen m-0"
+            onMouseEnter={() => {
+                setAutoplay(false);
+                clearTimeout(timeOut);
+            }}
+            onMouseLeave={() => {
+                setAutoplay(true);
+            }}
+        >
+        
+            <div
+                className="flex transition-transform ease-out duration-300"
+                style={{
+                    transform: `translateX(-${slide * 100}%)`,
+                    width: `${slides.length * 100}%`
+                }}
+            >
+                {slides.map((item, idx) => (
+                    <div
+                        key={idx}
+                        className="flex-shrink-0 w-screen h-[75vh]" 
+                    >
+                        <img
+                            src={item.src}
+                            alt={item.alt}
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                ))}
             </div>
-            <div className="absolute top-0 h-full w-full justify-between items-center flex px-3">
-               <div onClick={prevSlide} className="rounded-full w-10 h-10 bg-white text-center cursor-pointer">P</div>
-               <div onClick={nextslide} className="rounded-full w-10 h-10 bg-white text-center cursor-pointer">N</div>
-            </div>
+
+            {/* Dots for Slide Navigation */}
             <div className="absolute bottom-0 py-3 flex justify-center gap-3 w-full">
-               {slides.map((items, idx)=>{
-                return <div onClick={()=>{setSlide(idx)}} key={"circle"+idx} className={`rounded-full w-3 h-3 cursor-pointer ${idx==slide? "bg-white":"bg-gray-300"}`}>
-                </div> 
-               })}
+                {slides.map((_, idx) => (
+                    <div
+                        onClick={() => {
+                            setSlide(idx);
+                        }}
+                        key={"circle" + idx}
+                        className={`rounded-full w-3 h-3 cursor-pointer ${
+                            idx === slide ? "bg-white" : "bg-gray-300"
+                        }`}
+                    ></div>
+                ))}
             </div>
         </div>
     );
-}
+};
 
 export default Carousel;
