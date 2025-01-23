@@ -20,8 +20,8 @@ const HomePageCard = () => {
   const { clubName, eventType } = location.state || {};
   console.log("clubName:", clubName);
   console.log("sportType:", eventType);
-  const lowerCaseEventType = eventType ? eventType.toLowerCase() : ''; 
-  console.log("lowerCaseEventType:", lowerCaseEventType); 
+  const lowerCaseEventType = eventType ? eventType.toLowerCase() : "";
+  console.log("lowerCaseEventType:", lowerCaseEventType);
   const context = useContext(myContext);
   const { AllMatches, getAllMatches } = context;
 
@@ -271,11 +271,13 @@ const HomePageCard = () => {
           <section className="body-font">
             <div className="container px-5 py-5 mx-auto space-y-6">
               {getAllMatches
-                .filter(
-                  (match) =>
-                    (!clubName || match.club === clubName) &&
-                    match.status === "completed"
-                )
+                .filter((match) => {
+                  const clubMatch = !clubName || match.club === clubName;
+                  const eventTypeMatch =
+                    !lowerCaseEventType ||
+                    match.eventType === lowerCaseEventType;
+                  return clubMatch && eventTypeMatch && match.status === "completed";
+                })
                 .map((match) => {
                   const { eventId, teamA, teamB, venue, date, scoreA, scoreB } =
                     match;
