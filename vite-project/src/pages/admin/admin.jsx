@@ -1,6 +1,6 @@
 import React, { useState ,useEffect} from 'react';
 import { Link } from 'react-router-dom'; // Import the Link component
-import { db, collection, getDocs } from '../../firebase/FirebaseConfig';
+import { db, collection, getDocs, doc } from '../../firebase/FirebaseConfig';
 import { 
   Card, 
   CardHeader,
@@ -24,6 +24,7 @@ const AdminDashboard = () => {
   const [activeCoordinators, setActiveCoordinators] = useState(0);
   const [activeUsers, setActiveUsers] = useState(0);
   const [Equipment, setEquipment] = useState(0);
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
     // Fetch active coordinators from Firestore
@@ -50,9 +51,23 @@ const AdminDashboard = () => {
       setEquipment(activeCount);
     };
 
+    const fetchEvents = async() => {
+       try {
+          const querySnapshot = await getDocs(collection(db, "activeEvents"));
+          const docsData = querySnapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+          }));
+          setEvents(docsData);
+        } catch (error) {
+          console.error("Error fetching documents: ", error);
+        }
+    }
+
     fetchActiveUsers();
     fetchEquipment();
     fetchActiveCoordinators();
+    fetchEvents();
   }, []); // Empty dependency array to run this effect once on mount
 
 
@@ -156,56 +171,23 @@ const AdminDashboard = () => {
         <Card className="bg-white">
           <CardHeader>
             <CardTitle className="text-xl font-bold flex items-center gap-2">
-              <Activity className="h-5 w-5 text-blue-500" />
-              Recent Activities
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {[
-                { text: "Suman upgraded to Cricket Coordinator", time: "2 hours ago", type: "role" },
-                { text: "New equipment request from Football team", time: "4 hours ago", type: "equipment" },
-                { text: "Tournament schedule updated", time: "1 day ago", type: "tournament" }
-              ].map((activity, index) => (
-                <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className={`h-2 w-2 rounded-full ${
-                      activity.type === 'role' ? 'bg-blue-500' :
-                      activity.type === 'equipment' ? 'bg-green-500' :
-                      'bg-purple-500'
-                    }`} />
-                    <span className="text-sm text-gray-700">{activity.text}</span>
-                  </div>
-                  <span className="text-xs text-gray-500">{activity.time}</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-white">
-          <CardHeader>
-            <CardTitle className="text-xl font-bold flex items-center gap-2">
               <Calendar className="h-5 w-5 text-purple-500" />
-              Upcoming Events
+              Events
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {[
-                { title: "Inter-College Football Tournament", date: "Dec 25", status: "Pending" },
-                { title: "Cricket Tournament", date: "Dec 27", status: "Confirmed" },
-                { title: "Futsal Inter-department", date: "Dec 30", status: "Scheduled" }
-              ].map((event, index) => (
+              {events.map((event, index) => (
                 <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
                   <div>
-                    <p className="font-medium text-gray-800">{event.title}</p>
-                    <p className="text-sm text-gray-500">{event.date}</p>
+                    <p className="font-medium text-gray-800">{event.eventName}</p>
+                    <p className="text-sm text-gray-500">{event.startDate}</p>
                   </div>
                   <span className={`px-3 py-1 rounded-full text-xs ${
-                    event.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                    event.status === 'Confirmed' ? 'bg-green-100 text-green-800' :
-                    'bg-blue-100 text-blue-800'
+                    event.status === 'upcoming' ? 'bg-yellow-100 text-yellow-800' :
+                    event.status === 'active' ? 'bg-green-100 text-green-800' :
+                    event.status === 'live' ? 'bg-blue-100 text-blue-800':
+                    'bg-gray-100 text-gray-800'  // Default case
                   }`}>
                     {event.status}
                   </span>
@@ -230,7 +212,6 @@ const AdminDashboard = () => {
               {[
                 { icon: UserPlus, text: "Add New Coordinator", color: "text-blue-500", link: "/coordinator" },
                 { icon: Dumbbell, text: "Equipment Check-out", color: "text-green-500", link: "/addequipment" },
-              { icon: Trophy, text: "Create Tournament", color: "text-yellow-500", link: "/createtournament" },
                 // { icon: Activity, text: "Generate Reports", color: "text-purple-500", link: "/generatereports" }
               ].map((action, index) => (
                 <Link key={index} to={action.link}>

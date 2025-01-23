@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ShoppingCart, X, Plus, Minus } from 'lucide-react';
 import { getAuth } from 'firebase/auth';
 
-import { db, doc, collection, getDoc,getDocs,addDoc } from '../../firebase/FirebaseConfig';
+import { auth, db, doc, collection, getDoc,getDocs,addDoc } from '../../firebase/FirebaseConfig';
 
 const EquipCards = () => {
     const cloudName = 'dt4rt3krq';
@@ -85,8 +85,8 @@ const EquipCards = () => {
  
     
     const handleSubmitRequest = async () => {
-        const auth = getAuth();
-        auth.onAuthStateChanged(async (user) => {
+        const Auth = getAuth();
+        Auth.onAuthStateChanged(async (user) => {
             const docRef = doc(db, "Users", user?.uid); // Ensure user is authenticated
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
@@ -109,11 +109,16 @@ const EquipCards = () => {
                     status: "Pending",
                     timestamp: new Date(),
                 }));
-    
+
+                const user = auth.currentUser;
+                const userDocRef = doc(db, "Users", user.uid);
+                const equipmentCollectionRef = collection(userDocRef, "Equipments");
+
                 for (const request of requestDetails) {
                     // Ensure no undefined fields are added to Firestore
                     if (request.requestedBy) {
                         await addDoc(requestedEquipmentRef, request);
+                        await addDoc(equipmentCollectionRef, request);
                     } else {
                         console.log("Missing required fields in request details");
                     }

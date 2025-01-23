@@ -97,8 +97,7 @@ const Navbar = () => {
 
         <div className="hidden lg:flex items-center space-x-12 mr-4">
           {navList}
-          <i className="fas fa-bell fa-lg hover:text-[#f2f0ef] ml-6" />
-          <i onClick={() => navigate("/profile")} className="fas fa-user-circle fa-lg hover:text-[#f2f0ef] ml-6" />
+          <i onClick={() => navigate("/profile")} className="fas fa-user-circle fa-lg hover:text-[#387478] ml-6" />
         </div>
       </div>
 
@@ -106,8 +105,7 @@ const Navbar = () => {
         <div className="lg:hidden bg-[#f2f0ef] px-4 pb-4">
           {navList}
           <div className="flex justify-center space-x-6 mt-4">
-            <i className="fas fa-bell fa-lg hover:text-[#f2f0ef]" />
-            <i onClick={() => navigate("/profile")} className="fas fa-user-circle fa-lg hover:text-[#f2f0ef]" />
+            <i onClick={() => navigate("/profile")} className="fas fa-user-circle fa-lg hover:text-[#387478]" />
           </div>
         </div>
       )}

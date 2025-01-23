@@ -1,12 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { getDoc, doc } from "../../firebase/FirebaseConfig";
+import { getDoc, doc, collection, getDocs } from "../../firebase/FirebaseConfig";
 import { auth, db } from "../../firebase/FirebaseConfig";
 import { sendPasswordResetEmail } from "firebase/auth";
 import Layout from "../../components/layout/Layout";
 
 const Profile = () => {
     const [userDetails, setUserDetails] = useState(null);
+    const [equipmentsReq, setEquipentsReq] = useState([]);
 
     const fetchUserData = async() => {
         auth.onAuthStateChanged(async (user) => {
@@ -20,8 +21,26 @@ const Profile = () => {
             }
         });
     };
+    
+    const fetchEquipmentReq = async() => {
+        auth.onAuthStateChanged(async (user) => {
+            try {
+                const userdocRef = doc(db, "Users", user.uid);
+                const querySnapshot = await getDocs(collection(userdocRef, "Equipments"));
+                const docsData = querySnapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                }));
+                setEquipentsReq(docsData);
+              } catch (error) {
+                console.error("Error fetching documents: ", error);
+              }
+        })
+        };
+
     useEffect(() => {
         fetchUserData();
+        fetchEquipmentReq();
     }, []);
 
     async function handleLogout() {
@@ -77,10 +96,36 @@ const Profile = () => {
         </div>
         <div className="h-5"></div>
         <div className="bg-gray-300 rounded-xl px-20 py-10 flex flex-col gap-5 items-center mx-4">
-            <h3 className="font-bold">Equipments borrowed</h3>
+            <h3 className="font-bold">Equipments list</h3>
+            <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md" border="1">
+                <thead className="bg-gray-100">
+                    <tr>
+                        <th className="py-2 px-4 text-left text-sm font-medium text-gray-600">Name</th>
+                        <th className="py-2 px-4 text-left text-sm font-medium text-gray-600">Quantity</th>
+                        <th className="py-2 px-4 text-left text-sm font-medium text-gray-600">Status</th>
+                        <th className="py-2 px-4 text-left text-sm font-medium text-gray-600">Requested date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {equipmentsReq.length === 0 ? (
+                        <tr>
+                        <td colSpan="4" className="py-2 px-4 text-center text-gray-500">Loading...</td>
+                        </tr>
+                    ) : (
+                        equipmentsReq.map((doc) => (
+                        <tr key={doc.id} className="border-b border-gray-200">
+                            <td className="py-2 px-4 text-sm text-gray-700">{doc.name}</td>
+                            <td className="py-2 px-4 text-sm text-gray-700">{doc.quantity}</td> 
+                            <td className="py-2 px-4 text-sm text-gray-700">{doc.status}</td>
+                            <td className="py-2 px-4 text-sm text-gray-700">{doc.time?.toDate()}</td>
+                        </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
         </div>
     </Layout>
-    )
+    );
 }
 
 export default Profile;
