@@ -291,7 +291,7 @@ const HomePageCard = () => {
                         {/* Left Team */}
                         <div className="text-center space-y-4">
                           <img
-                            className="h-30 w-32 object-cover mx-auto"
+                            className="h-30 w-32 object-cover mx-auto"  
                             src="/TeamA.png"
                             alt={`${teamA} jersey`}
                           />
@@ -376,7 +376,7 @@ const HomePageCard = () => {
                   <div className="p-1.5 bg-white rounded-full shadow-lg">
                     <img
                       className="h-14 w-14 rounded-full object-cover"
-                      src={event.clubLogo}
+                      src= {`${event.clubName}.png`}
                       alt={`${event.organizerEmail} club logo`}
                     />
                   </div>
@@ -470,7 +470,7 @@ const HomePageCard = () => {
                   <div className="p-1.5 bg-white rounded-full shadow-lg">
                     <img
                       className="h-14 w-14 rounded-full object-cover"
-                      src={event.clubLogo}
+                      src={`${event.clubName}.png`}
                       alt={`${event.organizerEmail} club logo`}
                     />
                   </div>
