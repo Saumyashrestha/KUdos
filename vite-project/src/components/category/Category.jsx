@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import HomePageCard from "../homePageCard/HomePageCard";
 
 const category = [
     { name: 'KUCC' },

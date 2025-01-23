@@ -10,8 +10,9 @@ import { set } from "date-fns";
 
 const HomePageCard = () => {
   const location = useLocation();
-  const { clubName } = location.state || {};
-
+  const { clubName, eventType } = location.state || {};
+    
+  console.log("Eventttte:", eventType);
   const context = useContext(myContext);
   const { AllMatches, getAllMatches } = context;
 
