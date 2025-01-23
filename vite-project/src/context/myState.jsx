@@ -23,12 +23,10 @@ function MyState({ children }) {
           querySnapshot.docs.map(async (docSnapshot) => {
             const matchData = docSnapshot.data();
             
-            // Extract team1Id and team2Id
             const team1RefPath = matchData.team1Id;
             const team2RefPath = matchData.team2Id;
             
 
-            // Resolve references dynamically
             const team1Doc = await getDoc(team1RefPath);
             const team2Doc = await getDoc(team2RefPath);
 
@@ -40,8 +38,7 @@ function MyState({ children }) {
             };
           })
         );
-
-        // Update state with fetched matches and team data
+        
         setGetAllMatches(matchesWithTeams);
         setLoading(false);
       });

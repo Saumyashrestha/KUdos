@@ -89,7 +89,7 @@ const EventDetails = () => {
         const userSnapshot = await getDocs(usersRef);
         const userDoc = userSnapshot.docs.find((doc) => doc.data().Email === selectedEvent.organizerEmail);
 
-        if (userDoc) {
+        if (userDoc) {  
           const userRef = doc(db, 'Users', userDoc.id);
           await updateDoc(userRef, {
             Role: `${selectedEvent.eventName} Coordinator`,
