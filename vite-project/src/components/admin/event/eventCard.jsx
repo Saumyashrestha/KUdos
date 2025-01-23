@@ -61,6 +61,7 @@ const EventDetails = () => {
       await setDoc(activeEventRef, {
         ...selectedEvent,
         status: 'upcoming',
+        clubName: selectedEvent.clubName || 'Unknown',
         acceptedAt: new Date().toISOString(),
       });
 
@@ -318,16 +319,11 @@ const EventDetails = () => {
                             <span className="font-medium">Description:</span>{' '}
                             {event.description || 'Not provided'}
                           </p>
-                          {event.proposalFile && (
-                            <div className="mt-2">
-                              <p className="font-medium mb-1">Proposal Document:</p>
-                              <img
-                                src={event.proposalFile}
-                                alt="Proposal Document"
-                                className="w-full h-14 object-cover rounded-lg"
-                              />
-                            </div>
-                          )}
+                          <p>
+                            <span className="font-medium">Description:</span>{' '}
+                            {event.clubName || 'Not provided'}
+                          </p>
+                          
                         </div>
                       </div>
                     </div>

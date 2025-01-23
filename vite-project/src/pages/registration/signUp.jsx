@@ -1,7 +1,7 @@
 
 import { useState ,useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../components/loader/Loader";
 import Layout from "../../components/layout/Layout";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -9,8 +9,6 @@ import { auth, db } from "../../firebase/FirebaseConfig";
 import { setDoc, doc } from "firebase/firestore";
 
 import ClubsDropdown from "../../components/clubsdropdown/ClubsDropDown";
-
-
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -97,42 +95,47 @@ const Signup = () => {
             toast.error("Passwords do not match");
             return;
         }
-
-        try {
+        
+        try{
+            await createUserWithEmailAndPassword(auth, userSignup.email, userSignup.password)
+            const user = auth.currentUser;
+            //console.log(user);
+            if(user){
+                await setDoc(doc(db, "Users", user.uid),{
+                    Name: userSignup.name,
+                    Email: userSignup.email,
+                    Club: userSignup.club,
+                    Role: "Student"
+                })
+            }
             setLoading(true);
-         
-            const userCredential = await createUserWithEmailAndPassword(
-                auth,
-                userSignup.email,
-
-                userSignup.password
-            );
-
-
-            console.log(userSignup.clubLogo);
-
-            
-            await setDoc(doc(db, "Users", userCredential.user.uid), {
-                Name: userSignup.name,
-                Email: userSignup.email,
-                Club: userSignup.club,
-                Role: "Student",
-            });
-
-            toast.success("Signed Up Successfully");
-            setLoading(false);
-            setUserSignup({
-                name: "",
-                email: "",
-                password: "",
-                confirmPassword: "",
-                club: "",
-            });
-            navigate("/login");
-        } catch (error) {
-            console.error("Signup Error:", error.message);
-            setLoading(false);
-            toast.error("Signup Failed");
+            // Simulate signup delay
+            setTimeout(() => {
+                setLoading(false);
+                toast.success("Signed Up Successfully");
+                setUserSignup({
+                    name: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: ""
+                });
+            }, 1000);
+            window.location.href = "/login";
+        }
+        catch(error){
+            console.log(error.message);
+            setLoading(true);
+            // Simulate signup delay
+            setTimeout(() => {
+                setLoading(false);
+                toast.success("Signed Up Failed");
+                setUserSignup({
+                    name: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: ""
+                });
+            }, 1000);
         }
     };
 
@@ -236,6 +239,7 @@ const Signup = () => {
                         >
                             SIGN UP
                         </button>
+                        <ToastContainer position="top-center"/>
                     </div>
 
                     <div>
