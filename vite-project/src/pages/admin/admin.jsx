@@ -21,9 +21,12 @@ import Layout from '../../components/layout/Layout';
 
 const AdminDashboard = () => {
   const [notifications] = useState(3);
+ 
+  const [inactiveCoordinators, setInactiveCoordinators] = useState(0);
   const [activeCoordinators, setActiveCoordinators] = useState(0);
   const [activeUsers, setActiveUsers] = useState(0);
   const [Equipment, setEquipment] = useState(0);
+  const [EquipmentCount, setEquipmentCount] = useState(0);
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -31,9 +34,10 @@ const AdminDashboard = () => {
     const fetchActiveCoordinators = async () => {
       const coordinatorsRef = collection(db, "coordinator"); // Assuming "coordinators" is your Firestore collection
       const coordinatorsSnapshot = await getDocs(coordinatorsRef);
-      
+      const InactiveCount = coordinatorsSnapshot.docs.filter(doc => doc.data().status === "Inactive").length;
       const activeCount = coordinatorsSnapshot.docs.filter(doc => doc.data().status === "Active").length;
       setActiveCoordinators(activeCount);
+      setInactiveCoordinators(InactiveCount);
     };
 
     const fetchActiveUsers = async () => {
@@ -43,13 +47,24 @@ const AdminDashboard = () => {
       const activeCount = UsersSnapshot.docs.filter(doc => doc.data()).length;
       setActiveUsers(activeCount);
     };
+
     const fetchEquipment = async () => {
-      const EquipmentRef = collection(db, "equipment"); // Assuming "coordinators" is your Firestore collection
+      const EquipmentRef = collection(db, "requestedEquipment"); 
       const EquipmentSnapshot = await getDocs(EquipmentRef);
       
       const activeCount = EquipmentSnapshot.docs.filter(doc => doc.data()).length;
       setEquipment(activeCount);
     };
+
+
+    const fetchRequestedEquipment = async () => {
+      const EquipmentRefs = collection(db, "equipment"); 
+      const EquipmentSnapshots = await getDocs(EquipmentRefs);
+      
+      const Count = EquipmentSnapshots.docs.filter(doc => doc.data()).length;
+      setEquipmentCount(Count);
+    };
+
 
     const fetchEvents = async() => {
        try {
@@ -59,6 +74,7 @@ const AdminDashboard = () => {
               ...doc.data(),
           }));
           setEvents(docsData);
+          console.log("Fetched events: ", docsData);
         } catch (error) {
           console.error("Error fetching documents: ", error);
         }
@@ -68,6 +84,8 @@ const AdminDashboard = () => {
     fetchEquipment();
     fetchActiveCoordinators();
     fetchEvents();
+    fetchRequestedEquipment();
+    
   }, []); // Empty dependency array to run this effect once on mount
 
 
@@ -122,9 +140,10 @@ const AdminDashboard = () => {
               </div>
               <UserPlus className="h-8 w-8 text-purple-500" />
             </div>
-            <div className="mt-4 text-xs text-blue-600">
-              2 pending approvals
-            </div>
+            <div className="mt-4 text-xs text-purple-600">
+           {inactiveCoordinators} coordinators are  Inactive
+</div>
+
           </CardContent>
         </Card>
       </Link>
@@ -139,26 +158,29 @@ const AdminDashboard = () => {
               </div>
               <Dumbbell className="h-8 w-8 text-green-500" />
             </div>
-            <div className="mt-4 text-xs text-orange-600">
-              12 items checked out
-            </div>
+            <div className="mt-4 text-xs text-purple-600">
+            {EquipmentCount} type of equipment available
+</div>
+
+
           </CardContent>
         </Card>
       </Link>
 
-      <Link to="/ongoingtournament">
+      <Link to="/eventdetails">
         <Card className="bg-white hover:shadow-lg transition-shadow cursor-pointer">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Active Tournaments</p>
-                <h3 className="text-2xl font-bold text-gray-800">3</h3>
+                <p className="text-sm font-medium text-gray-600">Requested Events</p>
+                <h3 className="text-2xl font-bold text-gray-800">{events.length}</h3>
               </div>
               <Trophy className="h-8 w-8 text-yellow-500" />
             </div>
             <div className="mt-4 text-xs text-purple-600">
-              2 upcoming this week
-            </div>
+  {events.filter(event => event.status === "active").length} events approved
+</div>
+
           </CardContent>
         </Card>
       </Link>
