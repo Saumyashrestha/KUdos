@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import HomePageCard from "../homePageCard/HomePageCard";
 
 const category = [
     { name: 'KUCC' },
@@ -8,7 +9,6 @@ const category = [
     { name: 'AMES' },
     { name: 'SEEE' },
     { name: 'KUARC' },
-
 ];
 
 const Category = () => {
@@ -29,9 +29,10 @@ const Category = () => {
 
                             {/* Category Box */}
                             <div
-                                onClick={() => navigate(`/clubhome`)}
+                                onClick={() => navigate(`/clubhome`, { state: { clubName: item.name } })}
                                 className="flex justify-center items-center cursor-pointer mx-4 flex-grow"
                             >
+                                
                                 <h1 className="text-lg lg:text-2xl font-medium text-white text-center transition-all hover:text-gray-400">
                                     {item.name}
                                 </h1>

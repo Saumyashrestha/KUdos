@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-
+import { useLocation } from "react-router-dom";
 import myContext from "../../context/myContext";
 import { getFirestore, collection, getDocs, query, where, doc, } from "firebase/firestore";
 import { db, updateDoc } from '../../firebase/FirebaseConfig'
@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { set } from "date-fns";
 
 const HomePageCard = () => {
+  const location = useLocation();
+  const { clubName } = location.state || {}; 
 
   const context = useContext(myContext);
   const { AllMatches, getAllMatches } = context;
@@ -189,13 +191,13 @@ const HomePageCard = () => {
 
       <section className="body-font">
         <div className="container px-5 py-5 mx-auto space-y-6">
-
+          
           {getAllMatches.map((match) => {
             const { matchId, team1Name, team2Name, venue, dateTime, team1score, team2score, matchTime } = match;
 
             return (
               <a
-                key={matchId}
+                key={teamA + teamB} 
                 className="block w-full bg-white border-2 border-[#e7f3f3] p-0 rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-102 hover:shadow-xl hover:border-[#387478]"
               >
                 <div className="relative bg-[#f8f7f6] w-full flex justify-between items-center px-28 py-6">
@@ -203,34 +205,34 @@ const HomePageCard = () => {
                   <div className="text-center space-y-4">
                     <img
                       className="h-30 w-32 object-cover mx-auto"
-                      src="/TeamA.png"
-                      alt={`${team1Name} jersey`}
+                      src="/TeamA.png" 
+                      alt={`${teamA} jersey`}
                     />
-                    <h3 className="font-semibold text-xl text-[#2c5a5d]">{team1Name}</h3>
+                    <h3 className="font-semibold text-xl text-[#2c5a5d]">{teamA}</h3>
                   </div>
 
                   <div className="text-center space-y-4">
                     <h1 className="text-4xl font-bold text-[#387478] bg-[#f0f7f7] py-3 px-6 rounded-xl">
-                      {team1score} : {team2score}
+                      {scoreA} : {scoreB}
                     </h1>
                     <div className="bg-gradient-to-r from-[#387478] to-[#2c5a5d] rounded-full py-2 px-8 inline-block shadow-md">
-                      <p className="text-lg text-white font-medium">{matchTime}</p>
+                      <p className="text-lg text-white font-medium"></p>
                     </div>
                   </div>
 
                   <div className="text-center space-y-4">
                     <img
                       className="h-30 w-32 object-cover mx-auto"
-                      src="/TeamB.png"
-                      alt={`${team2Name} jersey`}
+                      src="/TeamB.png" 
+                      alt={`${teamB} jersey`}
                     />
-                    <h3 className="font-semibold text-xl text-[#2c5a5d]">{team2Name}</h3>
+                    <h3 className="font-semibold text-xl text-[#2c5a5d]">{teamB}</h3>
                   </div>
                 </div>
                 <div className="border-t-2 border-[#e7f3f3]"></div>
                 <div className="p-5 bg-[#f9fbfb]">
                   <h1 className="text-lg font-semibold text-[#387478]">
-                    {team1Name} VS {team2Name}
+                    {teamA} VS {teamB}
                   </h1>
                   <p className="text-[#5c8f92] text-sm mt-1">Venue: {venue}</p>
                 </div>
