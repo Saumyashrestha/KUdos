@@ -31,17 +31,22 @@ const Navbar = () => {
     <ul className="lg:flex lg:space-x-10 text-black font-medium text-md space-y-4 lg:space-y-0">
       <li>
         <Link to={"/equipmentArroval"} className="hover:text-[#f2f0ef]">
-        EQUIPMENTS
+          EQUIPMENTS
         </Link>
       </li>
       <li>
-        <Link to={"/eventdetails"} className="hover:text-[#f2f0ef]">
+        <Link to={"/login"} className="hover:text-[#387478]">
+          LOGIN
+        </Link>
+      </li>
+      <li>
+        <Link to={"/eventdetails"} className="hover:text-[#387478]">
           EVENT DETAIL
         </Link>
       </li>
       <li>
-        <Link to={"/"} className="hover:text-[#f2f0ef]">
-         NOTICE
+        <Link to={"/"} className="hover:text-[#387478]">
+          NOTICE
         </Link>
       </li>
     </ul>
@@ -51,18 +56,18 @@ const Navbar = () => {
   const userNavList = (
     <ul className="lg:flex lg:space-x-10 text-black font-medium text-md space-y-4 lg:space-y-0">
       <li>
-        <Link to={"/equipments"} className="hover:text-[#f2f0ef]">
+        <Link to={"/equipments"} className="hover:text-[#387478]">
           EQUIPMENTS
         </Link>
       </li>
       <li>
-        <Link to={"/eventRequestform"} className="hover:text-[#f2f0ef]">
-         EVENT REQUEST
+        <Link to={"/eventRequestform"} className="hover:text-[#387478]">
+          EVENT REQUEST
         </Link>
       </li>
       <li>
-        <Link to={"/"} className="hover:text-[#f2f0ef]">
-        NOTICE
+        <Link to={"/"} className="hover:text-[#387478]">
+          NOTICE
         </Link>
       </li>
     </ul>
@@ -73,15 +78,12 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   return (
-    <nav className="bg-[#387478] shadow-md sticky z-50 top-0">
+    <nav className="bg-[#f2f0ef] shadow-md sticky z-50 top-0">
       <div className="flex justify-between items-center py-3 px-8 lg:px-14">
         {/* Logo */}
         <div className="flex items-center">
-        <Link to={userDetails?.Role === "Admin" ? "/admin" : "/homepage"}>
- 
-
-
-            <h2 className="font-bold text-[#f2f0ef] text-2xl">KUdos</h2>
+          <Link to={userDetails?.Role === "Admin" ? "/admin" : "/homepage"}>
+            <h2 className="font-bold text-[#387478] text-2xl">KUdos</h2>
           </Link>
         </div>
 
@@ -93,7 +95,6 @@ const Navbar = () => {
           <i className={`fas ${isMenuOpen ? "fa-times" : "fa-bars"} fa-lg`}></i>
         </button>
 
-        {/* Desktop Nav */}
         <div className="hidden lg:flex items-center space-x-12 mr-4">
           {navList}
           <i className="fas fa-bell fa-lg hover:text-[#f2f0ef] ml-6" />
@@ -101,7 +102,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Nav */}
       {isMenuOpen && (
         <div className="lg:hidden bg-[#f2f0ef] px-4 pb-4">
           {navList}

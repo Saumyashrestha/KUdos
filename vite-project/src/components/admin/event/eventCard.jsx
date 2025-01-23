@@ -13,11 +13,11 @@ const EventDetails = () => {
 
   const sendAcceptedEmail = (event) => {
     const emailTemplateParams = {
-      user_email: event.userEmail, // Sender email address
+      user_email: event.organizerEmail, // Sender email address
       event_name: event.eventName, // Event name
       event_type: event.eventType, // Event type
       location: event.location, // Event location
-      organizer_name: event.userName, // Organizer name
+      organizer_name: event.organizerName, // Organizer name
       description: event.description || 'No description provided', // Event description
     };
   
@@ -32,11 +32,11 @@ const EventDetails = () => {
   
   const sendRejectedEmail = (event) => {
     const emailTemplateParams = {
-      user_email: event.userEmail, // Sender email address
+      user_email: event.organizerEmail, // Sender email address
       event_name: event.eventName, // Event name
       event_type: event.eventType, // Event type
       location: event.location, // Event location
-      organizer_name: event.userName, // Organizer name
+      organizer_name: event.organizerName, // Organizer name
       description: event.description || 'No description provided', // Event description
     };
   
@@ -52,7 +52,7 @@ const EventDetails = () => {
 
   const handleAccept = async () => {
     try {
-      if (!selectedEvent || !selectedEvent.id || !selectedEvent.userEmail || !selectedEvent.eventType || !selectedEvent.startDate || !selectedEvent.endDate) {
+      if (!selectedEvent || !selectedEvent.id || !selectedEvent.organizerEmail || !selectedEvent.eventType || !selectedEvent.startDate || !selectedEvent.endDate) {
         throw new Error('Invalid event data or missing required fields.');
       }
 
@@ -60,9 +60,22 @@ const EventDetails = () => {
       const activeEventRef = doc(db, 'activeEvents', selectedEvent.id);
       await setDoc(activeEventRef, {
         ...selectedEvent,
-        status: 'active',
+        status: 'upcoming',
         acceptedAt: new Date().toISOString(),
       });
+
+
+      const coordinatorRef = doc(db, 'coordinator', selectedEvent.organizerEmail);
+      await setDoc(coordinatorRef, {
+        createdAt: new Date().toISOString(),
+        department: selectedEvent.department || 'Unknown',
+        email: selectedEvent.organizerEmail,
+        name: selectedEvent.organizerName,
+        phone: selectedEvent.phoneNumber,
+        sport: selectedEvent.eventType,
+        eventId: selectedEvent.id,
+        status: 'Active', // Set status to 'Active' for accepted events
+      }, { merge: true });
 
       // Update the status in the eventRequests collection
       const eventRequestRef = doc(db, 'eventRequests', selectedEvent.id);
@@ -74,7 +87,7 @@ const EventDetails = () => {
       if (selectedEvent.userEmail) {
         const usersRef = collection(db, 'Users');
         const userSnapshot = await getDocs(usersRef);
-        const userDoc = userSnapshot.docs.find((doc) => doc.data().Email === selectedEvent.userEmail);
+        const userDoc = userSnapshot.docs.find((doc) => doc.data().Email === selectedEvent.organizerEmail);
 
         if (userDoc) {
           const userRef = doc(db, 'Users', userDoc.id);
@@ -90,7 +103,7 @@ const EventDetails = () => {
       // Update local state
       setEventData((prevData) =>
         prevData.map((event) =>
-          event.id === selectedEvent.id ? { ...event, status: 'accepted' } : event
+          event.id === selectedEvent.id ? { ...event, status: 'upcoming' } : event
         )
       );
 
@@ -107,12 +120,14 @@ const EventDetails = () => {
 
  const handleReject = async () => {
     try {
-      if (!selectedEvent || !selectedEvent.id || !selectedEvent.userEmail || !selectedEvent.eventType || !selectedEvent.startDate || !selectedEvent.endDate) {
+      if (!selectedEvent || !selectedEvent.id || !selectedEvent.organizerEmail || !selectedEvent.eventType || !selectedEvent.startDate || !selectedEvent.endDate) {
         throw new Error('Invalid event data or missing required fields.');
       }
 
       // Get the Firestore reference for the selected event
       const eventRef = doc(db, 'eventRequests', selectedEvent.id);
+
+    
 
       // Update the event status to 'rejected' and set the rejection timestamp
       await updateDoc(eventRef, {
@@ -134,7 +149,7 @@ const EventDetails = () => {
       await fetchEvents();
 
       // Notify the user that the event was rejected
-      alert('Event request has been rejected.');
+      alert('Event request has been accepted.');
     } catch (error) {
       // Handle any errors that occur during the rejection process
       console.error('Error rejecting event:', error);
@@ -282,10 +297,10 @@ const EventDetails = () => {
                         </h3>
                         <div className="space-y-2">
                           <p>
-                            <span className="font-medium">Name:</span> {event.userName}
+                            <span className="font-medium">Name:</span> {event.organizerName}
                           </p>
                           <p>
-                            <span className="font-medium">Email:</span> {event.userEmail}
+                            <span className="font-medium">Email:</span> {event.organizerEmail}
                           </p>
                           <p>
                             <span className="font-medium">Phone:</span> {event.phoneNumber}
