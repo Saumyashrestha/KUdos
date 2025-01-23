@@ -6,7 +6,7 @@ import { getAuth } from 'firebase/auth';
 
 
 
-import { db, doc, collection, getDoc,addDoc , getDocs,query ,where } from '../../firebase/FirebaseConfig';
+import { db, doc, collection, getDoc,addDoc, getDocs,query ,where } from '../../firebase/FirebaseConfig';
 
 
 const EventRequestForm = () => {
@@ -39,6 +39,7 @@ const EventRequestForm = () => {
     'Football',
     'Basketball',
     'Futsal',
+    'TableTennis',
     'Volleyball',
     'Badminton',
     'Cricket',
@@ -104,6 +105,8 @@ const EventRequestForm = () => {
     }
   
     const auth = getAuth();
+
+    if (auth.currentUser == null ){}
   
     try {
       const user = auth.currentUser; // Get the current user directly
