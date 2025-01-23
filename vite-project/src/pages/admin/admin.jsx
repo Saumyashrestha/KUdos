@@ -184,9 +184,10 @@ const AdminDashboard = () => {
                     <p className="text-sm text-gray-500">{event.startDate}</p>
                   </div>
                   <span className={`px-3 py-1 rounded-full text-xs ${
-                    event.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                    event.status === 'Confirmed' ? 'bg-green-100 text-green-800' :
-                    'bg-blue-100 text-blue-800'
+                    event.status === 'upcoming' ? 'bg-yellow-100 text-yellow-800' :
+                    event.status === 'active' ? 'bg-green-100 text-green-800' :
+                    event.status === 'live' ? 'bg-blue-100 text-blue-800':
+                    'bg-gray-100 text-gray-800'  // Default case
                   }`}>
                     {event.status}
                   </span>
@@ -211,7 +212,6 @@ const AdminDashboard = () => {
               {[
                 { icon: UserPlus, text: "Add New Coordinator", color: "text-blue-500", link: "/coordinator" },
                 { icon: Dumbbell, text: "Equipment Check-out", color: "text-green-500", link: "/addequipment" },
-              { icon: Trophy, text: "Create Tournament", color: "text-yellow-500", link: "/createtournament" },
                 // { icon: Activity, text: "Generate Reports", color: "text-purple-500", link: "/generatereports" }
               ].map((action, index) => (
                 <Link key={index} to={action.link}>
