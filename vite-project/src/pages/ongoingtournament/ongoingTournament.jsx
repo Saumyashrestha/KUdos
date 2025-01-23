@@ -33,7 +33,8 @@ const OngoingTournament = () => {
         try {
           setIsLoading(true);
           const teamsRef = collection(db, "teams");
-          const querySnapshot = await getDocs(teamsRef);
+          const q = query(teamsRef, where("eventId", "==", eventName));
+          const querySnapshot = await getDocs(q);
       
           const fetchedTeams = querySnapshot.docs.map((doc) => ({
             id: doc.id,
@@ -74,6 +75,7 @@ const OngoingTournament = () => {
                 
 
               const matchRef = collection(db, 'matches');
+              
               console.log("Event Name:", eventName);
               console.log("Match Ref:", matchRef);
               console.log(matchRef);
