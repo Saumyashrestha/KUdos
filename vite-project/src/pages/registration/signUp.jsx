@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../components/loader/Loader";
 import Layout from "../../components/layout/Layout";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase/FirebaseConfig";
 import { setDoc, doc } from "firebase/firestore";
 import ClubsDropdown from "../../components/clubsdropdown/ClubsDropDown";
-
-
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -60,7 +58,7 @@ const Signup = () => {
             // Simulate signup delay
             setTimeout(() => {
                 setLoading(false);
-                toast.success("Signed Up Successfully");
+                toast.success("Signed up successfully");
                 setUserSignup({
                     name: "",
                     email: "",
@@ -76,7 +74,7 @@ const Signup = () => {
             // Simulate signup delay
             setTimeout(() => {
                 setLoading(false);
-                toast.success("Signed Up Failed");
+                toast.error(error);
                 setUserSignup({
                     name: "",
                     email: "",
@@ -172,6 +170,7 @@ const Signup = () => {
                         >
                             SIGN UP
                         </button>
+                        <ToastContainer position="top-center"/>
                     </div>
 
                     <div>
