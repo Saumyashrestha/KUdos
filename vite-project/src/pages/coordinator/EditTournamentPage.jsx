@@ -444,6 +444,7 @@ const resetTeams = () => {
           eventId: eventName, // Make sure eventName is valid
           eventName: eventname, // Ensure eventName is not undefined
           updatedAt: new Date().toISOString(),
+          staus: "upcoming"
         });
       
         return matchDoc.id;

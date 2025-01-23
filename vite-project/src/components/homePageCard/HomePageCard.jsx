@@ -192,7 +192,7 @@ const HomePageCard = () => {
       <section className="body-font">
         <div className="container px-5 py-5 mx-auto space-y-6">
           
-   {getAllMatches.filter(match => !clubName || match.club === clubName).map((match) => {
+  {getAllMatches.filter(match => (!clubName || match.club === clubName) && match.status === "live").map((match) => {
             const { eventId, teamA, teamB, venue, date, scoreA, scoreB } = match;
 
             return (
