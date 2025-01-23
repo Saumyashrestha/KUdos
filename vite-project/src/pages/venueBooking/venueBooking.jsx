@@ -103,7 +103,7 @@ const venueBooking = () => {
                                 />
                             </div>
                             <div className="mb-4">
-                                <label className="block text-gray-800 mb-2">Time</label>
+                                <label className="block text-gray-800 mb-2"> Start Time</label>
                                 <input
                                     type="time"
                                     name="time"
@@ -113,14 +113,13 @@ const venueBooking = () => {
                                 />
                             </div>
                             <div className="mb-4">
-                                <label className="block text-gray-800 mb-2">Event Name</label>
+                                <label className="block text-gray-800 mb-2"> End Time</label>
                                 <input
-                                    type="text"
-                                    name="eventName"
-                                    value={formData.eventName}
+                                    type="time"
+                                    name="time"
+                                    value={formData.time}
                                     onChange={handleInputChange}
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none"
-                                    placeholder="Enter Event Name"
                                 />
                             </div>
                             <div className="flex justify-end">

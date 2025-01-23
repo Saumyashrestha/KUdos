@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-// Slides array with local images
 const slides = [
     {
         src: "/carousel1.jpg",
@@ -22,20 +21,19 @@ const Carousel = () => {
     let timeOut = null;
 
     const nextSlide = () => {
-        if (slide === slides.length - 1) setSlide(0);
-        else setSlide(slide + 1);
+        setSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     };
 
     useEffect(() => {
         timeOut = autoplay && setTimeout(() => {
             nextSlide();
         }, 2000);
-        return () => clearTimeout(timeOut); 
+        return () => clearTimeout(timeOut);
     });
 
     return (
         <div
-            className="overflow-hidden relative w-screen m-0"
+            className="overflow-hidden relative w-full"
             onMouseEnter={() => {
                 setAutoplay(false);
                 clearTimeout(timeOut);
@@ -44,18 +42,17 @@ const Carousel = () => {
                 setAutoplay(true);
             }}
         >
-        
             <div
                 className="flex transition-transform ease-out duration-300"
                 style={{
-                    transform: `translateX(-${slide * 100}%)`,
-                    width: `${slides.length * 100}%`
+                    transform: `translateX(-${slide * 100}vw)`,
+                    width: `${slides.length * 100}vw`
                 }}
             >
                 {slides.map((item, idx) => (
                     <div
                         key={idx}
-                        className="flex-shrink-0 w-screen h-[75vh]" 
+                        className="flex-shrink-0 w-[100vw] h-[75vh]"
                     >
                         <img
                             src={item.src}
@@ -67,7 +64,7 @@ const Carousel = () => {
             </div>
 
             {/* Dots for Slide Navigation */}
-            <div className="absolute bottom-0 py-3 flex justify-center gap-3 w-full">
+            <div className="absolute bottom-4 py-3 flex justify-center gap-3 w-full">
                 {slides.map((_, idx) => (
                     <div
                         onClick={() => {

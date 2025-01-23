@@ -139,20 +139,7 @@ const Login = () => {
             <div className="border-t border-gray-400 flex-grow ml-2"></div>
           </div>
 
-          {/* Google Login Button */}
-          <div className="mb-5 mt-4 w-96">
-            <button
-              type="button"
-              className="border border-gray-300 w-full py-2 rounded-md flex items-center justify-center gap-2 hover:bg-gray-100"
-            >
-              <img
-                src="https://cdn-icons-png.flaticon.com/128/281/281764.png"
-                alt="Google Icon"
-                className="w-5 h-5"
-              />
-              Continue with Google
-            </button>
-          </div>
+         
 
           {/* Signup Link */}
           <div>

@@ -23,12 +23,12 @@ const SportsCategory = () => {
                         <div key={index} className="flex items-center flex-grow">
                             {/* Divider before the item */}
                             {index !== 0 && (
-                                <div className="border-l-2 border-white h-10"></div>
+                                <div className="border-l-2 border-white h-10"></div>    
                             )}
 
                             {/* Category Box */}
                             <div
-                                onClick={() => navigate(`/category/${item.name}`)}
+                                onClick={() => navigate(`/football`, { state: { eventType: item.name } })}
                                 className="flex justify-center items-center cursor-pointer mx-4 flex-grow"
                             >
                                 <h1 className="text-lg lg:text-2xl font-medium text-white text-center transition-all hover:text-gray-400">

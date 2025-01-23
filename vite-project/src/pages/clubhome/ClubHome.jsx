@@ -4,6 +4,7 @@ import HeroSection from "../../components/heroSection/heroSection"
 import HomePageCard from "../../components/homePageCard/HomePageCard";
 
 
+
 const ClubHome = () => {
     return(
         <Layout>

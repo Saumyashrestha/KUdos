@@ -56,7 +56,7 @@ const EditScorePage = () => {
     if (isTimerRunning) return;
     setIsMatchStarted(true); // Set match status to started
     setIsTimerRunning(true);
- 
+    
     
 
     let minutes = 0;
