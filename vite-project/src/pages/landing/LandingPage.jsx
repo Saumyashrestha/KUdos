@@ -14,7 +14,7 @@ const LandingPage = () => {
           alt="Sports at Kathmandu University" 
         />
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
       </div>
 
       {/* Content Section */}
@@ -31,10 +31,10 @@ const LandingPage = () => {
             </h1>
 
             {/* Subheading */}
-            <p className="text-lg md:text-xl text-gray-300 mb-4 font-light">
+            <p className="text-lg md:text-xl text-gray-200 mb-4 font-light">
               Celebrate sportsmanship and excellence with us!
             </p>
-            <p className="text-md md:text-lg text-gray-400 mb-8 leading-relaxed">
+            <p className="text-md md:text-lg text-gray-200 mb-8 leading-relaxed">
               Stay updated with live scores, form teams, manage resources, and join exciting tournaments.
               Together, let's redefine sports at KU!
             </p>

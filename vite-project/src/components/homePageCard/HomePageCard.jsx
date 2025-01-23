@@ -81,7 +81,7 @@ const HomePageCard = () => {
   const getBadgeColor = (eventType) => {
     const colors = {
   'Football': 'bg-orange-500 text-white',
-  'Futsal': 'bg-teal-500 text-white',
+  'Table Tennis': 'bg-teal-500 text-white',
   'Cricket': 'bg-indigo-600 text-white',
   'Basketball': 'bg-red-500 text-white',
   'Volleyball': 'bg-yellow-600 text-white',

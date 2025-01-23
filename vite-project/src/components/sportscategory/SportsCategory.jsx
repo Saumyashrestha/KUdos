@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 const category = [
     { name: 'Football' },
-    { name: 'Futsal' },
+    { name: 'Table Tennis' },
     { name: 'Cricket' },
     { name: 'Basketball' },
     { name: 'Volleyball' },
