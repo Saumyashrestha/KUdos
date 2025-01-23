@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Layout from "../../components/layout/Layout";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/FirebaseConfig";
 
 const VenueBooking = () => {
@@ -14,26 +14,25 @@ const VenueBooking = () => {
     time: "",
     eventName: "",
   });
-  const [bookings, setBookings] = useState({}); // Holds the actual data from Firebase
+  const [bookings, setBookings] = useState({}); 
 
-  // Fetch booking data from Firebase
   useEffect(() => {
-    const fetchBookings = async () => {
-      const bookingData = {};
-      try {
-        const querySnapshot = await getDocs(collection(db, "venue"));
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          bookingData[data.date] = `${data.venue} - ${data.eventName}`;
-        });
-        setBookings(bookingData);
-      } catch (error) {
-        console.error("Error fetching bookings:", error);
-      }
+    const fetchApprovedBookings = async () => {
+      const venueCollection = collection(db, "venue");
+      const approvedQuery = query(venueCollection, where("status", "==", "approved"));
+      const querySnapshot = await getDocs(approvedQuery);
+  
+      const approvedBookings = {};
+      querySnapshot.forEach((doc) => {
+        approvedBookings[doc.data().date] = `${doc.data().venue} - ${doc.data().eventName}`;
+      });
+  
+      setBookings(approvedBookings); // Assuming you manage state for bookings
     };
-    fetchBookings();
+  
+    fetchApprovedBookings();
   }, []);
-
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
