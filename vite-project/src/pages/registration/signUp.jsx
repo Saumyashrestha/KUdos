@@ -24,10 +24,6 @@ const Signup = () => {
     });
     const [dropMenu, showDropMenu] = useState(false);
 
-    /**========================================================================
-     *                          User Signup Function 
-    *========================================================================**/
-
 
     const updateUserField = (field, value) => {
         setUserSignup((prevState) => ({

@@ -26,17 +26,18 @@ const Login = () => {
     } else {
       try{
         await signInWithEmailAndPassword(auth, userLogin.email, userLogin.password)
+        window.localStorage.setItem("LoggedIn", "true");
         setLoading(true);
         // Mock login process
         setTimeout(() => {
           setLoading(false);
-          toast.success("Logged in successfully");
           if(userLogin.email === "swd.kudos@gmail.com"){
             window.location.href = "/admin";
           }
           else{
           window.location.href = "/homepage";
           }
+          toast.success("Logged in successfully");
         }, 1000);
       }
       catch(error){
@@ -138,20 +139,7 @@ const Login = () => {
             <div className="border-t border-gray-400 flex-grow ml-2"></div>
           </div>
 
-          {/* Google Login Button */}
-          <div className="mb-5 mt-4 w-96">
-            <button
-              type="button"
-              className="border border-gray-300 w-full py-2 rounded-md flex items-center justify-center gap-2 hover:bg-gray-100"
-            >
-              <img
-                src="https://cdn-icons-png.flaticon.com/128/281/281764.png"
-                alt="Google Icon"
-                className="w-5 h-5"
-              />
-              Continue with Google
-            </button>
-          </div>
+         
 
           {/* Signup Link */}
           <div>

@@ -35,6 +35,7 @@ import EditTTPage from "./pages/coordinator/EditTTPage";
 import VenueBooking from "./pages/venueBooking/venueBooking";
 
 import Profile from "./pages/profile/ProfilePage";
+import ProtectedRoute from "./components/protectedRoutes/ProtectedRoutes";
 
 const App = () => {
   return(
@@ -43,38 +44,41 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage/>}/>
-          <Route path="/homepage" element={<HomePage/>}/>
-          <Route path="/*" element={<NoPage/>}/> 
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/login" element={<Login/>}/>
 
-          <Route path="/equipments" element={<Equipments/>}/>
-          <Route path="/clubhome" element={<ClubHome/>}/>
-          <Route path="/football" element={<Football/>}/>
-          <Route path="/ongoingtournament" element={<OngoingTournament/>}/>
-          <Route path="/eventRequestform" element={<EventRequestForm/>}/>
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoute/>}>
 
-          <Route path="/admin" element={<Admin/>}/>
-          <Route path="/admin-dashboard" element={<EventDetailsCard/>}/>
-          <Route path="/addequipment" element={<AddEquipmentPage/>} />
-          <Route path="/editscore" element={<EditScorePage/>}/>
-          <Route path="/coordinator" element={<CoordinatorManagement/>}/>
-          <Route path="/equipmentArroval" element={<EquipmentApprovalPage/>}/>
-          <Route path="/eventdetails" element={<EventDetails/>}/>
-          <Route path="/tabletennis" element={<TableTennis/>}/>
-          <Route path="/edittt" element={<EditTTPage/>}/>
-          <Route path="/venuebooking" element={<VenueBooking/>}/>
+            <Route path="/homepage" element={<HomePage/>}/>
+            <Route path="/*" element={<NoPage/>}/> 
+            <Route path="/equipments" element={<Equipments/>}/>
+            <Route path="/clubhome" element={<ClubHome/>}/>
+            <Route path="/football" element={<Football/>}/>
+            <Route path="/ongoingtournament" element={<OngoingTournament/>}/>
+            <Route path="/eventRequestform" element={<EventRequestForm/>}/>
+
+            <Route path="/admin" element={<Admin/>}/>
+            <Route path="/admin-dashboard" element={<EventDetailsCard/>}/>
+            <Route path="/addequipment" element={<AddEquipmentPage/>} />
+            <Route path="/editscore" element={<EditScorePage/>}/>
+            <Route path="/coordinator" element={<CoordinatorManagement/>}/>
+            <Route path="/equipmentArroval" element={<EquipmentApprovalPage/>}/>
+            <Route path="/eventdetails" element={<EventDetails/>}/>
+            <Route path="/tabletennis" element={<TableTennis/>}/>
+            <Route path="/edittt" element={<EditTTPage/>}/>
+            <Route path="/venuebooking" element={<VenueBooking/>}/>
 
 
-          <Route path="/userdetail" element={<UserDetail/>}/>
+            <Route path="/userdetail" element={<UserDetail/>}/>
+            
+            <Route path="/ActiveTournamentsPage" element={<ActiveTournamentsPage/>}/>
           
-          <Route path="/ActiveTournamentsPage" element={<ActiveTournamentsPage/>}/>
-         
-          
-       
-          <Route path="/edittournament" element={<EditTournamentPage/>}/>
+            <Route path="/edittournament" element={<EditTournamentPage/>}/>
 
-          <Route path="/profile" element={<Profile/>}/>
+            <Route path="/profile" element={<Profile/>}/>
+
+          </Route>
         </Routes>
       </Router>
       </div>  

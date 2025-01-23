@@ -2,7 +2,7 @@ import {
   collection,
   query,
   onSnapshot,
-  orderBy,
+  where,
   getDoc,
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
@@ -12,37 +12,30 @@ import MyContext from "./myContext";
 function MyState({ children }) {
   const [loading, setLoading] = useState(false);
   const [getAllMatches, setGetAllMatches] = useState([]);
+  const [clubName, setClubName] = useState("");
 
   const getAllMatchesFunction = async () => {
     setLoading(true);
     try {
-      const q = query(collection(db, "Matches"), orderBy("dateTime", "desc"));
+      console.log("clubName::::::::", clubName);  
+      const matchQuery = clubName
+        ? query(collection(db, "matches"), where("club", "==", clubName))
+        : query(collection(db, "matches"));
 
-      const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-        const matchesWithTeams = await Promise.all(
+      const unsubscribe = onSnapshot(matchQuery, async (querySnapshot) => {
+        const matches = await Promise.all(
           querySnapshot.docs.map(async (docSnapshot) => {
             const matchData = docSnapshot.data();
-            
-            // Extract team1Id and team2Id
-            const team1RefPath = matchData.team1Id;
-            const team2RefPath = matchData.team2Id;
-            
 
-            // Resolve references dynamically
-            const team1Doc = await getDoc(team1RefPath);
-            const team2Doc = await getDoc(team2RefPath);
+           console.log(matchData);  
 
             return {
               ...matchData,
-              id: docSnapshot.id,
-              team1Name: team1Doc.exists() ? team1Doc.data().name : "Unknown Team",
-              team2Name: team2Doc.exists() ? team2Doc.data().name : "Unknown Team",
             };
           })
         );
 
-        // Update state with fetched matches and team data
-        setGetAllMatches(matchesWithTeams);
+        setGetAllMatches(matches);
         setLoading(false);
       });
 
@@ -55,7 +48,7 @@ function MyState({ children }) {
 
   useEffect(() => {
     getAllMatchesFunction();
-  }, []);
+  }, [clubName]);
 
   return (
     <MyContext.Provider
@@ -63,6 +56,7 @@ function MyState({ children }) {
         loading,
         setLoading,
         getAllMatches,
+        setClubName,
       }}
     >
       {children}
