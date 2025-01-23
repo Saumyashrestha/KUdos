@@ -140,7 +140,7 @@ const OngoingTournament = () => {
           if (coordinator) {fetchCoordinator(); }
         
         fetchActiveEvents();
-        fetchActiveEvents();
+
         fetchUserDetail();
         fetchTeams();
        

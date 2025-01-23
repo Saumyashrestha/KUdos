@@ -203,7 +203,7 @@ const HomePageCard = () => {
               return clubMatch && eventTypeMatch && match.status === "live";
             })
             .map((match) => {
-              const { eventId, teamA, teamB, venue, date, scoreA, scoreB } =
+              const { eventId, teamA, teamB, venue, date, teamAScore, teamBScore } =
                 match;
 
               return (
@@ -226,7 +226,7 @@ const HomePageCard = () => {
 
                     <div className="text-center space-y-4">
                       <h1 className="text-4xl font-bold text-[#387478] bg-[#f0f7f7] py-3 px-6 rounded-xl">
-                        {scoreA} : {scoreB}
+                        {teamAScore} : {teamBScore}
                       </h1>
                       <div className="bg-gradient-to-r from-[#387478] to-[#2c5a5d] rounded-full py-2 px-8 inline-block shadow-md">
                         <p className="text-lg text-white font-medium"></p>
