@@ -4,6 +4,7 @@ import { getDoc, doc, collection, getDocs } from "../../firebase/FirebaseConfig"
 import { auth, db } from "../../firebase/FirebaseConfig";
 import { sendPasswordResetEmail } from "firebase/auth";
 import Layout from "../../components/layout/Layout";
+import moment from 'moment';
 
 const Profile = () => {
     const [userDetails, setUserDetails] = useState(null);
@@ -69,6 +70,16 @@ const Profile = () => {
           alert("User email not found.");
         }
       }
+
+      function TimestampDisplay({ timestamp }) {
+        if (typeof timestamp === "number" || !isNaN(timestamp)) {
+            const date = moment(timestamp * 1000);
+            const formattedDate = date.format("MMM DD, hh:mm A");
+            return <div>{formattedDate}</div>;
+        }
+        return <div>Invalid Date Format</div>;
+    }
+    
     return(
     <Layout>
         <div className="bg-gray-300 rounded-xl px-20 py-10 flex flex-col gap-5 items-center mx-4">
@@ -101,24 +112,24 @@ const Profile = () => {
             <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md" border="1">
                 <thead className="bg-gray-100">
                     <tr>
-                        <th className="py-2 px-4 text-left text-sm font-medium text-gray-600">Name</th>
-                        <th className="py-2 px-4 text-left text-sm font-medium text-gray-600">Quantity</th>
-                        <th className="py-2 px-4 text-left text-sm font-medium text-gray-600">Status</th>
-                        <th className="py-2 px-4 text-left text-sm font-medium text-gray-600">Requested date</th>
+                        <th className="py-2 px-4 text-gray-600">Name</th>
+                        <th className="py-2 px-4 text-gray-600">Quantity</th>
+                        <th className="py-2 px-4 text-gray-600">Status</th>
+                        <th className="py-2 px-4 text-gray-600">Requested date</th>
                     </tr>
                 </thead>
                 <tbody>
                     {equipmentsReq.length === 0 ? (
                         <tr>
-                        <td colSpan="4" className="py-2 px-4 text-center text-gray-500">Loading...</td>
+                        <td colSpan="4" className="py-2 px-4 text-center text-gray-500">You haven't borrowed anything yet.</td>
                         </tr>
                     ) : (
                         equipmentsReq.map((doc) => (
                         <tr key={doc.id} className="border-b border-gray-200">
-                            <td className="py-2 px-4 text-sm text-gray-700">{doc.name}</td>
-                            <td className="py-2 px-4 text-sm text-gray-700">{doc.quantity}</td> 
-                            <td className="py-2 px-4 text-sm text-gray-700">{doc.status}</td>
-                            <td className="py-2 px-4 text-sm text-gray-700">{doc.time?.toDate()}</td>
+                            <td className="py-2 px-4 text-center text-gray-700">{doc.name}</td>
+                            <td className="py-2 px-4 text-center text-gray-700">{doc.quantity}</td> 
+                            <td className="py-2 px-4 text-center text-gray-700">{doc.status}</td>
+                            <td className="py-2 px-4 text-center text-gray-700"><TimestampDisplay timestamp={doc.timestamp} /></td>
                         </tr>
                         ))
                     )}
