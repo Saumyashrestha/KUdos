@@ -66,20 +66,7 @@ const HomePageCard = () => {
  
  
   
-  const handleEventAction = (event) => {
-    // If user is the coordinator, navigate to edit/manage page
-    if (userDetails.email === event.organizerEmail) {
-      navigate('/edittournament', { 
-        state: { 
-          eventDetails: event.id,
-          userRole: 'coordinator' 
-        } 
-      });
-    } else {
-      // Regular navigation for non-coordinators
-      window.location.href = event.link;
-    }
-  };
+
   const getBadgeColor = (eventType) => {
     const colors = {
   'Football': 'bg-orange-500 text-white',
@@ -345,24 +332,23 @@ const HomePageCard = () => {
         </div>
       </div>
 
-      {/* Recent Matches Section */}
-      <div className="py-12 px-4 sm:px-6 lg:px-8">
+{/* Ongoing Tournaments Section */}
+<div className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="relative mb-12 text-center">
           <h1 className="text-3xl font-bold text-[#387478] inline-block pb-2">
-            Upcoming Tournaments
+          Upcoming Tournaments
           </h1>
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-[#387478] rounded-full"></div>
         </div>
 
         <div className="max-w-7xl mx-auto grid gap-8 sm:grid-cols-1 lg:grid-cols-1">
           {upcomingEvents.map((event) => (
-            console.log("User Email:", userDetails.email), 
-            console.log("Event Creator Email:", event.userEmail),
-            <div 
-            key={event.id}
-            onClick={() => handleEventAction(event)}
-            className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#e7f3f3] hover:border-[#387478] cursor-pointer"
-          >
+     
+            <a
+              key={event.id}
+              href={event.link}
+              className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#e7f3f3] hover:border-[#387478]"
+            >
               <div className="relative h-64 overflow-hidden">
                 <img
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
@@ -383,13 +369,14 @@ const HomePageCard = () => {
                     <img
                       className="h-14 w-14 rounded-full object-cover"
                       src={event.clubLogo}
-                      alt={`${event.eventName} club logo`}
+                      alt={`${event.organizerEmail} club logo`}
                     />
                   </div>
                 </div>
                 
                 {/* Conditionally render the "Edit" button */}
                 {userDetails.email === event.organizerEmail && (
+                  console.log(event),
                   <button 
                     className="absolute bottom-4 right-4 bg-[#387478] text-white py-1 px-4 rounded-full"
                     onClick={() => {
@@ -402,37 +389,69 @@ const HomePageCard = () => {
                 )}
               </div>
 
-              <div className="p-6 bg-gradient-to-b from-white to-[#f9fbfb]">
-    <h2 className="text-xl font-semibold text-[#387478] group-hover:text-[#2c5a5d] transition-colors duration-300">
-      {event.eventName}
-    </h2>
-    <a href={event.link} className="block">
-      <div className="mt-4 flex items-center justify-between">
-        <span className="text-sm text-[#5c8f92] font-medium cursor-pointer">Coming Soon</span>
-        <svg 
-          className="w-5 h-5 text-[#387478] transform group-hover:translate-x-1 transition-transform duration-300" 
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth={2} 
-            d="M9 5l7 7-7 7"
-          />
-        </svg>
+              {
+  userDetails.email === event.organizerEmail ? (
+    <a href={`http://localhost:5173/edittournament?eventName=${event.id}`}>
+      <div className="p-6 bg-gradient-to-b from-white to-[#f9fbfb]">
+        <h2 className="text-xl font-semibold text-[#387478] group-hover:text-[#2c5a5d] transition-colors duration-300">
+          {event.eventName}
+        </h2>
+        <a href={event.link} className="block">
+          <div className="mt-4 flex items-center justify-between">
+            <span className="text-sm text-[#5c8f92] font-medium cursor-pointer">View Details</span>
+            <svg 
+              className="w-5 h-5 text-[#387478] transform group-hover:translate-x-1 transition-transform duration-300" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </div>
+        </a>
       </div>
     </a>
-  </div>
+  ) : (
+    <div className="p-6 bg-gradient-to-b from-white to-[#f9fbfb]">
+      <h2 className="text-xl font-semibold text-[#387478] group-hover:text-[#2c5a5d] transition-colors duration-300">
+        {event.eventName}
+      </h2>
+      <a href={event.link} className="block">
+        <div className="mt-4 flex items-center justify-between">
+          <span className="text-sm text-[#5c8f92] font-medium cursor-pointer">View Details</span>
+          <svg 
+            className="w-5 h-5 text-[#387478] transform group-hover:translate-x-1 transition-transform duration-300" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </div>
+      </a>
+    </div>
+  )
+}
+
 
 
 
               
-            </div>
+            </a>
           ))}
         </div>
       </div>
+   
       
 
 

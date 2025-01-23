@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../components/loader/Loader";
 import Layout from "../../components/layout/Layout";
 import { auth } from "../../firebase/FirebaseConfig";
@@ -30,12 +30,18 @@ const Login = () => {
         // Mock login process
         setTimeout(() => {
           setLoading(false);
-          toast.success("Logged In Successfully");
+          toast.success("Logged in successfully");
+          if(userLogin.email === "swd.kudos@gmail.com"){
+            window.location.href = "/admin";
+          }
+          else{
           window.location.href = "/homepage";
+          }
         }, 1000);
       }
       catch(error){
         console.log(error.message);
+        toast.error(error);
       }
     }
   };
@@ -122,6 +128,7 @@ const Login = () => {
             >
               LOG IN
             </button>
+            <ToastContainer position="top-center"/>
           </div>
 
           {/* Divider with lines */}
