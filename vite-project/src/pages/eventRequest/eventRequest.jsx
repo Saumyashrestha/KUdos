@@ -42,7 +42,7 @@ const EventRequestForm = () => {
     'Volleyball',
     'Badminton',
     'Cricket',
-   'Badminton' ,
+    'Table tennis' ,
   ];
 
   const handleChange = (e) => {
