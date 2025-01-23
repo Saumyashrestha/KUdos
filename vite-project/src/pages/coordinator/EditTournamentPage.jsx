@@ -50,6 +50,8 @@ const generateRandomId = () => {
 
   
 
+
+
   // Reset form when switching sections
   useEffect(() => {
     setError(null);
@@ -611,32 +613,7 @@ const resetTeams = () => {
                         : "border-[#387478]/20 focus:border-[#387478]"
                     }`}
                   />
-                  {teams.length > 1 && (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <button className="p-3 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors">
-                          <Trash2 size={20} />
-                        </button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete Team</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Are you sure you want to delete this team? This action cannot be undone.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => removeTeamInput(index)}
-                            className="bg-red-500 hover:bg-red-600"
-                          >
-                            Delete
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  )}
+                  
                 </div>
                 {/* Players Section */}
                 <div className="bg-gray-50 p-6 rounded-xl border border-[#387478]/10">
@@ -862,7 +839,7 @@ const resetTeams = () => {
             <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Stage</th>
             <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Venue</th>
             <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Winner</th>
-            <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Action</th> {/* Added Action column */}
+            
           </tr>
         </thead>
         <tbody>
@@ -888,15 +865,7 @@ const resetTeams = () => {
                 {(match.winner|| 0)}
               </td>
               <td className="px-1 py-2 border-b border-[#387478] text-center">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent the row click event from firing
-                    handleDeleteMatch(match.id); // Function to handle match deletion
-                  }}
-                  className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600"
-                >
-                  Delete
-                </button>
+             
               </td> {/* Delete button */}
             </tr>
           ))}

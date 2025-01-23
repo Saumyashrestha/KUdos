@@ -75,18 +75,7 @@ const OngoingTournament = () => {
           setActiveEvents(events);
         };
 
-        const fetchCurrentEvent = async () => {
-          const activeEventsRef = collection(db, "matches");
-          const q = query(activeEventsRef, where("eventId", "==", eventName));
-          const querySnapshot = await getDocs(q);
-    
-          const events = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          
-          setActiveEvents(events);
-        };
+        
         
     
        
@@ -155,7 +144,7 @@ const OngoingTournament = () => {
         fetchUserDetail();
         fetchTeams();
        
-      },[eventName, userDetails.email,coordinator]); 
+      },[eventName, userDetails.email]); 
     
      console.log(eventName);
 
