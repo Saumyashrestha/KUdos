@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
+
+import { useState ,useEffect} from "react";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Loader from "../../components/loader/Loader";
 import Layout from "../../components/layout/Layout";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase/FirebaseConfig";
 import { setDoc, doc } from "firebase/firestore";
+
 import ClubsDropdown from "../../components/clubsdropdown/ClubsDropDown";
 
 
@@ -13,6 +15,7 @@ import ClubsDropdown from "../../components/clubsdropdown/ClubsDropDown";
 const Signup = () => {
     const navigate = useNavigate();
     // State to manage loading and signup fields
+    const cloudName = 'dt4rt3krq';  // Cloudinary cloud name
     const [loading, setLoading] = useState(false);
     const [userSignup, setUserSignup] = useState({
         name: "",
@@ -27,8 +30,59 @@ const Signup = () => {
      *                          User Signup Function 
     *========================================================================**/
 
+
+    const updateUserField = (field, value) => {
+        setUserSignup((prevState) => ({
+            ...prevState, 
+            [field]: value,
+        }));
+    };
+
+
+    const handleClubSelection = (club) => {
+        setUserSignup({ ...userSignup, club:club });
+      };
+
+      const handleFileUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return; 
+    
+        // Prepare the form data for Cloudinary upfload
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'ml_default');
+    
+        try {
+            // Upload the file to Cloudinary
+            const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+                method: 'POST',
+                body: formData,
+            });
+    
+            const data = await response.json();
+            const ClubLogoUrl = data.url;
+            console.log(ClubLogoUrl);
+    
+            if (data.url) {
+                console.log('File uploaded successfully:', data.url);
+    
+                
+                updateUserField('clubLogo', ClubLogoUrl);
+            } else {
+                console.error('Failed to upload file:', data);
+            }
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
+    };
+    
+    useEffect(() => {
+        console.log('Updated userSignup:', userSignup);
+    }, [userSignup.clubLogo]); 
+
+
+
     const userSignupFunction = async () => {
-        // Validation check
         if (
             userSignup.name === "" ||
             userSignup.email === "" ||
@@ -43,47 +97,44 @@ const Signup = () => {
             toast.error("Passwords do not match");
             return;
         }
-        
-        try{
-            await createUserWithEmailAndPassword(auth, userSignup.email, userSignup.password)
-            const user = auth.currentUser;
-            //console.log(user);
-            if(user){
-                await setDoc(doc(db, "Users", user.uid),{
-                    Name: userSignup.name,
-                    Email: userSignup.email,
-                    Club: userSignup.club,
-                    Role: "Student"
-                })
-            }
+
+        try {
             setLoading(true);
-            // Simulate signup delay
-            setTimeout(() => {
-                setLoading(false);
-                toast.success("Signed Up Successfully");
-                setUserSignup({
-                    name: "",
-                    email: "",
-                    password: "",
-                    confirmPassword: ""
-                });
-            }, 1000);
-            window.location.href = "/login";
-        }
-        catch(error){
-            console.log(error.message);
-            setLoading(true);
-            // Simulate signup delay
-            setTimeout(() => {
-                setLoading(false);
-                toast.success("Signed Up Failed");
-                setUserSignup({
-                    name: "",
-                    email: "",
-                    password: "",
-                    confirmPassword: ""
-                });
-            }, 1000);
+         
+            const userCredential = await createUserWithEmailAndPassword(
+                auth,
+                userSignup.email,
+
+                userSignup.password
+            );
+
+
+            console.log(userSignup.clubLogo);
+
+            
+            await setDoc(doc(db, "Users", userCredential.user.uid), {
+                Name: userSignup.name,
+                Email: userSignup.email,
+                Club: userSignup.club,
+                ClubLogo: userSignup.clubLogo, 
+                Role: "Student",
+            });
+
+            toast.success("Signed Up Successfully");
+            setLoading(false);
+            setUserSignup({
+                name: "",
+                email: "",
+                password: "",
+                confirmPassword: "",
+                club: "",
+                clubLogo: null,
+            });
+            navigate("/login");
+        } catch (error) {
+            console.error("Signup Error:", error.message);
+            setLoading(false);
+            toast.error("Signup Failed");
         }
     };
 
@@ -91,27 +142,19 @@ const Signup = () => {
         <Layout>
             <div className="playfair flex justify-center items-center h-screen">
                 {loading && <Loader />}
-
-                {/* Image Section */}
                 <div
                     className="hidden lg:flex w-2/3 h-full relative bg-cover bg-center bg-opacity-40"
-                    style={{ backgroundImage: "url('/kuimg.jpeg')",
-                        opacity: 0.95
-                     }}
-                >
-                </div>
-
-                {/* Signup Form */}
+                    style={{ backgroundImage: "url('/kuimg.jpeg')", opacity: 0.95 }}
+                ></div>
                 <div className="login_Form px-8 py-6 lg:w-2/3 flex flex-col justify-center items-center h-full shadow-md">
-                    {/* Top Heading */}
                     <div className="mb-2 text-center">
                         <h2 className="text-2xl font-semibold text-[#387478]">SIGN UP</h2>
                         <p className="text-gray-800 mt-2">
-                            Welcome to Kathmandu University Domain of Sports! Please enter your details.
+                            Welcome to Kathmandu University Domain of Sports! Please enter your
+                            details.
                         </p>
                     </div>
 
-                    {/* Input Fields */}
                     <div className="mb-4 w-96 flex mt-4 justify-center">
                         <input
                             type="text"
@@ -156,14 +199,37 @@ const Signup = () => {
                             className="shadow-md border border-[#387478] px-2 py-2 w-96 rounded-md outline-none placeholder-gray-400"
                         />
                     </div>
-                    <div class="mb-5 flex flex-row space-x-3">
-                        <p className="text-gray-800 mt-2">Are you part of a Club ?</p>
-                        <button onClick={()=>showDropMenu(true)} className="text-[#387478] hover:text-[#52a7ad] underline">Yes</button>
-                        <button onClick={()=>showDropMenu(false)} className="text-[#387478] hover:text-[#52a7ad] underline">No</button>
-                        {dropMenu && <ClubsDropdown/>}
+                    <div className="mb-5">
+                        <div className="flex items-center space-x-3">
+                            <p className="text-gray-800">Are you part of a Club?</p>
+                            <button
+                                onClick={() => showDropMenu(true)}
+                                className="text-[#387478] hover:text-[#52a7ad] underline"
+                            >
+                                Yes
+                            </button>
+                            <button
+                                onClick={() => showDropMenu(false)}
+                                className="text-[#387478] hover:text-[#52a7ad] underline"
+                            >
+                                No
+                            </button>
+                            {dropMenu && (
+                                <ClubsDropdown onSelectClub={handleClubSelection} 
+                                />
+                            )}
+                        </div>
+                        {dropMenu && (
+                            <div className="mt-3">
+                                <input
+                                    type="file"
+                                    onChange={handleFileUpload}
+                                    className="text-gray-800"
+                                />
+                            </div>
+                        )}
                     </div>
 
-                    {/* Signup Button */}
                     <div className="mb-5 w-full flex justify-center mt-4">
                         <button
                             type="button"
@@ -192,3 +258,4 @@ const Signup = () => {
 };
 
 export default Signup;
+

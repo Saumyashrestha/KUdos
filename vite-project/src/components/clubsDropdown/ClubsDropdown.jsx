@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const options = ['KUCC','KUCEC','KUCMC','GES','AMES','SEEE','KUARC']
 
-const ClubsDropdown = () => {
+const ClubsDropdown = ({onSelectClub}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -13,6 +13,8 @@ const ClubsDropdown = () => {
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
+    onSelectClub(option);
+   
   };
 
   return (
