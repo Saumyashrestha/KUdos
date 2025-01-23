@@ -46,6 +46,7 @@ const Profile = () => {
     async function handleLogout() {
         try {
             await auth.signOut();
+            window.localStorage.setItem("LoggedIn", "false");
             window.location.href = "/login";
         } catch (error) {
             console.error("Error logging out: ", error);
