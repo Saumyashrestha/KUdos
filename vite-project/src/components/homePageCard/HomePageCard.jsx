@@ -356,7 +356,7 @@ const HomePageCard = () => {
               <div className="relative h-64 overflow-hidden">
                 <img
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                  src={`${event.eventType}.jpg`}
+                  src={`${event.bannerImage}`}
                   alt={`${event.eventName} banner`}
                 />
 
@@ -450,7 +450,7 @@ const HomePageCard = () => {
               <div className="relative h-64 overflow-hidden">
                 <img
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                  src={`${event.eventType}.jpg`}
+                  src={`${event.bannerImage}`}
                   alt={`${event.eventName} banner`}
                 />
 

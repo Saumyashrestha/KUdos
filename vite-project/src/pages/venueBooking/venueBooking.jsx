@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Layout from "../../components/layout/Layout";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/FirebaseConfig";
 
-const venueBooking = () => {
+const VenueBooking = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -14,11 +14,25 @@ const venueBooking = () => {
     time: "",
     eventName: "",
   });
+  const [bookings, setBookings] = useState({}); // Holds the actual data from Firebase
 
-  const bookings = {
-    "2025-02-04": "Football Ground Booked",
-    "2025-02-05": "Basketball Court Booked",
-  };
+  // Fetch booking data from Firebase
+  useEffect(() => {
+    const fetchBookings = async () => {
+      const bookingData = {};
+      try {
+        const querySnapshot = await getDocs(collection(db, "venue"));
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          bookingData[data.date] = `${data.venue} - ${data.eventName}`;
+        });
+        setBookings(bookingData);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      }
+    };
+    fetchBookings();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -40,23 +54,35 @@ const venueBooking = () => {
     }
 
     try {
-      const docRef = await addDoc(collection(db, "venue"), {
+      await addDoc(collection(db, "venue"), {
         venue: formData.venue,
         date: formData.date,
         time: formData.time,
         eventName: formData.eventName,
         status: "pending",
       });
-      console.log("Document written with ID: ", docRef.id);
       alert("Booking request submitted successfully!");
+
+      // Reset form fields
       setFormData({
         venue: "",
         date: "",
         time: "",
         eventName: "",
       });
+
+      // Fetch updated bookings
+      const updatedQuerySnapshot = await getDocs(collection(db, "venue"));
+      const updatedBookingData = {};
+      updatedQuerySnapshot.forEach((doc) => {
+        const data = doc.data();
+        updatedBookingData[data.date] = `${data.venue} - ${data.eventName}`;
+      });
+      setBookings(updatedBookingData);
+
+      setShowModal(false); // Close the modal
     } catch (e) {
-      console.error("Error adding document: ", e);
+      console.error("Error adding document:", e);
       alert("Error submitting booking request");
     }
   };
@@ -101,8 +127,8 @@ const venueBooking = () => {
         </div>
 
         {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ">
-            <div className="bg-white p-6 rounded-md shadow-lg w-[400px] border border-[#387478] ">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-md shadow-lg w-[400px] border border-[#387478]">
               <h2 className="text-xl font-semibold text-[#387478] mb-4">
                 Book Venue
               </h2>
@@ -157,20 +183,12 @@ const venueBooking = () => {
                 >
                   Cancel
                 </button>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSubmit();
-                  }}
+                <button
+                  className="px-4 py-2 bg-[#387478] text-white rounded-md hover:bg-[#4fa3a9]"
+                  onClick={handleSubmit}
                 >
-                  {/* Form fields */}
-                  <button
-                    className="px-4 py-2 bg-[#387478] text-white rounded-md hover:bg-[#4fa3a9]"
-                    type="submit"
-                  >
-                    Book Venue
-                  </button>
-                </form>
+                  Book Venue
+                </button>
               </div>
             </div>
           </div>
@@ -180,4 +198,4 @@ const venueBooking = () => {
   );
 };
 
-export default venueBooking;
+export default VenueBooking;
