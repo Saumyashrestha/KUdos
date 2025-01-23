@@ -1,11 +1,13 @@
 import Layout from "../../components/layout/Layout";
 import React, { useState, useEffect } from "react";
-import { db, collection, doc, setDoc, getDocs, query, where } from "../../firebase/FirebaseConfig";
+import { db, collection, doc, setDoc, getDocs, query, where,updateDoc } from "../../firebase/FirebaseConfig";
 import { Alert, AlertDescription } from "../../components/ui/alert";
 import { Loader2, AlertCircle, Trash2, Plus, Save, CheckCircle } from "lucide-react";
 import { Toaster } from '../../components/toaster/toaster'
 import { useLocation ,useNavigate} from 'react-router-dom';
 import { useToast } from '../../components/toaster/usetoaster'
+
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,6 +22,8 @@ import {
 
 const EditTournamentPage = () => {
   const { toast } = useToast()
+  let teamA = null;
+  let teamB = null;
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search); 
@@ -29,7 +33,7 @@ const EditTournamentPage = () => {
   const [old_teams, setOldTeams] = useState([{ name: "", players: [] , eventId :eventName }]);
   const [old_matches, setOldMatches] = useState([{ name: "", players: [] , club : ""}]);
   const [matches, setMatches] = useState([
-    { teamA: "", teamB: "", date: "", time: "", venue: "", stage: "",eventId:"" ,club:""},
+    { matchId:"",teamA: "", teamB: "", date: "", time: "", venue: "", stage: "",eventId:"" ,club:"",playerA:"",playerB:"" ,eventType:"" },
   ]);
   const [activeSection, setActiveSection] = useState("teams");
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +42,13 @@ const EditTournamentPage = () => {
   const [deleteConfirm, setDeleteConfirm] = useState({ show: false, type: null, index: null });
   const [validationErrors, setValidationErrors] = useState({});
   const [isDirty, setIsDirty] = useState(false);
+ 
+
+const generateRandomId = () => {
+  return Math.random().toString(36).substring(2, 12);
+};
+
+  
 
   // Reset form when switching sections
   useEffect(() => {
@@ -100,8 +111,6 @@ const EditTournamentPage = () => {
       const teamsRef = collection(db, "teams");
       const q = query(teamsRef, where("eventId", "==", eventName));
       const querySnapshot = await getDocs(q);
-
-  
       const fetchedTeams = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -116,7 +125,7 @@ const EditTournamentPage = () => {
     }
   };
   
-// Fetching a Matchs
+
 
 //Fetching a team 
 const fetchMatch = async () => {
@@ -296,11 +305,13 @@ const resetTeams = () => {
   };
 
   const addMatch = () => {
-    if (teams.length < 2) {
+    console.log("Adding match");
+    console.log(matches);
+    if (old_teams.length < 2) {
       setError("Please add at least two teams before creating a match");
       return;
     }
-    setMatches([...matches, { teamA: "", teamB: "", date: "", time: "", venue: "", stage: "" }]);
+    setMatches([...matches, { matchId:"",teamA: "", teamB: "", date: "", time: "", venue: "", stage: "" }]);
     setIsDirty(true);
   };
 
@@ -387,25 +398,22 @@ const resetTeams = () => {
     setError(null);
     setSuccess(null);
     setValidationErrors({});
-
-
+  
     const loadingToast = toast({
       title: "Saving Matches",
       description: "Please wait while we save your changes...",
       duration: 30000, // Long duration for loading state
       variant: "loading",
       isLoading: true,
-    })
-
-   
-
+    });
+  
     // Validate all matches
     let allErrors = [];
     matches.forEach((match, index) => {
       const matchErrors = validateMatch(match, index);
       allErrors = [...allErrors, ...matchErrors];
     });
-
+  
     if (allErrors.length > 0) {
       setValidationErrors(
         allErrors.reduce((acc, error) => {
@@ -416,67 +424,113 @@ const resetTeams = () => {
       setError("Please fix all validation errors before saving");
       return;
     }
-
+  
     setIsLoading(true);
     try {
       const matchesRef = collection(db, "matches");
-      const eventRef =collection(db, "activeEvents"); 
-      const q = query(eventRef, where("id", "==",  eventName));
+      const matchDoc = doc(matchesRef, generateRandomId());
+      const eventRef = collection(db, "activeEvents"); 
+      const q = query(eventRef, where("id", "==", eventName));
       const querySnapshot = await getDocs(q);
       const matchData = querySnapshot.docs.map(doc => doc.data());
-      console.log(matchData[0].eventName)
+  
       const eventname = matchData[0].eventName;
-
+      const eventType = matchData[0].eventType;
+      console.log("meiome");
+      console.log(matchData[0]);
+  
+      if (!querySnapshot.empty) {
+        const eventDoc = querySnapshot.docs[0];
+        const eventDocRef = doc(db, "activeEvents", eventDoc.id);
+  
+        await updateDoc(eventDocRef, { status: "active" });
+        console.log(`Event '${eventName}' status updated to 'active'.`);
+      } else {
+        console.log("No matching event found.");
+      }
+  
       const matchPromises = matches.map(async (match) => {
         if (!eventname) {
           console.error("Event name is undefined. Skipping match.");
           return; // Skip the match if event name is not defined
         }
-      
-        const matchDoc = doc(matchesRef); // Assuming matchesRef is correct
+ 
+
+        for (let i = 0; i < old_teams.length; i++) {
+          if (old_teams[i].name === match.teamA) {
+           teamA = old_teams[i];
+          }
+          if (old_teams[i].name === match.teamB) {
+          teamB = old_teams[i];
+          }
+         
+        } 
+
+        console.log("ssss")
+        // Find teams by name
+        console.log(old_teams);
+        console.log(match.teamA);
+        console.log(teamA);
+        console.log(teamA.players);
+  
+        // Ensure teams and players are defined
+        if (!teamA || !teamB) {
+          console.error("Team A or Team B not found, skipping match.");
+          return; // Skip the match if a team is not found
+        }
+  
+        
+  
+        const matchDocs = doc(matchesRef); 
         await setDoc(matchDoc, {
+          matchId: matchDocs.id,
+          playerA: teamA.players, // Ensure playerA.id exists
+          playerB: teamB.players, // Ensure playerB.id exists
           teamA: match.teamA,
+          eventType: eventType,
           teamB: match.teamB,
           date: match.date,
           time: match.time,
-          venue: match.venue?.trim() || "", // Ensure venue is not undefined
-          stage: match.stage?.trim() || "", // Ensure stage is not undefined
-          eventId: eventName, // Make sure eventName is valid
-          eventName: eventname, // Ensure eventName is not undefined
+          venue: match.venue?.trim() || "",
+          stage: match.stage?.trim() || "",
+          eventId: eventName,
+          eventName: eventname,
           updatedAt: new Date().toISOString(),
         });
-      
+  
         return matchDoc.id;
       });
-      
-
+  
       await Promise.all(matchPromises);
-      loadingToast.dismiss()
+  
+      loadingToast.dismiss();
       toast({
         title: "Success!",
         description: "Matches have been saved successfully.",
         duration: 3000,
-        variant:"success",
-      })
+        variant: "success",
+      });
       setSuccess("Matches updated successfully!");
       fetchMatch();
       resetMatch();
       setIsDirty(false);
     } catch (error) {
       console.error("Error saving matches:", error);
-
-      loadingToast.dismiss()
+  
+      loadingToast.dismiss();
       toast({
         title: "Failed to Save Matches",
         description: "Failed to save matches. Please try again later.",
         variant: "error",
         duration: 4000,
-      })
+      });
       setError(`Error saving matches: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
   };
+  
+  
 
   // Confirmation dialog for unsaved changes
   const handleSectionChange = (newSection) => {
@@ -816,6 +870,7 @@ const resetTeams = () => {
               key={match.id}
               className="hover:bg-gray-200 cursor-pointer"
               onClick={() => handleRowClick(match.id,
+                match.id ,
                 match.eventName || "Unknown",
                 match.teamA || 0,
                 match.teamB || 0,

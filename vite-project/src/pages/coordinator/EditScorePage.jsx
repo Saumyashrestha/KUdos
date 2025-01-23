@@ -19,10 +19,12 @@ const EditScorePage = () => {
   });
 
   const [timer, setTimer] = useState("00:00");
+ 
   const [extraTime, setExtraTime] = useState("");
   const [timerId, setTimerId] = useState(null);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [selectedScorer, setSelectedScorer] = useState({ teamA: "", teamB: "" });
+  
   const [teamAPlayers, setTeamAPlayers] = useState([]);
   const [teamBPlayers, setTeamBPlayers] = useState([]);
   const [isMatchStarted, setIsMatchStarted] = useState(false);  // New state for match status
@@ -52,32 +54,90 @@ const EditScorePage = () => {
     fetchPlayers();
   }, [teamA, teamB]);
 
-  const handleStartTimer = () => {
-    if (isTimerRunning) return;
-    setIsMatchStarted(true); // Set match status to started
-    setIsTimerRunning(true);
- 
-    
+  
 
+  const handleMatchStart = () => {
+    if (!eventName) {
+      toast.error("Please enter the event name!");
+      return;
+    }
+    setIsMatchStarted(true);
+    toast.success("Match started!");
+  };
+
+
+  const handleStartTimer = async () => {
+    if (isTimerRunning) return; // Prevent multiple timers from starting
+    if (!eventName) {
+      toast.error("Event name is required to start the timer!");
+      return;
+    }
+  
+    setIsMatchStarted(true);
+    setIsTimerRunning(true);
+  
     let minutes = 0;
     let seconds = 0;
-
-    const id = setInterval(() => {
-      seconds++;
-      if (seconds === 60) {
-        minutes++;
-        seconds = 0;
+  
+    try {
+      // Update the match status in the "matches" collection
+      const matchQuery = query(collection(db, "matches"), where("eventName", "==", eventName));
+      const matchSnapshot = await getDocs(matchQuery);
+  
+      if (!matchSnapshot.empty) {
+        const matchDoc = matchSnapshot.docs[0];
+        const matchRef = doc(db, "matches", matchDoc.id);
+        await updateDoc(matchRef, { status: "live" });
+        console.log(`Match '${eventName}' status updated to 'live'.`);
+      } else {
+        console.error("No matching match found in 'matches' collection.");
       }
-      setTimer(`${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`);
-
-      if (minutes === 90 + parseInt(extraTime || 0)) {
-        clearInterval(id);
-        setIsTimerRunning(false);
+  
+      console.log("hehe")
+      console.log(eventName);
+      // Update the event status in the "activeEvents" collection
+      const eventQuery = query(collection(db, "activeEvents"), where("eventName", "==", eventName));
+      
+      const eventSnapshot = await getDocs(eventQuery);
+  
+      if (!eventSnapshot.empty) {
+        const eventDoc = eventSnapshot.docs[0];
+        const eventRef = doc(db, "activeEvents", eventDoc.id);
+        await updateDoc(eventRef, { status: "live" });
+        console.log(`Event '${eventName}' status updated to 'live'.`);
+      } else {
+        console.error("No matching event found in 'activeEvents' collection.");
       }
-    }, 1000);
-
-    setTimerId(id);
+  
+      // Start the timer after both updates are successful
+      const id = setInterval(() => {
+        seconds++;
+        if (seconds === 60) {
+          minutes++;
+          seconds = 0;
+        }
+  
+        setTimer(`${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`);
+  
+        // Stop the timer after 90 minutes + extra time
+        if (minutes === 90 + parseInt(extraTime || 0)) {
+          clearInterval(id);
+          setIsTimerRunning(false);
+          console.log("Match timer stopped.");
+        }
+      }, 1000);
+  
+      setTimerId(id);
+    } catch (error) {
+      console.error("Error starting the match or updating statuses:", error);
+      toast.error("Failed to update match or event status.");
+      setIsTimerRunning(false); // Reset the timer running state if there's an error
+    }
   };
+  
+  
+
+
   const handleStopTimer = async () => {
     clearInterval(timerId);
     setIsTimerRunning(false);
@@ -86,6 +146,24 @@ const EditScorePage = () => {
       // Query for the match document by eventName
       const matchQuery = query(collection(db, "matches"), where("eventName", "==", eventName));
       const matchSnapshot = await getDocs(matchQuery);
+
+      const eventRef =collection(db, "activeEvents"); 
+      const q = query(eventRef, where("eventName", "==",  eventName));
+      const querySnapshot = await getDocs(q);
+
+       if (!querySnapshot.empty) {
+              // Get the first document that matches
+              const eventDoc = querySnapshot.docs[0];
+              const eventDocRef = doc(db, "activeEvents", eventDoc.id); // Reference the document by its ID
+          
+              // Update the 'status' field to 'active'
+              await updateDoc(eventDocRef, { status: "active" });
+          
+              console.log(`Event '${eventName}' status updated to 'active'.`);
+            } else {
+              console.log("No matching event found.");
+            }
+
   
       if (!matchSnapshot.empty) {
         const matchDoc = matchSnapshot.docs[0]; // Get the first match document that matches the eventName
@@ -109,6 +187,7 @@ const EditScorePage = () => {
           scoreA: scores.teamA,
           scoreB: scores.teamB,
           winner,
+          status:"",
         };
   
         // Update the match document with the new data
@@ -171,28 +250,81 @@ const EditScorePage = () => {
     }
   };
   
-  
-  
-
-  const addGoal = (team, scorer) => {
+  const addGoal = async (team, scorer) => {
     if (!isMatchStarted) {
       toast.error("The match has not started yet! No goals can be scored.");
       return;
     }
-    
+  
     if (!scorer) {
       toast.error("Please select a goal scorer!");
       return;
     }
-
-    setScores(prev => ({
-      ...prev,
-      [team]: prev[team] + 1
-    }));
-
-    toast.success(`Goal scored by ${scorer}!`);
-    setSelectedScorer({ ...selectedScorer, [team]: "" });
+  
+    try {
+      const matchQuery = query(
+        collection(db, "matches"),
+        where("eventName", "==", eventName)
+      );
+      const matchSnapshot = await getDocs(matchQuery);
+  
+      if (!matchSnapshot.empty) {
+        const matchDoc = matchSnapshot.docs[0];
+        const matchRef = doc(db, "matches", matchDoc.id);
+  
+        // Fetch current match data
+        const matchData = matchDoc.data();
+        const currentScorers = matchData.scorers || [];
+  
+        // Retrieve scores from Firestore or default to 0
+        const currentScoreA = matchData.teamAScore || 0;
+        const currentScoreB = matchData.teamBScore || 0;
+  
+        // Update scores based on the team
+        const updatedScoreA = team === "teamA" ? currentScoreA + 1 : currentScoreA;
+        console.log(updatedScoreA);
+        const updatedScoreB = team === "teamB" ? currentScoreB + 1 : currentScoreB;
+  
+        // Create the new scorer entry
+        const newScorer = {
+          team,
+          player: scorer,
+          time: timer,
+        };
+  
+        // Add new scorer to the array
+        const updatedScorers = [...currentScorers, newScorer];
+  
+        // Update Firestore with the updated scores and scorers
+        await updateDoc(matchRef, {
+          scorers: updatedScorers,
+          teamAScore: updatedScoreA,
+          teamBScore: updatedScoreB,
+        });
+  
+        // Update local scores (UI state)
+        setScores((prev) => ({
+          ...prev,
+          teamA: updatedScoreA,
+          teamB: updatedScoreB,
+        }));
+  
+        toast.success(`Goal scored by ${scorer} for ${team}!`);
+      } else {
+        toast.error("Match not found!");
+      }
+    } catch (error) {
+      console.error("Error adding scorer to the database:", error);
+      toast.error("Failed to add scorer to the database.");
+    }
+  
+    // Reset selected scorer
+    setSelectedScorer((prev) => ({ ...prev, [team]: "" }));
   };
+  
+  
+
+
 
   const removeGoal = (team) => {
     setScores(prev => ({
@@ -201,12 +333,120 @@ const EditScorePage = () => {
     }));
   };
 
-  const resetMatch = () => {
+  const resetMatch =async () => {
     setScores({ teamA: 0, teamB: 0 });
     setTimer("00:00");
     setExtraTime("");
     setIsTimerRunning(false);
     setSelectedScorer({ teamA: "", teamB: "" });
+
+    try {
+      // Query for the match document by eventName
+      const matchQuery = query(collection(db, "matches"), where("eventName", "==", eventName));
+      const matchSnapshot = await getDocs(matchQuery);
+
+      const eventRef =collection(db, "activeEvents"); 
+      const q = query(eventRef, where("eventName", "==",  eventName));
+      const querySnapshot = await getDocs(q);
+
+       if (!querySnapshot.empty) {
+              // Get the first document that matches
+              const eventDoc = querySnapshot.docs[0];
+              const eventDocRef = doc(db, "activeEvents", eventDoc.id); // Reference the document by its ID
+          
+              // Update the 'status' field to 'active'
+              await updateDoc(eventDocRef, { status: "active" });
+          
+              console.log(`Event '${eventName}' status updated to 'active'.`);
+            } else {
+              console.log("No matching event found.");
+            }
+
+  
+      if (!matchSnapshot.empty) {
+        const matchDoc = matchSnapshot.docs[0]; // Get the first match document that matches the eventName
+  
+        const matchRef = doc(db, "matches", matchDoc.id); // Get the document reference using the document ID
+  
+        // Determine the winner based on the scores
+        const winner = scores.teamA > scores.teamB ? teamA : (scores.teamB > scores.teamA ? teamB : "Draw");
+  
+        // Data to update in Firestore for the match document
+        const updatedData = {
+          eventName,
+          eventide: eventName, // You might want to set this dynamically if applicable
+          stage,
+          teamA,
+          teamB,
+          time: timer,  // Match time
+          updatedAt: new Date().toISOString(),  // Store the current timestamp
+          venue,
+          date: "2025-01-24", // Static date, change as needed
+          scoreA: scores.teamA,
+          scoreB: scores.teamB,
+          winner,
+          status:"",
+        };
+  
+        // Update the match document with the new data
+        await updateDoc(matchRef, updatedData);
+  
+        // Query for the teams' documents (assuming teams have a name field for easy querying)
+        const teamAQuery = query(collection(db, "teams"), where("name", "==", teamA));
+        const teamBQuery = query(collection(db, "teams"), where("name", "==", teamB));
+  
+        // Get the team documents for teamA and teamB
+        const teamAQuerySnapshot = await getDocs(teamAQuery);
+        const teamBQuerySnapshot = await getDocs(teamBQuery);
+  
+        if (!teamAQuerySnapshot.empty && !teamBQuerySnapshot.empty) {
+          const teamADoc = teamAQuerySnapshot.docs[0];
+          const teamBDoc = teamBQuerySnapshot.docs[0];
+  
+          const teamARef = doc(db, "teams", teamADoc.id);
+          const teamBRef = doc(db, "teams", teamBDoc.id);
+  
+          // Calculate the new statistics for both teams
+          const teamAStats = {
+            played: (teamADoc.data().played || 0) + 1,
+            win: winner === teamA ? (teamADoc.data().win || 0) + 1 : teamADoc.data().win || 0,
+            draw: winner === "Draw" ? (teamADoc.data().draw || 0) + 1 : teamADoc.data().draw || 0,
+            loss: winner === teamB ? (teamADoc.data().loss || 0) + 1 : teamADoc.data().loss || 0,
+            goals: (teamADoc.data().goals || 0) + scores.teamA,  // Add teamA goals
+            goalDifference: (teamADoc.data().goalDifference || 0) + (scores.teamA - scores.teamB),  // Calculate goal difference
+            points: (teamADoc.data().points || 0) + (winner === teamA ? 3 : winner === "Draw" ? 1 : 0), // Points (3 for win, 1 for draw)
+          };
+  
+          const teamBStats = {
+            played: (teamBDoc.data().played || 0) + 1,
+            win: winner === teamB ? (teamBDoc.data().win || 0) + 1 : teamBDoc.data().win || 0,
+            draw: winner === "Draw" ? (teamBDoc.data().draw || 0) + 1 : teamBDoc.data().draw || 0,
+            loss: winner === teamA ? (teamBDoc.data().loss || 0) + 1 : teamBDoc.data().loss || 0,
+            goals: (teamBDoc.data().goals || 0) + scores.teamB,  // Add teamB goals
+            goalDifference: (teamBDoc.data().goalDifference || 0) + (scores.teamB - scores.teamA),  // Calculate goal difference
+            points: (teamBDoc.data().points || 0) + (winner === teamB ? 3 : winner === "Draw" ? 1 : 0), // Points (3 for win, 1 for draw)
+          };
+  
+          // Update the goals and statistics for both teams
+          await updateDoc(teamARef, teamAStats);
+          await updateDoc(teamBRef, teamBStats);
+  
+          toast.success("Match and team data updated successfully!");
+          setScores({
+            teamA: 0,
+            teamB: 0
+          });
+        } else {
+          toast.error("One or both teams not found!");
+        }
+      } else {
+        toast.error("Match not found!");
+      }
+    } catch (error) {
+      console.error("Error updating match data:", error);
+      toast.error("Failed to update match data.");
+    }
+    
     setIsMatchStarted(false);  // Reset match status
     if (timerId) clearInterval(timerId);
   };
@@ -262,7 +502,7 @@ const EditScorePage = () => {
                 onChange={(e) => setSelectedScorer({ ...selectedScorer, teamA: e.target.value })}
                 className="w-full p-2 border rounded mb-2"
               >
-                <option value="">Select Goal Scorer</option>
+                <option value="" >Select Goal Scorer</option>
                 {teamAPlayers?.map((player, index) => (
                   <option key={index} value={player}>{player}</option>
                 ))}
@@ -295,7 +535,7 @@ const EditScorePage = () => {
                 onChange={(e) => setSelectedScorer({ ...selectedScorer, teamB: e.target.value })}
                 className="w-full p-2 border rounded mb-2"
               >
-                <option value="">Select Goal Scorer</option>
+                <option value="" >Select Goal Scorer</option>
                 {teamBPlayers?.map((player, index) => (
                   <option key={index} value={player}>{player}</option>
                 ))}

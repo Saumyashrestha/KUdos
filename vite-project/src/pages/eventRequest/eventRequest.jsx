@@ -6,7 +6,7 @@ import { getAuth } from 'firebase/auth';
 
 
 
-import { db, doc, collection, getDoc,addDoc , getDocs,query ,where } from '../../firebase/FirebaseConfig';
+import { db, doc, collection, getDoc,addDoc, getDocs,query ,where } from '../../firebase/FirebaseConfig';
 
 
 const EventRequestForm = () => {
