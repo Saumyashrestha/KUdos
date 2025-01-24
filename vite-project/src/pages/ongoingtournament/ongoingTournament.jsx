@@ -8,7 +8,7 @@ import { db, collection, getDocs ,query,where} from "../../firebase/FirebaseConf
 const OngoingTournament = () => {
     const matchContainerRef = useRef(null);
     const location = useLocation();
-   
+    const [isEditing, setIsEditing] = useState(false);
     const navigate = useNavigate();
       const [error, setError] = useState(null);
       const [old_teams, setOldTeams] = useState([{ name: "", players: [] }]);
@@ -18,6 +18,7 @@ const OngoingTournament = () => {
     const [activeEvents, setActiveEvents] = useState([]);
     const [coordinator, setCoordinator] = useState([]);
     const [matches, setMatches] = useState([]);
+
     const [userDetails, setUserDetailsLocal] = useState({});
  const [match, setMatch] = useState("");
  
@@ -37,29 +38,17 @@ const OngoingTournament = () => {
 
 
     //Fetching a team 
-      const fetchTeams = async () => {
-        try {
-          setIsLoading(true);
-          const teamsRef = collection(db, "teams");
-          const q = query(teamsRef, where("eventId", "==", eventName));
-          const querySnapshot = await getDocs(q);
-      
-          const fetchedTeams = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setOldTeams(fetchedTeams);
-        
-          setError(null);
-        } catch (error) {
-        
-          setError("Failed to fetch teams. Please try again later.");
-        } finally {
-          setIsLoading(false);
-        }
-      };
+     
 
       useEffect(() => {
+
+
+        if (coordinator.some(coord => coord.eventId === eventName)) {
+          setIsEditing(true); // Show the Edit button if the condition is true
+        } else {
+          setIsEditing(false); // Hide the Edit button if the condition is false
+        }
+
         const fetchActiveEvents = async () => {
         
         
@@ -75,18 +64,7 @@ const OngoingTournament = () => {
           setActiveEvents(events);
         };
 
-        const fetchCurrentEvent = async () => {
-          const activeEventsRef = collection(db, "matches");
-          const q = query(activeEventsRef, where("eventId", "==", eventName));
-          const querySnapshot = await getDocs(q);
-    
-          const events = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          
-          setActiveEvents(events);
-        };
+
         
     
        
@@ -114,7 +92,7 @@ const OngoingTournament = () => {
           };
 
         
-          const fetchUserDetail = async () => {
+        const fetchUserDetail = async () => {
             const auth = getAuth();
             const user = auth.currentUser;  
             userDetails.email = user.email;
@@ -122,10 +100,32 @@ const OngoingTournament = () => {
           };
 
 
+           const fetchTeams = async () => {
+        try {
+          setIsLoading(true);
+          const teamsRef = collection(db, "teams");
+          const q = query(teamsRef, where("eventId", "==", eventName));
+          const querySnapshot = await getDocs(q);
+      
+          const fetchedTeams = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setOldTeams(fetchedTeams);
+        
+          setError(null);
+        } catch (error) {
+        
+          setError("Failed to fetch teams. Please try again later.");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
           
-      console.log(userDetails.email);
+      
   
-          const fetchCoordinator = async () => {
+        const fetchCoordinator = async () => {
             try {
               const coordinatorRef = collection(db, 'coordinator'); 
               
@@ -148,14 +148,14 @@ const OngoingTournament = () => {
           
             fetchMatches();
           }
-          if (coordinator) {fetchCoordinator(); }
+          if (userDetails.email) {fetchCoordinator(); }
         
         fetchActiveEvents();
         
         fetchUserDetail();
         fetchTeams();
        
-      },[eventName, userDetails.email,coordinator]); 
+      },[eventName, userDetails.email,]); 
     
      console.log(eventName);
 
@@ -198,24 +198,14 @@ const OngoingTournament = () => {
             
 
 
-    {coordinator.map(coord => {
-  
-    // Check if the email matches and return the button if true
-    if (coord.eventId === eventName) {
-        return (
-            <button
-                className="bg-[#387478] text-white text-lg font-semibold py-2 px-4 rounded-md shadow-md transform transition-all duration-300 hover:scale-105 hover:bg-[#306a61] hover:shadow-lg"
-                onClick={() => navigate(`/edittournament?eventName=${eventName}`)}
-                key={coord.email} // Add a unique key for list items
-            >
-                Edit
-            </button>
-        );
-    }
-
-    // Return null if condition is not met
-    return null;
-})}
+            {isEditing && (
+      <button
+        className="bg-[#387478] text-white text-lg font-semibold py-2 px-4 rounded-md shadow-md transform transition-all duration-300 hover:scale-105 hover:bg-[#306a61] hover:shadow-lg"
+        onClick={() => navigate(`/edittournament?eventName=${eventName}`)}
+      >
+        Edit
+      </button>
+    )}
 
         </div>
     </div>
@@ -276,49 +266,53 @@ const OngoingTournament = () => {
       </div>
                  {/* Table Section */}
                  <div className="container bg-gray-100 border border-[#387478] shadow-md rounded-lg mt-8 mx-auto px-5 py-5 mb-8">
-      <h2 className="text-2xl font-semibold text-[#387478] mb-4">Teams Table</h2>
+  <h2 className="text-2xl font-semibold text-[#387478] mb-4">Teams Table</h2>
 
-      {isLoading ? (
-        <p className="text-center text-gray-500">Loading teams...</p>
-      ) : error ? (
-        <p className="text-center text-red-500">{error}</p>
-      ) : old_teams.length === 0 ? (
-        <p className="text-center text-gray-500">No teams found.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse border border-[#387478]">
-            <thead>
-              <tr className="bg-gray-200 text-[#387478]">
-                <th className="px-2 py-2 border-b border-[#387478] text-left font-semibold">Rank</th>
-                <th className="px-8 py-2 border-b border-[#387478] text-left font-semibold">Team Name</th>
-                <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Played</th>
-                <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Win</th>
-                <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Draw</th>
-                <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Loss</th>
-                <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Goal Difference</th>
-                <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Points</th>
+  {isLoading ? (
+    <p className="text-center text-gray-500">Loading teams...</p>
+  ) : error ? (
+    <p className="text-center text-red-500">{error}</p>
+  ) : old_teams.length === 0 ? (
+    <p className="text-center text-gray-500">No teams found.</p>
+  ) : (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left border-collapse border border-[#387478]">
+        <thead>
+          <tr className="bg-gray-200 text-[#387478]">
+            <th className="px-2 py-2 border-b border-[#387478] text-left font-semibold">Rank</th>
+            <th className="px-8 py-2 border-b border-[#387478] text-left font-semibold">Team Name</th>
+            <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Played</th>
+            <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Win</th>
+            <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Draw</th>
+            <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Loss</th>
+            <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Goal Difference</th>
+            <th className="px-1 py-2 border-b border-[#387478] text-center font-semibold">Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          {/* Render teams only for the current event */}
+          {old_teams.map((team, index) => (
+            team.eventId === eventName && ( // Filter teams by the event name
+              <tr key={team.id} className="hover:bg-gray-200">
+                <td className="px-4 py-2 border-b border-[#387478] text-left">{index + 1}</td>
+                <td className="px-8 py-2 border-b border-[#387478] text-left">{team.name || "Unknown"}</td>
+                <td className="px-1 py-2 border-b border-[#387478] text-center">{team.played || 0}</td>
+                <td className="px-1 py-2 border-b border-[#387478] text-center">{team.win || 0}</td>
+                <td className="px-1 py-2 border-b border-[#387478] text-center">{team.draw || 0}</td>
+                <td className="px-1 py-2 border-b border-[#387478] text-center">{team.loss || 0}</td>
+                <td className="px-1 py-2 border-b border-[#387478] text-center">{team.goalDifference || 0}</td>
+                <td className="px-1 py-2 border-b border-[#387478] text-center">
+                  {(team.win || 0) * 3 + (team.draw || 0) * 1 + (team.loss || 0) * 0}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {old_teams.map((team, index) => (
-                <tr key={team.id} className="hover:bg-gray-200">
-                  <td className="px-4 py-2 border-b border-[#387478] text-left">{index + 1}</td>
-                  <td className="px-8 py-2 border-b border-[#387478] text-left">{team.name || "Unknown"}</td>
-                  <td className="px-1 py-2 border-b border-[#387478] text-center">{team.played || 0}</td>
-                  <td className="px-1 py-2 border-b border-[#387478] text-center">{team.win || 0}</td>
-                  <td className="px-1 py-2 border-b border-[#387478] text-center">{team.draw || 0}</td>
-                  <td className="px-1 py-2 border-b border-[#387478] text-center">{team.loss || 0}</td>
-                  <td className="px-1 py-2 border-b border-[#387478] text-center">{team.goalDifference || 0}</td>
-                  <td className="px-1 py-2 border-b border-[#387478] text-center">
-                    {(team.win || 0) * 3 + (team.draw || 0) * 1 + (team.loss || 0) * 0}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            )
+          ))}
+        </tbody>
+      </table>
     </div>
+  )}
+</div>
+
         
         </Layout>
     );
