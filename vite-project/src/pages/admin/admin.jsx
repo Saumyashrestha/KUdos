@@ -14,13 +14,12 @@ import {
   Dumbbell,
   Calendar,
   Trophy,
-  Activity,
-  Bell
+  
 } from 'lucide-react';
 import Layout from '../../components/layout/Layout';
 
 const AdminDashboard = () => {
-  const [notifications] = useState(3);
+
  
   const [inactiveCoordinators, setInactiveCoordinators] = useState(0);
   const [activeCoordinators, setActiveCoordinators] = useState(0);
@@ -100,14 +99,7 @@ const AdminDashboard = () => {
           <p className="text-sm text-gray-500">Welcome back, Administrator</p>
         </div>
       </div>
-      <div className="relative">
-        <Bell className="h-6 w-6 text-gray-600 cursor-pointer hover:text-blue-600 transition-colors" />
-        {notifications > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-            {notifications}
-          </span>
-        )}
-      </div>
+      
     </div>
 
     {/* Quick Stats */}

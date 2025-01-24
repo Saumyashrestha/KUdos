@@ -222,6 +222,7 @@ const HomePageCard = () => {
                 match;
 
               return (
+                
                 <a
                   key={teamA + teamB}
                   className="block w-full bg-white border-2 border-[#e7f3f3] p-0 rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-102 hover:shadow-xl hover:border-[#387478]"
@@ -259,15 +260,21 @@ const HomePageCard = () => {
                       </h3>
                     </div>
                   </div>
-                  <div className="border-t-2 border-[#e7f3f3]"></div>
-                  <div className="p-5 bg-[#f9fbfb]">
-                    <h1 className="text-lg font-semibold text-[#387478]">
-                      {teamA} VS {teamB}
-                    </h1>
-                    <p className="text-[#5c8f92] text-sm mt-1">
-                      Venue: {venue}
-                    </p>
-                  </div>
+
+
+                  <a
+                href={`http://localhost:5173/ongoingtournament?eventName=${match.eventId}`}
+              ><div className="border-t-2 border-[#e7f3f3]"></div>
+              <div className="p-5 bg-[#f9fbfb]">
+                <h1 className="text-lg font-semibold text-[#387478]">
+                  {teamA} VS {teamB}
+                </h1>
+                <p className="text-[#5c8f92] text-sm mt-1">
+                  Venue: {venue}
+                </p>
+              </div></a>
+                  
+                  
                 </a>
               );
             })}
@@ -336,7 +343,10 @@ const HomePageCard = () => {
                         </div>
                       </div>
                       <div className="border-t-2 border-[#e7f3f3]"></div>
-                      <div className="p-5 bg-[#f9fbfb]">
+                      <a
+                href={`http://localhost:5173/ongoingtournament?eventName=${match.eventId}`}
+              >
+                 <div className="p-5 bg-[#f9fbfb]">
                         <h1 className="text-lg font-semibold text-[#387478]">
                           {teamA} VS {teamB}
                         </h1>
@@ -344,6 +354,8 @@ const HomePageCard = () => {
                           Venue: {venue}
                         </p>
                       </div>
+              </a>
+                     
                     </a>
                   );
                 })}
