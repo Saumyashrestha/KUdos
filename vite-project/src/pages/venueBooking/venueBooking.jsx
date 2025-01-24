@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Layout from "../../components/layout/Layout";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { db } from "../../firebase/FirebaseConfig";
 
 const VenueBooking = () => {
@@ -14,25 +14,35 @@ const VenueBooking = () => {
     time: "",
     eventName: "",
   });
-  const [bookings, setBookings] = useState({}); 
+  const [bookings, setBookings] = useState({});
 
+  // Fetch approved bookings from Firestore
   useEffect(() => {
     const fetchApprovedBookings = async () => {
-      const venueCollection = collection(db, "venue");
-      const approvedQuery = query(venueCollection, where("status", "==", "approved"));
-      const querySnapshot = await getDocs(approvedQuery);
-  
-      const approvedBookings = {};
-      querySnapshot.forEach((doc) => {
-        approvedBookings[doc.data().date] = `${doc.data().venue} - ${doc.data().eventName}`;
-      });
-  
-      setBookings(approvedBookings); // Assuming you manage state for bookings
+      try {
+        const venueCollection = collection(db, "venue");
+        const approvedQuery = query(
+          venueCollection,
+          where("status", "==", "approved")
+        );
+        const querySnapshot = await getDocs(approvedQuery);
+
+        const approvedBookings = {};
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          approvedBookings[data.date] = `${data.venue} - ${data.eventName}`;
+        });
+
+        setBookings(approvedBookings);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      }
     };
-  
+
     fetchApprovedBookings();
   }, []);
-  
+
+  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -41,28 +51,28 @@ const VenueBooking = () => {
     }));
   };
 
+  // Submit booking request
   const handleSubmit = async () => {
-    if (
-      !formData.venue ||
-      !formData.date ||
-      !formData.time ||
-      !formData.eventName
-    ) {
+    const { venue, date, time, eventName } = formData;
+
+    // Validate input fields
+    if (!venue || !date || !time || !eventName) {
       alert("Please fill in all fields");
       return;
     }
 
     try {
+      // Add booking to Firestore
       await addDoc(collection(db, "venue"), {
-        venue: formData.venue,
-        date: formData.date,
-        time: formData.time,
-        eventName: formData.eventName,
+        venue,
+        date,
+        time,
+        eventName,
         status: "pending",
       });
       alert("Booking request submitted successfully!");
 
-      // Reset form fields
+      // Reset form data
       setFormData({
         venue: "",
         date: "",
@@ -70,19 +80,10 @@ const VenueBooking = () => {
         eventName: "",
       });
 
-      // Fetch updated bookings
-      const updatedQuerySnapshot = await getDocs(collection(db, "venue"));
-      const updatedBookingData = {};
-      updatedQuerySnapshot.forEach((doc) => {
-        const data = doc.data();
-        updatedBookingData[data.date] = `${data.venue} - ${data.eventName}`;
-      });
-      setBookings(updatedBookingData);
-
-      setShowModal(false); // Close the modal
-    } catch (e) {
-      console.error("Error adding document:", e);
-      alert("Error submitting booking request");
+      setShowModal(false); // Close modal
+    } catch (error) {
+      console.error("Error submitting booking request:", error);
+      alert("Error submitting booking request. Please try again.");
     }
   };
 
@@ -125,6 +126,7 @@ const VenueBooking = () => {
           </button>
         </div>
 
+        {/* Modal for Booking */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-md shadow-lg w-[400px] border border-[#387478]">
@@ -155,7 +157,7 @@ const VenueBooking = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-800 mb-2"> Start Time</label>
+                <label className="block text-gray-800 mb-2">Start Time</label>
                 <input
                   type="time"
                   name="time"

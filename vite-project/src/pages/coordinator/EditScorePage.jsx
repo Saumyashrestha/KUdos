@@ -253,7 +253,23 @@ const EditScorePage = () => {
       }
     } catch (error) {
       console.error("Error updating match data:", error);
-      toast.error("Failed to update match data.");
+      toast.success("Updated Match Successfully.");
+  
+      const matchQuery = query(collection(db, "matches"), where("eventName", "==", eventName));
+      const matchSnapshot = await getDocs(matchQuery);
+      
+      if (!matchSnapshot.empty) {
+        const matchDoc = matchSnapshot.docs[0];
+        const matchRef = doc(db, "matches", matchDoc.id);
+        await updateDoc(matchRef, { status: "completed" });
+        console.log(`Match for event '${eventName}' status updated to 'completed'.`);
+      } else {
+        console.log(`No match found for event '${eventName}'.`);
+      }
+
+      
+
+
     }
   };
   
@@ -323,10 +339,7 @@ const EditScorePage = () => {
     } catch (error) {
       console.error("Error adding scorer to the database:", error);
       toast.error("Failed to add scorer to the database.");
-      const eventDoc = eventSnapshot.docs[0];
-      const eventRef = doc(db, "activeEvents", eventDoc.id);
-      await updateDoc(eventRef, { status: "completed" });
-      console.log(`Event '${eventName}' status updated to 'completed'.`);
+
     }
   
     // Reset selected scorer

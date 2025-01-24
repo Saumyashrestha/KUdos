@@ -31,8 +31,7 @@ const OngoingTournament = () => {
     };
 
 
-    console.log('matches');
-   
+    const image = match.club;
  
 
 
@@ -76,7 +75,18 @@ const OngoingTournament = () => {
           setActiveEvents(events);
         };
 
-        
+        const fetchCurrentEvent = async () => {
+          const activeEventsRef = collection(db, "matches");
+          const q = query(activeEventsRef, where("eventId", "==", eventName));
+          const querySnapshot = await getDocs(q);
+    
+          const events = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          
+          setActiveEvents(events);
+        };
         
     
        
@@ -88,7 +98,6 @@ const OngoingTournament = () => {
                 
 
               const matchRef = collection(db, 'matches');
-
              
             
               const q = query(matchRef, where("eventId", "==",  eventName));
@@ -98,15 +107,11 @@ const OngoingTournament = () => {
               const matchData = querySnapshot.docs.map(doc => doc.data());
              
             setMatch(matchData[0]);
-            console.log('match');
-            console.log(matchData[0]);
               setMatches(matchData);
             } catch (error) {
               console.error("Error fetching matches: ", error);
             }
           };
-          console.log('matches');
-       
 
         
           const fetchUserDetail = async () => {
@@ -150,7 +155,7 @@ const OngoingTournament = () => {
         fetchUserDetail();
         fetchTeams();
        
-      },[eventName, userDetails.email]); 
+      },[eventName, userDetails.email,coordinator]); 
     
      console.log(eventName);
 

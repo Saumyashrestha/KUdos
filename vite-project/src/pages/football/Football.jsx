@@ -112,7 +112,7 @@ const Football = () => {
                 alt="Team B Jersey"
                 className="w-20 mx-auto"
               />
-              <h3 className="font-semibold text-xl text-[#387478]">{eventData.teamA}</h3>
+              <h3 className="font-semibold text-xl text-[#387478]">{eventData.teamB}</h3>
               <div className="text-sm text-[#387478] space-y-2">
                 {teamBScorers.map((scorer, index) => (
                   <p key={index}>
